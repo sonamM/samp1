@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>DriverBuilder.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Test Automation Library</a> &gt; <a href="index.html" class="el_package">com.etouch.taf.core.driver</a> &gt; <span class="el_source">DriverBuilder.java</span></div><h1>DriverBuilder.java</h1><pre class="source lang-java linenums">/*
+ * 
+ */
+package com.etouch.taf.core.driver;
+
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.concurrent.TimeUnit;
+
+import com.etouch.taf.core.TestBed;
+import com.etouch.taf.core.TestBedManager;
+import com.etouch.taf.core.config.TestBedManagerConfiguration;
+import com.etouch.taf.core.exception.DriverException;
+import com.etouch.taf.core.resources.TestBedType;
+import com.etouch.taf.core.resources.TestEnvironmentType;
+import com.etouch.taf.util.LogUtil;
+
+import org.apache.commons.logging.Log;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxProfile;
+import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.remote.CapabilityType;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.safari.SafariDriver;
+import org.openqa.selenium.Platform;
+//import org.openqa.selenium.Platform;
+import org.openqa.selenium.Proxy;
+import org.openqa.selenium.WebDriver;
+
+// TODO: Auto-generated Javadoc
+/**
+ * The Class DriverBuilder.
+ *
+ * @author eTouch Systems Corporation
+ * @version 1.0
+ */
+public abstract class DriverBuilder {
+
+	/** The tb mgr config. */
+<span class="fc" id="L43">	protected TestBedManagerConfiguration tbMgrConfig=TestBedManagerConfiguration.getInstance();</span>
+	
+	/** The test bed. */
+<span class="fc" id="L46">	protected TestBed testBed = TestBedManager.INSTANCE.getCurrentTestBed();</span>
+	
+	/** The hub location. */
+<span class="fc" id="L49">	protected String hubLocation=null;</span>
+	
+	/** The capabilities. */
+<span class="fc" id="L52">	protected DesiredCapabilities capabilities=null;</span>
+	
+	/** The driver. */
+<span class="fc" id="L55">	protected Object driver=null;</span>
+	
+	/** The browser stack url. */
+<span class="fc" id="L58">	protected String browserStackURL = null;</span>
+	
+	/** The test environment. */
+<span class="fc" id="L61">	protected String testEnvironment= tbMgrConfig.getWebConfig().getTestEnv();</span>
+	
+	/** The log. */
+<span class="fc" id="L64">	static Log log = LogUtil.getLog(DriverBuilder.class);</span>
+
+	/**
+	 * Instantiates a new driver builder.
+	 *
+	 * @param testBed the test bed
+	 * @throws DriverException the driver exception
+	 */
+<span class="fc" id="L72">	public DriverBuilder(TestBed testBed) throws DriverException {</span>
+<span class="fc" id="L73">		this.testBed = testBed;</span>
+<span class="fc" id="L74">	}</span>
+
+	 /**
+ 	 * Builds the driver.
+ 	 *
+ 	 * @throws DriverException the driver exception
+ 	 */
+	public abstract void buildDriver() throws DriverException;
+	 
+	 /**
+ 	 * Gets the driver.
+ 	 *
+ 	 * @return Object of an Driver
+ 	 * @throws DriverException the driver exception
+ 	 */
+	public abstract Object getDriver() throws DriverException;
+
+
+	
+
+
+	/**
+	 * This method set the details for BrowserStackDriver.
+	 *
+	 * @throws DriverException the driver exception
+	 */
+	public void buildBrowserstackCapabilities() throws DriverException
+	{
+<span class="nc" id="L102">		capabilities.setCapability(&quot;osVersion&quot;, testBed.getPlatform().getVersion());</span>
+<span class="nc" id="L103">		capabilities.setCapability(&quot;os&quot;, testBed.getPlatform().getName());</span>
+<span class="nc" id="L104">		capabilities.setCapability(&quot;version&quot;, testBed.getBrowser().getVersion());</span>
+<span class="nc" id="L105">		capabilities.setCapability(&quot;browserName&quot;, testBed.getBrowser().getName());</span>
+<span class="nc" id="L106">		capabilities.setCapability(&quot;browserstack.debug&quot;, &quot;true&quot;);</span>
+		try {
+<span class="nc" id="L108">			driver = new RemoteWebDriver(new URL(buildBrowserStackUrl()), capabilities);</span>
+<span class="nc" id="L109">		} catch (MalformedURLException e) {</span>
+<span class="nc" id="L110">			log.error(&quot;failed to create driver : &quot; + e.getMessage());</span>
+<span class="nc" id="L111">			throw new DriverException(&quot;failed to create driver : &quot; + e.getMessage());</span>
+<span class="nc" id="L112">		}</span>
+
+<span class="nc" id="L114">	}</span>
+	
+	
+	/**
+	 * Builds the url.
+	 *
+	 * @return the string
+	 */
+	protected  String buildURL() {
+<span class="nc" id="L123">		TestBedManagerConfiguration tbMgrConfig=TestBedManagerConfiguration.getInstance();</span>
+<span class="nc" id="L124">		String hub = tbMgrConfig.getWebConfig().getHub();</span>
+<span class="nc" id="L125">		String port = tbMgrConfig.getWebConfig().getPort();</span>
+		
+<span class="nc" id="L127">		TestBed testBed=TestBedManager.INSTANCE.getCurrentTestBed();</span>
+
+		// defalut hub to localhost
+<span class="nc bnc" id="L130" title="All 4 branches missed.">		if (hub == null || hub.isEmpty()) {</span>
+<span class="nc" id="L131">			hub = &quot;localhost&quot;;</span>
+		}
+
+		// default port to 4444
+<span class="nc bnc" id="L135" title="All 4 branches missed.">		if (port == null || port.isEmpty()) {</span>
+<span class="nc" id="L136">			port = &quot;4444&quot;;</span>
+		}
+		
+<span class="nc" id="L139">		 hubLocation = &quot;http://&quot; + hub + &quot;:&quot; + port + &quot;/wd/hub&quot;;</span>
+
+		// add proxy setting to the webdriver
+<span class="nc" id="L142">		String proxyString = tbMgrConfig.getWebConfig().getProxy();</span>
+<span class="nc" id="L143">		String noProxyString = tbMgrConfig.getWebConfig().getNoProxy();</span>
+<span class="nc bnc" id="L144" title="All 4 branches missed.">		if (proxyString != null &amp;&amp; !proxyString.isEmpty()) {</span>
+<span class="nc" id="L145">			Proxy proxysetting = new Proxy();</span>
+<span class="nc" id="L146">			proxysetting.setHttpProxy(proxyString)</span>
+					.setFtpProxy(proxyString).setSslProxy(proxyString);
+<span class="nc bnc" id="L148" title="All 4 branches missed.">			if (noProxyString != null &amp;&amp; !proxyString.isEmpty()) {</span>
+<span class="nc" id="L149">				proxysetting.setNoProxy(noProxyString);</span>
+			}
+
+<span class="nc" id="L152">			capabilities.setCapability(CapabilityType.PROXY,</span>
+					proxysetting);
+		}
+		
+<span class="nc" id="L156">		return hubLocation;</span>
+	}
+	
+
+	
+	/**
+	 * Get the BrowserStackURL from configuration file.
+	 *
+	 * @return browserStackURL
+	 */
+	public String buildBrowserStackUrl(){
+<span class="nc" id="L167">		return browserStackURL;</span>
+	}
+	
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.5.201112152213</span></div></body></html>

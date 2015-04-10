@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>SafariDriver.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Test Automation Library</a> &gt; <a href="index.html" class="el_package">com.etouch.taf.core.driver.web</a> &gt; <span class="el_source">SafariDriver.java</span></div><h1>SafariDriver.java</h1><pre class="source lang-java linenums">/*
+ * 
+ */
+package com.etouch.taf.core.driver.web;
+
+import org.openqa.selenium.Platform;
+import org.openqa.selenium.remote.DesiredCapabilities;
+
+import com.etouch.taf.core.TestBed;
+import com.etouch.taf.core.config.TestBedManagerConfiguration;
+import com.etouch.taf.core.driver.DriverBuilder;
+import com.etouch.taf.core.exception.DriverException;
+import com.etouch.taf.core.resources.TestEnvironmentType;
+import com.etouch.taf.util.ConfigUtil;
+import com.etouch.taf.webui.selenium.SeleniumDriver;
+
+// TODO: Auto-generated Javadoc
+/**
+ * The Class SafariDriver.
+ */
+public class SafariDriver extends DriverBuilder {
+
+	/**
+	 * Instantiates a new safari driver.
+	 *
+	 * @param testBed the test bed
+	 * @throws DriverException the driver exception
+	 */
+	public SafariDriver(TestBed testBed) throws DriverException {
+<span class="fc" id="L30">		super(testBed);</span>
+		// TODO Auto-generated constructor stub
+<span class="fc" id="L32">	}</span>
+
+	/**
+	 * Creates Driver for Safari.
+	 *
+	 * @throws DriverException the driver exception
+	 */
+	@Override
+	public void buildDriver() throws DriverException {
+<span class="nc bnc" id="L41" title="All 2 branches missed.">		if (ConfigUtil.isLocalEnv()) {</span>
+
+			// if the tool is mentioned as selenium in devconfig.yml then create a Selenium safari Driver
+<span class="nc bnc" id="L44" title="All 2 branches missed.">			if (ConfigUtil.isSelenium()) {</span>
+<span class="nc" id="L45">				driver = SeleniumDriver.buildSafariDriver();</span>
+			}
+<span class="nc bnc" id="L47" title="All 2 branches missed.">		} else if (ConfigUtil.isRemoteEnv()) {</span>
+
+<span class="nc bnc" id="L49" title="All 2 branches missed.">			if(ConfigUtil.isSelenium()){</span>
+<span class="nc" id="L50">				capabilities = DesiredCapabilities.safari();</span>
+				//capabilities.setBrowserName(testBed.getBrowser().getName());
+<span class="nc" id="L52">				capabilities.setBrowserName(&quot;safari&quot;);				</span>
+<span class="nc bnc" id="L53" title="All 2 branches missed.">				if (ConfigUtil.isWindows(testBed)) {</span>
+<span class="nc" id="L54">					capabilities.setPlatform(Platform.WINDOWS);</span>
+				}
+<span class="nc bnc" id="L56" title="All 2 branches missed.">				else if (ConfigUtil.isMac(testBed)) {</span>
+<span class="nc" id="L57">					capabilities.setPlatform(Platform.MAC);</span>
+				}
+<span class="nc" id="L59">				driver = SeleniumDriver.buildRemoteDriver(capabilities);</span>
+			}
+
+<span class="nc bnc" id="L62" title="All 2 branches missed.">		} else if (ConfigUtil.isBrowserStackEnv()) {</span>
+
+<span class="nc" id="L64">			capabilities = DesiredCapabilities.safari();</span>
+<span class="nc" id="L65">			buildBrowserstackCapabilities();</span>
+		}
+<span class="nc" id="L67">	}</span>
+	
+	
+	/* (non-Javadoc)
+	 * @see com.etouch.taf.core.driver.DriverBuilder#getDriver()
+	 */
+	@Override
+	public Object getDriver() throws DriverException {
+		// TODO Auto-generated method stub
+<span class="fc" id="L76">		return driver;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.5.201112152213</span></div></body></html>

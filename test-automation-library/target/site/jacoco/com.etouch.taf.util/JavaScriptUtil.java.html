@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>JavaScriptUtil.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Test Automation Library</a> &gt; <a href="index.html" class="el_package">com.etouch.taf.util</a> &gt; <span class="el_source">JavaScriptUtil.java</span></div><h1>JavaScriptUtil.java</h1><pre class="source lang-java linenums">package com.etouch.taf.util;
+
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+
+import com.etouch.taf.core.driver.DriverBuilder;
+
+
+
+<span class="nc" id="L11">public class JavaScriptUtil {</span>
+	
+		public static &lt;T extends Object&gt; T executeJavaScript(WebDriver driver, String javaScript) 
+		{
+<span class="fc" id="L15">			T result = null;</span>
+			
+			try {
+<span class="fc" id="L18">					JavascriptExecutor js = (JavascriptExecutor) driver;	</span>
+<span class="fc" id="L19">					result= (T)js.executeScript(javaScript);</span>
+					
+<span class="fc" id="L21">					Thread.sleep(10000);</span>
+<span class="nc" id="L22">				} catch (InterruptedException e) {</span>
+<span class="nc" id="L23">					e.printStackTrace();</span>
+<span class="fc" id="L24">				}</span>
+				
+<span class="fc" id="L26">				return result;</span>
+		}
+	
+	
+}
+
+
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.5.201112152213</span></div></body></html>

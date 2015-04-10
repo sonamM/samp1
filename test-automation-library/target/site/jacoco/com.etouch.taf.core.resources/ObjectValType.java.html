@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ObjectValType.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Test Automation Library</a> &gt; <a href="index.html" class="el_package">com.etouch.taf.core.resources</a> &gt; <span class="el_source">ObjectValType.java</span></div><h1>ObjectValType.java</h1><pre class="source lang-java linenums">/*
+ * 
+ */
+package com.etouch.taf.core.resources;
+
+import org.apache.commons.logging.Log;
+import com.etouch.taf.util.LogUtil;
+
+// TODO: Auto-generated Javadoc
+/**
+ * List the valid Expected condition for wait driver supported by the test framework.
+ *
+ * @author eTouch Systems Corporation
+ * @version 1.0
+ *
+ */
+<span class="nc" id="L17">public enum ObjectValType {</span>
+	
+	/* Use for the single element search */
+	/** The id. */
+<span class="nc" id="L21">	ID(&quot;id&quot;), </span>
+	
+	/** The name. */
+<span class="nc" id="L24">	NAME(&quot;name&quot;),</span>
+	
+	/** The xpath. */
+<span class="nc" id="L27">	XPATH(&quot;xpath&quot;),</span>
+	
+	/** The css. */
+<span class="nc" id="L30">	CSS(&quot;cssSelector&quot;),</span>
+	
+	/** The link. */
+<span class="nc" id="L33">	LINK(&quot;linkText&quot;),</span>
+	
+	/** The Partial link. */
+<span class="nc" id="L36">	PartialLink(&quot;PartialLinkText&quot;),</span>
+	
+	/** The class. */
+<span class="nc" id="L39">	CLASS(&quot;className&quot;),</span>
+	
+	/** The tag. */
+<span class="nc" id="L42">	TAG(&quot;tagName&quot;)</span>
+	;
+    
+	/** The log. */
+<span class="nc" id="L46">	static Log log = LogUtil.getLog(ObjectValType.class);</span>
+	
+	/** The type. */
+	private String type;
+
+	/**
+	 * Instantiates a new object val type.
+	 *
+	 * @param type the type
+	 */
+<span class="nc" id="L56">	private ObjectValType(String type) {</span>
+<span class="nc" id="L57">		this.type = type;</span>
+<span class="nc" id="L58">	}</span>
+
+	/**
+	 * Gets the object val type.
+	 *
+	 * @return the object val type
+	 */
+	public String getObjectValType() {
+<span class="nc" id="L66">		return type;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.5.201112152213</span></div></body></html>

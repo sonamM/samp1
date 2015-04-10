@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>JsonDataReader.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Test Automation Library</a> &gt; <a href="index.html" class="el_package">com.etouch.taf.tools.json.schemavalidator</a> &gt; <span class="el_source">JsonDataReader.java</span></div><h1>JsonDataReader.java</h1><pre class="source lang-java linenums">/*
+ * 
+ */
+package com.etouch.taf.tools.json.schemavalidator;
+
+import java.net.URL;
+
+import org.apache.commons.logging.Log;
+
+import com.etouch.taf.core.exception.ResourceLoadException;
+import com.etouch.taf.util.LogUtil;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.github.fge.jsonschema.util.JsonLoader;
+
+// TODO: Auto-generated Javadoc
+/**
+ * This class reads JSON date.
+ * 
+ * @author eTouch Systems Corporation
+ * @version 1.0
+ *
+ */
+<span class="nc" id="L23">public class JsonDataReader implements IReader {</span>
+	 
+	/** The log. */
+<span class="nc" id="L26">	private static Log log = LogUtil.getLog(JsonDataReader.class);</span>
+	
+	/** The data. */
+	private JsonNode data;
+	
+	/* (non-Javadoc)
+	 * @see com.etouch.taf.tools.json.schemavalidator.IReader#loadFromResource(java.lang.String)
+	 */
+	public void loadFromResource(String resource) throws ResourceLoadException{
+		try{
+<span class="nc" id="L36">			data = JsonLoader.fromResource(resource);</span>
+<span class="nc" id="L37">		}catch(Exception ioe){</span>
+			// Throw Exception
+<span class="nc" id="L39">			throw new ResourceLoadException(ioe.toString());</span>
+<span class="nc" id="L40">		}</span>
+<span class="nc" id="L41">	}</span>
+
+	/* (non-Javadoc)
+	 * @see com.etouch.taf.tools.json.schemavalidator.IReader#loadFromURL(java.lang.String)
+	 */
+	public void loadFromURL(String url)  throws ResourceLoadException{
+		try{
+<span class="nc" id="L48">			URL urlObj = new URL(url);</span>
+<span class="nc" id="L49">			data = JsonLoader.fromURL(urlObj);</span>
+<span class="nc" id="L50">		}catch(Exception ioe){</span>
+			// Throw Exception
+<span class="nc" id="L52">			throw new ResourceLoadException(ioe.toString());</span>
+<span class="nc" id="L53">		}</span>
+<span class="nc" id="L54">	}</span>
+	
+	/* (non-Javadoc)
+	 * @see com.etouch.taf.tools.json.schemavalidator.IReader#loadFromPath(java.lang.String)
+	 */
+	public void loadFromPath(String path)  throws ResourceLoadException{
+		try{
+<span class="nc" id="L61">			data = JsonLoader.fromPath(path);</span>
+<span class="nc" id="L62">		}catch(Exception ioe){</span>
+			// Throw Exception
+<span class="nc" id="L64">			throw new ResourceLoadException(ioe.toString());</span>
+<span class="nc" id="L65">		}</span>
+<span class="nc" id="L66">	}</span>
+	
+	/* (non-Javadoc)
+	 * @see com.etouch.taf.tools.json.schemavalidator.IReader#loadFromString(java.lang.String)
+	 */
+	public void loadFromString(String json)  throws ResourceLoadException{
+		try{
+<span class="nc" id="L73">			data = JsonLoader.fromString(json);</span>
+<span class="nc" id="L74">		}catch(Exception ioe){</span>
+			// Throw Exception
+<span class="nc" id="L76">			throw new ResourceLoadException(ioe.toString());</span>
+<span class="nc" id="L77">		}</span>
+<span class="nc" id="L78">	}</span>
+	
+	/* (non-Javadoc)
+	 * @see com.etouch.taf.tools.json.schemavalidator.IReader#getNode()
+	 */
+	public Object getNode() {
+<span class="nc" id="L84">		return data;</span>
+	}
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.5.201112152213</span></div></body></html>

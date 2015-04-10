@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>MobileDriver.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Test Automation Library</a> &gt; <a href="index.html" class="el_package">com.etouch.taf.core.driver.mobile</a> &gt; <span class="el_source">MobileDriver.java</span></div><h1>MobileDriver.java</h1><pre class="source lang-java linenums">/*
+ * 
+ */
+package com.etouch.taf.core.driver.mobile;
+
+import org.openqa.selenium.remote.DesiredCapabilities;
+
+import com.etouch.taf.core.TestBed;
+import com.etouch.taf.core.TestBedManager;
+import com.etouch.taf.core.config.TestBedManagerConfiguration;
+import com.etouch.taf.core.driver.DriverBuilder;
+import com.etouch.taf.core.exception.DriverException;
+
+// TODO: Auto-generated Javadoc
+/**
+ * The Class MobileDriver.
+ */
+public  class MobileDriver extends DriverBuilder {
+	
+	
+	
+
+	/**
+	 * Instantiates a new mobile driver.
+	 *
+	 * @param testBed the test bed
+	 * @throws DriverException the driver exception
+	 */
+	public MobileDriver(TestBed testBed) throws DriverException {
+<span class="nc" id="L30">		super(testBed);</span>
+		// TODO Auto-generated constructor stub
+<span class="nc" id="L32">	}</span>
+
+	/* (non-Javadoc)
+	 * @see com.etouch.taf.core.driver.DriverBuilder#buildDriver()
+	 */
+	@Override
+	public void buildDriver() throws DriverException {
+		// TODO Auto-generated method stub
+		
+<span class="nc" id="L41">	}</span>
+
+	
+	/* (non-Javadoc)
+	 * @see com.etouch.taf.core.driver.DriverBuilder#getDriver()
+	 */
+	public Object getDriver() throws DriverException {
+		// TODO Auto-generated method stub
+<span class="nc" id="L49">		return driver;</span>
+	}
+	
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.5.201112152213</span></div></body></html>

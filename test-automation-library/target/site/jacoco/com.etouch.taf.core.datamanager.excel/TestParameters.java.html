@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>TestParameters.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Test Automation Library</a> &gt; <a href="index.html" class="el_package">com.etouch.taf.core.datamanager.excel</a> &gt; <span class="el_source">TestParameters.java</span></div><h1>TestParameters.java</h1><pre class="source lang-java linenums">//package com.etouch.taf.core.datamanager.excel;
+package com.etouch.taf.core.datamanager.excel;
+
+import java.util.HashMap;
+
+// TODO: Auto-generated Javadoc
+/**
+ * Read test data(Excel row) and assigned to TestParameters.
+ *
+ * @author eTouch
+ */
+public class TestParameters {
+	
+	/** The param map. */
+	HashMap&lt;String, String&gt; paramMap;
+	
+	/**
+	 * Instantiates a new test parameters.
+	 */
+<span class="nc" id="L20">	public TestParameters(){</span>
+<span class="nc" id="L21">		paramMap = new HashMap&lt;String, String&gt;();</span>
+<span class="nc" id="L22">	}</span>
+	
+	/**
+	 * Sets the param map.
+	 *
+	 * @param colName the col name
+	 * @param colVal the col val
+	 */
+	public void setParamMap(String colName, String colVal){
+<span class="nc" id="L31">		paramMap.put(colName, colVal);</span>
+<span class="nc" id="L32">	}</span>
+	
+	/**
+	 * Gets the param map.
+	 *
+	 * @return the param map
+	 */
+	public HashMap&lt;String, String&gt; getParamMap(){
+<span class="nc" id="L40">		return paramMap;</span>
+	}
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.5.201112152213</span></div></body></html>

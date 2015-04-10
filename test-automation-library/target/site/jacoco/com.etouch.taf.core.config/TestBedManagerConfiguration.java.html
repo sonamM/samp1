@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>TestBedManagerConfiguration.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Test Automation Library</a> &gt; <a href="index.html" class="el_package">com.etouch.taf.core.config</a> &gt; <span class="el_source">TestBedManagerConfiguration.java</span></div><h1>TestBedManagerConfiguration.java</h1><pre class="source lang-java linenums">/*
+ * 
+ */
+package com.etouch.taf.core.config;
+
+import java.io.InputStream;
+import java.util.HashMap;
+import org.apache.commons.logging.Log;
+
+import com.etouch.taf.core.ConfigurationReader;
+import com.etouch.taf.util.LogUtil;
+
+// TODO: Auto-generated Javadoc
+/**
+ * public class TestBedManagerConfiguration creates testBedss based on configuration input.
+ * 
+ * @author eTouch Systems Corporation
+ * @version 1.0
+ * 
+ */
+public class TestBedManagerConfiguration {
+
+	/** The instance. */
+	public static  TestBedManagerConfiguration INSTANCE;
+	
+	/** The test types. */
+	private String[] testTypes;
+	
+	
+	/**  To Configure XLS test data. */
+	private HashMap&lt;String, String&gt; xlsDataConfig;
+	
+	/** The web config. */
+	private WebConfig webConfig;
+	
+	/** The mobile config. */
+	private MobileConfig mobileConfig;
+	
+	/** The ip stream. */
+<span class="fc" id="L40">	protected static InputStream ipStream=null;</span>
+	
+	/** The defect config. */
+	private DefectConfig defectConfig;
+	
+	/** The testng config. */
+	private TestngConfig testngConfig;
+	
+	/** The db config. */
+	private DBConfig dbConfig;
+	
+	/** The TFS config. */
+	private TFSConfig tfsConfig;
+
+	/** The is set. */
+<span class="fc" id="L55">	private static boolean isSet=false;</span>
+	
+	/**
+	 * Instantiates a new test bed manager configuration.
+	 */
+<span class="fc" id="L60">	private TestBedManagerConfiguration() {</span>
+<span class="fc" id="L61">	}</span>
+
+	/**
+	 * Gets the single instance of TestBedManagerConfiguration.
+	 *
+	 * @return single instance of TestBedManagerConfiguration
+	 */
+	public static TestBedManagerConfiguration getInstance() {
+<span class="fc bfc" id="L69" title="All 2 branches covered.">		if(INSTANCE==null){</span>
+<span class="fc" id="L70">			 isSet=true;</span>
+<span class="fc" id="L71">			INSTANCE= ConfigurationReader.readConfig(ipStream);</span>
+			
+			}
+
+<span class="fc" id="L75">		return INSTANCE;</span>
+	}
+
+	
+	
+
+
+	/**
+	 * Checks if is sets the.
+	 *
+	 * @return true, if is sets the
+	 */
+	public boolean isSet() {
+<span class="nc" id="L88">		return isSet;</span>
+	}
+
+	/**
+	 * Sets the sets the.
+	 *
+	 * @param isSet the new sets the
+	 */
+	public void setSet(boolean isSet) {
+<span class="nc" id="L97">		this.isSet = isSet;</span>
+<span class="nc" id="L98">	}</span>
+
+	/**
+	 * Gets the web config.
+	 *
+	 * @return the web config
+	 */
+	public WebConfig getWebConfig() {
+<span class="fc" id="L106">		return webConfig;</span>
+	}
+
+	/**
+	 * Sets the web config.
+	 *
+	 * @param webConfig the new web config
+	 */
+	public void setWebConfig(WebConfig webConfig) {
+<span class="fc" id="L115">		this.webConfig = webConfig;</span>
+<span class="fc" id="L116">	}</span>
+
+	/**
+	 * Gets the mobile config.
+	 *
+	 * @return the mobile config
+	 */
+	public MobileConfig getMobileConfig() {
+<span class="fc" id="L124">		return mobileConfig;</span>
+	}
+
+	/**
+	 * Sets the mobile config.
+	 *
+	 * @param mobileConfig the new mobile config
+	 */
+	public void setMobileConfig(MobileConfig mobileConfig) {
+<span class="fc" id="L133">		this.mobileConfig = mobileConfig;</span>
+<span class="fc" id="L134">	}</span>
+
+	/**
+	 * Gets the test types.
+	 *
+	 * @return the test types
+	 */
+	public String[] getTestTypes() {
+<span class="nc" id="L142">		return testTypes;</span>
+	}
+
+	/**
+	 * Sets the test types.
+	 *
+	 * @param testTypes the new test types
+	 */
+	public void setTestTypes(String[] testTypes) {
+<span class="fc" id="L151">		this.testTypes = testTypes;</span>
+<span class="fc" id="L152">	}</span>
+
+	
+
+	/**
+	 * Sets the ip stream.
+	 *
+	 * @param ipStream the new ip stream
+	 */
+	public static void setIpStream(InputStream ipStream) {
+<span class="fc" id="L162">		TestBedManagerConfiguration.ipStream = ipStream;</span>
+<span class="fc" id="L163">	}</span>
+
+
+	/**
+	 * Gets the defect config.
+	 *
+	 * @return the defect config
+	 */
+	public DefectConfig getDefectConfig() {
+<span class="nc" id="L172">		return defectConfig;</span>
+	}
+
+	/**
+	 * Sets the defect config.
+	 *
+	 * @param defectConfig the new defect config
+	 */
+	public void setDefectConfig(DefectConfig defectConfig) {
+<span class="fc" id="L181">		this.defectConfig = defectConfig;</span>
+<span class="fc" id="L182">	}</span>
+	
+	/**
+	 * Gets the tfs config.
+	 *
+	 * @return the tfsConfig
+	 */
+	public TFSConfig getTfsConfig() {
+<span class="fc" id="L190">		return tfsConfig;</span>
+	}
+
+	/**
+	 * Sets the tfs config.
+	 *
+	 * @param tfsConfig the tfsConfig to set
+	 */
+	public void setTfsConfig(TFSConfig tfsConfig) {
+<span class="fc" id="L199">		this.tfsConfig = tfsConfig;</span>
+<span class="fc" id="L200">	}</span>
+
+	/**
+	 * Gets the testng config.
+	 *
+	 * @return the testng config
+	 */
+	public TestngConfig getTestngConfig() {
+<span class="nc" id="L208">		return testngConfig;</span>
+	}
+
+	/**
+	 * Sets the testng config.
+	 *
+	 * @param testngConfig the new testng config
+	 */
+	public void setTestngConfig(TestngConfig testngConfig) {
+<span class="fc" id="L217">		this.testngConfig = testngConfig;</span>
+<span class="fc" id="L218">	}</span>
+
+
+	
+	
+
+	/**
+	 * Gets the db config.
+	 *
+	 * @return the db config
+	 */
+	public DBConfig getDbConfig() {
+<span class="nc" id="L230">		return dbConfig;</span>
+	}
+
+	/**
+	 * Sets the db config.
+	 *
+	 * @param dbConfig the new db config
+	 */
+	public void setDbConfig(DBConfig dbConfig) {
+<span class="nc" id="L239">		this.dbConfig = dbConfig;</span>
+<span class="nc" id="L240">	}</span>
+	
+	
+	
+
+	/**
+	 * Gets the xls data config.
+	 *
+	 * @return the xls data config
+	 */
+	public HashMap&lt;String, String&gt; getXlsDataConfig() {
+<span class="nc" id="L251">		return xlsDataConfig;</span>
+	}
+
+	/**
+	 * Sets the xls data config.
+	 *
+	 * @param xlsDataConfig the xls data config
+	 */
+	public void setXlsDataConfig(HashMap&lt;String, String&gt; xlsDataConfig) {
+<span class="fc" id="L260">		this.xlsDataConfig = xlsDataConfig;</span>
+<span class="fc" id="L261">	}</span>
+
+
+
+
+	/** The log. */
+<span class="fc" id="L267">	static Log log = LogUtil.getLog(TestBedManagerConfiguration.class);</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.5.201112152213</span></div></body></html>

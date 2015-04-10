@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>TestUtil.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Test Automation Library</a> &gt; <a href="index.html" class="el_package">com.etouch.taf.util</a> &gt; <span class="el_source">TestUtil.java</span></div><h1>TestUtil.java</h1><pre class="source lang-java linenums">/*
+ * 
+ */
+package com.etouch.taf.util;
+
+import static org.monte.media.FormatKeys.EncodingKey;
+import static org.monte.media.FormatKeys.FrameRateKey;
+import static org.monte.media.FormatKeys.KeyFrameIntervalKey;
+import static org.monte.media.FormatKeys.MIME_AVI;
+import static org.monte.media.FormatKeys.MediaTypeKey;
+import static org.monte.media.FormatKeys.MimeTypeKey;
+import static org.monte.media.VideoFormatKeys.CompressorNameKey;
+import static org.monte.media.VideoFormatKeys.DepthKey;
+import static org.monte.media.VideoFormatKeys.ENCODING_AVI_TECHSMITH_SCREEN_CAPTURE;
+import static org.monte.media.VideoFormatKeys.QualityKey;
+
+import java.awt.AWTException;
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsEnvironment;
+import java.io.File;
+import java.io.IOException;
+
+import org.monte.media.Format;
+import org.monte.media.FormatKeys.MediaType;
+import org.monte.media.math.Rational;
+import org.monte.screenrecorder.ScreenRecorder;
+import org.openqa.selenium.WebDriver;
+
+import com.etouch.taf.core.TestBedManager;
+import com.etouch.taf.core.datamanager.excel.XlsxReader;
+import com.etouch.taf.core.driver.DriverManager;
+import com.etouch.taf.core.exception.DriverException;
+
+// TODO: Auto-generated Javadoc
+/**
+ * The Class TestUtil.
+ */
+<span class="nc" id="L38">public class TestUtil {</span>
+
+	/**
+	 * The main method.
+	 *
+	 * @param args the arguments
+	 */
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+<span class="nc" id="L48">	}</span>
+	
+	/**
+	 * Pick config file.
+	 *
+	 * @param currentEnvironment the current environment
+	 * @return the string
+	 */
+	public static String pickConfigFile(String currentEnvironment) {
+		
+<span class="fc" id="L58">		String defaultConfigFile = &quot;devConfig.yml&quot;;</span>
+<span class="fc bfc" id="L59" title="All 4 branches covered.">		if(currentEnvironment!=null &amp;&amp; currentEnvironment.length()&gt;0)</span>
+		{
+<span class="fc" id="L61">			return currentEnvironment + &quot;Config.yml&quot;;</span>
+		}
+		
+<span class="fc" id="L64">		else return defaultConfigFile;		</span>
+	}
+	
+//find if the Test Suite is runnable based on the run mode
+		/**
+ * Checks if is suite runnable.
+ *
+ * @param xls the xls
+ * @param suiteName the suite name
+ * @return true, if is suite runnable
+ */
+public static boolean isSuiteRunnable(XlsxReader xls, String suiteName){
+<span class="nc" id="L76">			System.out.println(&quot;Xls name:&quot;+xls+&quot;, Suite name:&quot;+suiteName);</span>
+<span class="nc" id="L77">			boolean isExecutable =false;</span>
+<span class="nc bnc" id="L78" title="All 2 branches missed.">			for(int  i = 2; i&lt;=xls.getRowCount(&quot;Test Suite&quot;); i++){</span>
+<span class="nc" id="L79">				String tsid = xls.getCellData(&quot;Test Suite&quot;, &quot;TSID&quot;, i);</span>
+<span class="nc" id="L80">				String runmode = xls.getCellData(&quot;Test Suite&quot;, &quot;Runmode&quot;, i);</span>
+<span class="nc" id="L81">				System.out.println(tsid + &quot; Runmode is &quot; + runmode);</span>
+				
+<span class="nc bnc" id="L83" title="All 2 branches missed.">				if(tsid.equalsIgnoreCase(suiteName)){</span>
+<span class="nc bnc" id="L84" title="All 2 branches missed.">					if(runmode.equalsIgnoreCase(&quot;Y&quot;)){</span>
+<span class="nc" id="L85">						isExecutable = true;</span>
+					}
+						else{
+<span class="nc" id="L88">							isExecutable = false;</span>
+							}
+					}
+				}
+<span class="nc" id="L92">		xls = null;</span>
+<span class="nc" id="L93">		return isExecutable;</span>
+		}
+	
+		
+		
+//Find if the specified test is runnable based on runmode
+		/**
+ * Checks if is test runnable.
+ *
+ * @param xls the xls
+ * @param testCaseName the test case name
+ * @return true, if is test runnable
+ */
+public static boolean isTestRunnable(XlsxReader xls, String testCaseName){
+<span class="nc" id="L107">			boolean isExecutable = false;</span>
+			
+<span class="nc" id="L109">			System.out.println(&quot;Sheet name:&quot;+xls+&quot;, Test case name:&quot;+testCaseName);</span>
+<span class="nc bnc" id="L110" title="All 2 branches missed.">			for(int i =2; i&lt;=xls.getRowCount(&quot;Test Cases&quot;); i++){</span>
+<span class="nc" id="L111">				String tcid = xls.getCellData(&quot;Test Cases&quot;, &quot;TCID&quot;, i);</span>
+<span class="nc" id="L112">				String runmode = xls.getCellData(&quot;Test Cases&quot;, &quot;Runmode&quot;, i);</span>
+				
+				//System.out.println(tcid + &quot; Runmode &quot; + runmode);
+				/*System.out.println(&quot;TIDA:&quot;+tcid);
+				System.out.println(&quot;TIDE:&quot;+testCaseName);
+				System.out.println(&quot;runmodeA:&quot;+runmode);
+				System.out.println(&quot;runmodeE:&quot;+&quot;Y&quot;);*/
+				
+<span class="nc bnc" id="L120" title="All 2 branches missed.">				if(tcid.equalsIgnoreCase(testCaseName)){</span>
+<span class="nc bnc" id="L121" title="All 2 branches missed.">					if(runmode.equalsIgnoreCase(&quot;Y&quot;)){</span>
+<span class="nc" id="L122">						isExecutable = true;						</span>
+					}else{
+<span class="nc" id="L124">						isExecutable = false;</span>
+						}
+					}
+				}
+				
+<span class="nc" id="L129">			xls =null;//release memory</span>
+<span class="nc" id="L130">			return isExecutable;		</span>
+		}
+
+	
+	
+//Return the test data from a two dimensional array
+		/**
+ * Gets the data.
+ *
+ * @param xls the xls
+ * @param testCaseName the test case name
+ * @return the data
+ */
+public static Object[][] getData(XlsxReader xls, String testCaseName){
+			
+<span class="nc" id="L145">			System.out.println(&quot;Reader sheet name:&quot;+xls+&quot;, testcasename:&quot;+testCaseName);</span>
+			//if the test data sheet is not present for a test case
+<span class="nc bnc" id="L147" title="All 2 branches missed.">			if(! xls.isSheetExist(testCaseName)){</span>
+<span class="nc" id="L148">				xls = null;</span>
+<span class="nc" id="L149">				return new Object[1][0];</span>
+			}
+			
+<span class="nc" id="L152">			int rows = xls.getRowCount(testCaseName);</span>
+<span class="nc" id="L153">			int cols = xls.getColumnCount(testCaseName);</span>
+			
+			//Retrieving data from excel
+<span class="nc" id="L156">			Object[][] data = new Object[rows-1][cols-3];</span>
+<span class="nc bnc" id="L157" title="All 2 branches missed.">			for(int rowNum =2; rowNum&lt;=rows; rowNum++ ){</span>
+<span class="nc bnc" id="L158" title="All 2 branches missed.">				for(int colNum =0; colNum&lt;cols-3; colNum++){</span>
+					//System.out.print(xls.getCellData(testCaseName, colNum, rowNum)+ &quot; -- &quot;);
+<span class="nc" id="L160">					data[rowNum-2][colNum] = xls.getCellData(testCaseName, colNum, rowNum);</span>
+				}
+				//System.out.println();
+			}
+<span class="nc" id="L164">				return data;</span>
+		}
+		
+		
+// checks Runmode for dataSet
+				/**
+ * Gets the data set runmodes.
+ *
+ * @param xlsFile the xls file
+ * @param sheetName the sheet name
+ * @return the data set runmodes
+ */
+public static String[] getDataSetRunmodes(XlsxReader xlsFile,String sheetName){
+<span class="nc" id="L177">					String[] runmodes=null;</span>
+<span class="nc bnc" id="L178" title="All 2 branches missed.">					if(!xlsFile.isSheetExist(sheetName)){</span>
+<span class="nc" id="L179">						xlsFile=null;</span>
+<span class="nc" id="L180">						sheetName=null;</span>
+<span class="nc" id="L181">						runmodes = new String[1];</span>
+<span class="nc" id="L182">						runmodes[0]=&quot;Y&quot;;</span>
+<span class="nc" id="L183">						xlsFile=null;</span>
+<span class="nc" id="L184">						sheetName=null;</span>
+<span class="nc" id="L185">						return runmodes;</span>
+					}
+<span class="nc" id="L187">					runmodes = new String[xlsFile.getRowCount(sheetName)-1];</span>
+<span class="nc bnc" id="L188" title="All 2 branches missed.">					for(int i=2;i&lt;=runmodes.length+1;i++){</span>
+<span class="nc" id="L189">						runmodes[i-2]=xlsFile.getCellData(sheetName, &quot;Runmode&quot;, i);</span>
+<span class="nc" id="L190">						System.out.println(&quot;Runmodes of sheet:&quot;+xlsFile.getCellData(sheetName, &quot;Runmode&quot;, i));</span>
+					}
+<span class="nc" id="L192">					xlsFile=null;</span>
+<span class="nc" id="L193">					sheetName=null;</span>
+<span class="nc" id="L194">					return runmodes;</span>
+					
+				}
+		
+//updating results for a particular data set
+		/**
+ * Report data set result.
+ *
+ * @param xls the xls
+ * @param testCaseName the test case name
+ * @param rowNum the row num
+ * @param result the result
+ */
+public static void reportDataSetResult(XlsxReader xls, String testCaseName, int rowNum, String result){
+<span class="nc" id="L208">			xls.setCellData(testCaseName, &quot;Results&quot;, rowNum, result);</span>
+<span class="nc" id="L209">		}</span>
+		
+	//updating results for a particular data set
+		/**
+	 * Report data set result class link.
+	 *
+	 * @param xls the xls
+	 * @param testCaseName the test case name
+	 * @param rowNum the row num
+	 * @param result the result
+	 */
+	public static void reportDataSetResultClassLink(XlsxReader xls, String testCaseName, int rowNum, String result){
+<span class="nc" id="L221">			xls.setCellData(testCaseName, &quot;ClassregLnk&quot;, rowNum, result);</span>
+<span class="nc" id="L222">		}</span>
+		//updating results for a particular data set
+		/**
+		 * Report data set result class id.
+		 *
+		 * @param xls the xls
+		 * @param testCaseName the test case name
+		 * @param rowNum the row num
+		 * @param result the result
+		 */
+		public static void reportDataSetResultClassId(XlsxReader xls, String testCaseName, int rowNum, String result){
+<span class="nc" id="L233">			xls.setCellData(testCaseName, &quot;ClassId&quot;, rowNum, result);</span>
+<span class="nc" id="L234">		}</span>
+
+//return the Row Number for a Test
+		/**
+ * Gets the row num.
+ *
+ * @param xls the xls
+ * @param id the id
+ * @return the row num
+ */
+public static int getRowNum(XlsxReader xls, String id){
+<span class="nc bnc" id="L245" title="All 2 branches missed.">			for(int i =2; i&lt;=xls.getRowCount(&quot;Test Cases&quot;); i++){</span>
+<span class="nc" id="L246">				String tcid = xls.getCellData(&quot;Test Cases&quot;, &quot;TCID&quot;, i);</span>
+<span class="nc bnc" id="L247" title="All 2 branches missed.">				if(tcid.equals(id)){</span>
+<span class="nc" id="L248">					xls=null;</span>
+<span class="nc" id="L249">					return i;</span>
+				}
+			}
+<span class="nc" id="L252">			return -1;</span>
+		}
+
+		
+
+		/**
+		 * Creates the driver.
+		 *
+		 * @param create the create
+		 * @return the web driver
+		 * @throws DriverException the driver exception
+		 */
+	    //This method takes boolean value as input. createDriver(false) returns existing driver Object. createDriver(true) creates new driver object and returns it.
+		public static WebDriver createDriver(boolean create) throws DriverException
+		{
+<span class="nc" id="L267">		    WebDriver driverObj = (WebDriver)TestBedManager.INSTANCE.getCurrentTestBed().getDriver();</span>
+<span class="nc bnc" id="L268" title="All 2 branches missed.">		    if(create)</span>
+		    {             
+<span class="nc" id="L270">		           driverObj = (WebDriver)DriverManager.buildDriver(TestBedManager.INSTANCE.getCurrentTestBed().getTestBedName()).getDriver();</span>
+<span class="nc" id="L271">		           TestBedManager.INSTANCE.getCurrentTestBed().setDriver(driverObj);</span>
+		           
+		    }
+		    
+<span class="nc" id="L275">		    return driverObj;</span>
+		}
+		
+		/**
+		 * Close driver.
+		 *
+		 * @param driverObj the driver obj
+		 */
+		public static void closeDriver(WebDriver driverObj)
+		{
+<span class="nc" id="L285">		    System.out.println(&quot;After Method SOP&quot;);</span>
+<span class="nc bnc" id="L286" title="All 2 branches missed.">		    if(driverObj!=null)</span>
+		           {
+		                  //driverObj.getWindowHandle();
+<span class="nc" id="L289">		                  driverObj.close();</span>
+<span class="nc" id="L290">		                  driverObj.quit();</span>
+		           }             
+<span class="nc" id="L292">		}</span>
+	
+		
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.5.201112152213</span></div></body></html>

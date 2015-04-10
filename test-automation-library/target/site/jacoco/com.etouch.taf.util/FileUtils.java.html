@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>FileUtils.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Test Automation Library</a> &gt; <a href="index.html" class="el_package">com.etouch.taf.util</a> &gt; <span class="el_source">FileUtils.java</span></div><h1>FileUtils.java</h1><pre class="source lang-java linenums">/*
+ * 
+ */
+package com.etouch.taf.util;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
+import org.apache.commons.logging.Log;
+
+// TODO: Auto-generated Javadoc
+/**
+ * This class contains utility methods for reading property file data.
+ * 
+ * @author eTouch Systems Corporation
+ * @version 1.0
+ *
+ */
+<span class="nc" id="L23">public class FileUtils {</span>
+	
+	/** The log. */
+<span class="nc" id="L26">	private static Log log = LogUtil.getLog(FileUtils.class);</span>
+
+	/**
+	 * Deletes the given file. If the file is a directory, recursively deletes all the files and finally deletes the directory.
+	 *
+	 * @param file the file
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
+	public static void delete(File file) throws IOException {
+		// Check if the file instance is not null
+<span class="nc bnc" id="L36" title="All 2 branches missed.">		if (null == file) {</span>
+<span class="nc" id="L37">			System.out.println(&quot;FileUtils::delete() -&gt; Ingnoring null parameter&quot;);</span>
+<span class="nc" id="L38">			return;</span>
+		}
+
+<span class="nc" id="L41">		System.out.println(&quot;Trying to delete file/directory &quot;</span>
+				+ file.getAbsolutePath());
+
+<span class="nc bnc" id="L44" title="All 2 branches missed.">		if (file.exists()) {</span>
+<span class="nc bnc" id="L45" title="All 2 branches missed.">			if (file.isDirectory()) {</span>
+<span class="nc" id="L46">				File[] files = file.listFiles();</span>
+				// directory is empty, then delete it
+<span class="nc bnc" id="L48" title="All 2 branches missed.">				if (files.length == 0) {</span>
+<span class="nc" id="L49">					file.delete();</span>
+				} else {
+<span class="nc bnc" id="L51" title="All 2 branches missed.">					for (File tmpFile : files) {</span>
+<span class="nc" id="L52">						delete(tmpFile);</span>
+					}
+				}
+<span class="nc" id="L55">			} else {</span>
+<span class="nc" id="L56">				file.delete();</span>
+			}
+		}
+<span class="nc" id="L59">	}</span>
+	
+	/**
+	 * Loads a given property file into {@link Properties}.
+	 *
+	 * @param filePath the file path
+	 * @return the properties
+	 * @throws FileNotFoundException the file not found exception
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
+	public static Properties readPropertyFile(String filePath)
+			throws FileNotFoundException, IOException {
+		
+<span class="nc bnc" id="L72" title="All 4 branches missed.">		if (null == filePath || filePath.trim().length() == 0) {</span>
+<span class="nc" id="L73">			return null;</span>
+		}
+		
+<span class="nc" id="L76">		Properties props = new Properties();</span>
+
+		// Create the file
+<span class="nc" id="L79">		File propFile = new File(filePath);</span>
+
+		// Load the properties
+<span class="nc bnc" id="L82" title="All 4 branches missed.">		if (propFile.isFile() &amp;&amp; propFile.exists()) {</span>
+<span class="nc" id="L83">			System.out.println(&quot;Loading property file from &quot;</span>
+					+ propFile.getAbsolutePath());
+<span class="nc" id="L85">			props.load(new FileInputStream(propFile));</span>
+		}
+
+<span class="nc" id="L88">		return props;</span>
+
+	}
+	
+	/**
+	 * Loads the given file from class path, if exists.
+	 *
+	 * @param fileName the file name
+	 * @return the properties
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
+	public static Properties readPropertyFileFromClassPath(String fileName)
+			throws IOException {
+		
+<span class="nc bnc" id="L102" title="All 4 branches missed.">		if (null == fileName || fileName.trim().length() == 0) {</span>
+<span class="nc" id="L103">			return null;</span>
+		}
+		
+<span class="nc" id="L106">		Properties props = new Properties();</span>
+<span class="nc" id="L107">		InputStream inStream = ClassLoader.getSystemResourceAsStream(fileName);</span>
+
+<span class="nc bnc" id="L109" title="All 2 branches missed.">		if (inStream == null) {</span>
+			// Trying to load from context class loader
+<span class="nc" id="L111">			inStream = Thread.currentThread().getContextClassLoader()</span>
+					.getResourceAsStream(fileName);
+		}
+
+<span class="nc" id="L115">		props.load(inStream);</span>
+<span class="nc" id="L116">		return props;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.5.201112152213</span></div></body></html>

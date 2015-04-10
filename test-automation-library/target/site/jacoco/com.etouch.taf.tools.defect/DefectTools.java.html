@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>DefectTools.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Test Automation Library</a> &gt; <a href="index.html" class="el_package">com.etouch.taf.tools.defect</a> &gt; <span class="el_source">DefectTools.java</span></div><h1>DefectTools.java</h1><pre class="source lang-java linenums">/*
+ * 
+ */
+package com.etouch.taf.tools.defect;
+
+// TODO: Auto-generated Javadoc
+/**
+ * The Enum DefectTools.
+ */
+<span class="nc" id="L10">public enum DefectTools {</span>
+	
+	/** The rally. */
+<span class="nc" id="L13">	RALLY(&quot;Rally&quot;),</span>
+	
+	/** The jira. */
+<span class="nc" id="L16">	JIRA(&quot;Jira&quot;);</span>
+	
+	/** The tool. */
+	private String tool;
+	
+	/**
+	 * Gets the tool.
+	 *
+	 * @return the tool
+	 */
+	public String getTool() {
+<span class="nc" id="L27">		return tool;</span>
+	}
+
+	/**
+	 * Instantiates a new defect tools.
+	 *
+	 * @param tool the tool
+	 */
+<span class="nc" id="L35">	DefectTools(String tool){</span>
+<span class="nc" id="L36">		this.tool = tool;</span>
+<span class="nc" id="L37">	}</span>
+	
+	/**
+	 * Checks if is supported.
+	 *
+	 * @param toolName the tool name
+	 * @return true, if is supported
+	 */
+	public static boolean isSupported(String toolName){
+<span class="nc" id="L46">		DefectTools[] dtList = DefectTools.values();</span>
+<span class="nc bnc" id="L47" title="All 2 branches missed.">		for(DefectTools dt : dtList){</span>
+<span class="nc bnc" id="L48" title="All 2 branches missed.">			if(dt.getTool().equalsIgnoreCase(toolName)){</span>
+<span class="nc" id="L49">				return true;</span>
+			}
+		}
+<span class="nc" id="L52">		return false;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.5.201112152213</span></div></body></html>

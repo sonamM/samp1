@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>SelectBox.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Test Automation Library</a> &gt; <a href="index.html" class="el_package">com.etouch.taf.webui.selenium.webelement</a> &gt; <span class="el_source">SelectBox.java</span></div><h1>SelectBox.java</h1><pre class="source lang-java linenums">/*
+ * 
+ */
+package com.etouch.taf.webui.selenium.webelement;
+
+import java.util.List;
+
+import org.apache.commons.logging.Log;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+
+import com.etouch.taf.core.exception.PageException;
+import com.etouch.taf.util.CommonUtil;
+import com.etouch.taf.util.LogUtil;
+
+// TODO: Auto-generated Javadoc
+/**
+ * Renders SelectBox PageObject. 
+ * 
+ * @author eTouch Systems Corporation
+ * @version 1.0
+ * 
+ */
+public class SelectBox extends Element{
+
+	/** The log. */
+<span class="nc" id="L27">	static Log log = LogUtil.getLog(SelectBox.class);</span>
+	
+	/**
+	 * Initialize select box page object.
+	 *
+	 * @param webElement the web element
+	 */
+	public SelectBox(WebElement webElement) {
+<span class="nc" id="L35">		super(webElement);</span>
+<span class="nc" id="L36">	}</span>
+	
+	/**
+	 * Selects value from the list .
+	 *
+	 * @param selection the text for the element to be selected from the selection list
+	 * @return true if the selection is found
+	 * @throws PageException the page exception
+	 */
+	public boolean selectDropDownList(String selection) throws PageException{
+<span class="nc bnc" id="L46" title="All 2 branches missed.">		if(CommonUtil.isNull(selection)){</span>
+<span class="nc" id="L47">			log.error(&quot;select text is missing - &quot;+ selection);			</span>
+<span class="nc" id="L48">			throw new PageException(&quot;select text is missing&quot;);</span>
+		}
+<span class="nc" id="L50">		List&lt;WebElement&gt; componentList = webElement.findElements(By.tagName(&quot;option&quot;));</span>
+<span class="nc bnc" id="L51" title="All 2 branches missed.">		for (WebElement component : componentList) {</span>
+<span class="nc bnc" id="L52" title="All 2 branches missed.">			if (component.getText().contains(selection)) {</span>
+<span class="nc" id="L53">				component.click();</span>
+<span class="nc" id="L54">				return true;</span>
+			}
+<span class="nc" id="L56">		}</span>
+<span class="nc" id="L57">		return false;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.5.201112152213</span></div></body></html>

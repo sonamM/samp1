@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ConfigUtil.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Test Automation Library</a> &gt; <a href="index.html" class="el_package">com.etouch.taf.util</a> &gt; <span class="el_source">ConfigUtil.java</span></div><h1>ConfigUtil.java</h1><pre class="source lang-java linenums">/*
+ * 
+ */
+package com.etouch.taf.util;
+
+import org.apache.commons.logging.Log;
+
+import com.etouch.taf.core.TestBed;
+import com.etouch.taf.core.config.TestBedManagerConfiguration;
+import com.etouch.taf.core.exception.DefectException;
+import com.etouch.taf.core.resources.DefectToolType;
+import com.etouch.taf.core.resources.PlatformType;
+import com.etouch.taf.core.resources.TestEnvironmentType;
+import com.etouch.taf.core.resources.TestToolType;
+import com.etouch.taf.core.resources.TestTypes;
+import com.etouch.taf.tools.defect.DefectManagerFactory;
+
+// TODO: Auto-generated Javadoc
+/**
+ * The Class ConfigUtil.
+ */
+<span class="nc" id="L22">public class ConfigUtil {</span>
+
+	/** The log. */
+<span class="fc" id="L25">	static Log log = LogUtil.getLog(ConfigUtil.class);</span>
+
+	/** The tb mgr config. */
+<span class="fc" id="L28">	private static TestBedManagerConfiguration tbMgrConfig = TestBedManagerConfiguration</span>
+			.getInstance();
+	
+	/** The test environment. */
+<span class="fc" id="L32">	private static String testEnvironment = tbMgrConfig.getWebConfig()</span>
+			.getTestEnv();
+
+	/**
+	 * If it is windows platform then return true.
+	 *
+	 * @param testBed the test bed
+	 * @return true, if is windows
+	 */
+	public static boolean isWindows(TestBed testBed) {
+
+<span class="nc" id="L43">		boolean result = false;</span>
+
+<span class="nc bnc" id="L45" title="All 2 branches missed.">		if (testBed.getPlatform().getName()</span>
+				.equalsIgnoreCase(PlatformType.Windows.toString())) {
+<span class="nc" id="L47">			result = true;</span>
+		}
+<span class="nc" id="L49">		return result;</span>
+	}
+
+	/**
+	 * If it is Mac platform then return true.
+	 *
+	 * @param testBed the test bed
+	 * @return true, if is mac
+	 */
+	public static boolean isMac(TestBed testBed) {
+
+<span class="nc" id="L60">		boolean result = false;</span>
+
+<span class="nc bnc" id="L62" title="All 2 branches missed.">		if (testBed.getPlatform().getName()</span>
+				.equalsIgnoreCase(PlatformType.Mac.toString())) {
+<span class="nc" id="L64">			result = true;</span>
+		}
+<span class="nc" id="L66">		return result;</span>
+	}
+
+	/**
+	 * If it is Linux platform then return true.
+	 *
+	 * @param testBed the test bed
+	 * @return true, if is linux
+	 */
+	public static boolean isLinux(TestBed testBed) {
+
+<span class="nc" id="L77">		boolean result = false;</span>
+
+<span class="nc bnc" id="L79" title="All 2 branches missed.">		if (testBed.getPlatform().getName()</span>
+				.equalsIgnoreCase(PlatformType.Linux.toString())) {
+<span class="nc" id="L81">			result = true;</span>
+		}
+<span class="nc" id="L83">		return result;</span>
+	}
+
+	
+	/**
+	 * If it is Android platform then return true.
+	 *
+	 * @param testBed the test bed
+	 * @return true, if is android
+	 */
+	public static boolean isAndroid(TestBed testBed) {
+
+<span class="nc" id="L95">		boolean result = false;</span>
+
+<span class="nc bnc" id="L97" title="All 2 branches missed.">		if (testBed.getPlatform().getName()</span>
+				.equalsIgnoreCase(PlatformType.Android.toString())) {
+<span class="nc" id="L99">			result = true;</span>
+		}
+<span class="nc" id="L101">		return result;</span>
+	}
+
+	/**
+	 * If it is iOS platform then return true.
+	 *
+	 * @param testBed the test bed
+	 * @return true, if is i os
+	 */
+	public static boolean isiOS(TestBed testBed) {
+
+<span class="nc" id="L112">		boolean result = false;</span>
+
+<span class="nc bnc" id="L114" title="All 2 branches missed.">		if (testBed.getPlatform().getName()</span>
+				.equalsIgnoreCase(PlatformType.iOS.toString())) {
+<span class="nc" id="L116">			result = true;</span>
+		}
+<span class="nc" id="L118">		return result;</span>
+	}
+
+	/**
+	 * If it is FirefoxOS platform then return true.
+	 *
+	 * @param testBed the test bed
+	 * @return true, if is firefox os
+	 */
+	public static boolean isFirefoxOS(TestBed testBed) {
+
+<span class="nc" id="L129">		boolean result = false;</span>
+
+<span class="nc bnc" id="L131" title="All 2 branches missed.">		if (testBed.getPlatform().getName()</span>
+				.equalsIgnoreCase(PlatformType.FirefoxOS.toString())) {
+<span class="nc" id="L133">			result = true;</span>
+		}
+<span class="nc" id="L135">		return result;</span>
+	}
+
+	/**
+	 * Checks whether testScripts are going to run again Local Environment or
+	 * not.
+	 *
+	 * @return true, if is local env
+	 */
+	public static boolean isLocalEnv() {
+
+<span class="fc" id="L146">		boolean result = false;</span>
+
+<span class="pc bpc" id="L148" title="1 of 2 branches missed.">		if (TestEnvironmentType.LOCAL.getTestEnv().equals(testEnvironment)) {</span>
+<span class="fc" id="L149">			result = true;</span>
+		}
+<span class="fc" id="L151">		return result;</span>
+	}
+
+	/**
+	 * Checks whether testScripts are going to run again Remote Environment or
+	 * not.
+	 *
+	 * @return true, if is remote env
+	 */
+	public static boolean isRemoteEnv() {
+
+<span class="nc" id="L162">		boolean result = false;</span>
+
+<span class="nc bnc" id="L164" title="All 2 branches missed.">		if (TestEnvironmentType.REMOTE.getTestEnv().equals(testEnvironment)) {</span>
+<span class="nc" id="L165">			result = true;</span>
+		}
+<span class="nc" id="L167">		return result;</span>
+	}
+
+	/**
+	 * Checks whether testScripts are going to run again Remote Environment or
+	 * not.
+	 *
+	 * @return true, if is browser stack env
+	 */
+	public static boolean isBrowserStackEnv() {
+
+<span class="nc" id="L178">		boolean result = false;</span>
+
+<span class="nc bnc" id="L180" title="All 2 branches missed.">		if (TestEnvironmentType.BROWSERSTACK.getTestEnv().equals(</span>
+				testEnvironment)) {
+<span class="nc" id="L182">			result = true;</span>
+		}
+<span class="nc" id="L184">		return result;</span>
+	}
+
+	/**
+	 * Check whether selenium is given for webTesting.
+	 *
+	 * @return true, if is selenium
+	 */
+	public static boolean isSelenium() {
+<span class="fc" id="L193">		boolean result = false;</span>
+<span class="pc bpc" id="L194" title="1 of 2 branches missed.">		if (tbMgrConfig.getWebConfig().getTool()</span>
+				.equalsIgnoreCase(TestToolType.Selenium.getTestToolType())) {
+<span class="fc" id="L196">			result = true;</span>
+		}
+<span class="fc" id="L198">		return result;</span>
+	}
+
+	/**
+	 * Check whether Appium is given for webTesting.
+	 *
+	 * @return true, if is appium
+	 */
+	public static boolean isAppium() {
+<span class="nc" id="L207">		boolean result = false;</span>
+<span class="nc bnc" id="L208" title="All 2 branches missed.">		if (tbMgrConfig.getMobileConfig().getTool()</span>
+				.equalsIgnoreCase(TestToolType.Appium.getTestToolType())) {
+<span class="nc" id="L210">			result = true;</span>
+		}
+<span class="nc" id="L212">		return result;</span>
+	}
+
+	
+	/**
+	 * To check whether the WebTestType is included or not.
+	 *
+	 * @return true, if is web test type enabled
+	 */
+	public static boolean isWebTestTypeEnabled() {
+<span class="nc" id="L222">		TestBedManagerConfiguration tbMgrConfig = TestBedManagerConfiguration</span>
+				.getInstance();
+<span class="nc" id="L224">		boolean isWebEnabled = false;</span>
+
+<span class="nc bnc" id="L226" title="All 2 branches missed.">		for (String testType : tbMgrConfig.getTestTypes()) {</span>
+<span class="nc bnc" id="L227" title="All 2 branches missed.">			if (testType.equalsIgnoreCase(TestTypes.WEB.getTestType())) {</span>
+<span class="nc" id="L228">				isWebEnabled = true;</span>
+<span class="nc" id="L229">				break;</span>
+			}
+		}
+
+<span class="nc" id="L233">		return isWebEnabled;</span>
+	}
+
+	
+	/**
+	 * To check whether the Mobile Test Types is included or not.
+	 *
+	 * @return true, if is mobile test type enabled
+	 */
+	public static boolean isMobileTestTypeEnabled() {
+<span class="nc" id="L243">		TestBedManagerConfiguration tbMgrConfig = TestBedManagerConfiguration</span>
+				.getInstance();
+<span class="nc" id="L245">		boolean isMobileEnabled = false;</span>
+
+<span class="nc bnc" id="L247" title="All 2 branches missed.">		for (String testType : tbMgrConfig.getTestTypes()) {</span>
+<span class="nc bnc" id="L248" title="All 2 branches missed.">			if (testType.equalsIgnoreCase(TestTypes.MOBILE.getTestType())) {</span>
+<span class="nc" id="L249">				isMobileEnabled = true;</span>
+<span class="nc" id="L250">				break;</span>
+			}
+		}
+
+<span class="nc" id="L254">		return isMobileEnabled;</span>
+	}
+
+	
+	/**
+	 * Verifies weather the given defect tool is Supported by eTaap or not.
+	 *
+	 * @return boolean
+	 * @throws DefectException the defect exception
+	 */
+	public static boolean isDefectToolSupported() throws DefectException {
+
+<span class="nc" id="L266">		boolean result = false;</span>
+<span class="nc" id="L267">		String defectTool = TestBedManagerConfiguration.getInstance()</span>
+				.getDefectConfig().getDefectTool();
+
+		// instantiate the appropriate defect tracking tool to be used
+<span class="nc bnc" id="L271" title="All 2 branches missed.">		if (defectTool != null) {</span>
+<span class="nc bnc" id="L272" title="All 2 branches missed.">			if (!DefectToolType.isSupported(defectTool)) {</span>
+<span class="nc" id="L273">				log.error(&quot;The defect '&quot; + defectTool + &quot;' is not supported.&quot;);</span>
+<span class="nc" id="L274">				throw new DefectException(&quot;The defect '&quot; + defectTool</span>
+						+ &quot;' is not supported.&quot;);
+			} else {
+<span class="nc" id="L277">				result = true;</span>
+			}
+		}
+<span class="nc" id="L280">		return result;</span>
+	}
+	
+	/**
+	 * Checks if is experi test.
+	 *
+	 * @return true, if is experi test
+	 */
+	public static boolean isExperiTest() {
+<span class="nc" id="L289">		boolean result = false;</span>
+<span class="nc bnc" id="L290" title="All 2 branches missed.">		if (tbMgrConfig.getMobileConfig().getTool()</span>
+				.equalsIgnoreCase(TestToolType.ExperiTest.getTestToolType())) {
+<span class="nc" id="L292">			result = true;</span>
+		}
+<span class="nc" id="L294">		return result;		</span>
+	}
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.5.201112152213</span></div></body></html>

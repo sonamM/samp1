@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>RequestInfo.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Test Automation Library</a> &gt; <a href="index.html" class="el_package">com.etouch.taf.tools.rally</a> &gt; <span class="el_source">RequestInfo.java</span></div><h1>RequestInfo.java</h1><pre class="source lang-java linenums">/*
+ * 
+ */
+package com.etouch.taf.tools.rally;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Map;
+
+// TODO: Auto-generated Javadoc
+/**
+ * This class stores Request information.
+ * @author eTouch Systems Corporation
+ * @version 1.0
+ *
+ */
+public class RequestInfo {
+	
+	/** The request type. */
+	String requestType;
+	
+	/** The fetch. */
+	String fetch[]; 
+	
+	/** The query filter. */
+	ArrayList&lt;String&gt; queryFilter;
+	
+	/** The ref field. */
+	String refField;
+	
+	/** The query order. */
+	Hashtable&lt;String,String&gt; queryOrder;
+	
+	/** The page size. */
+	int pageSize;
+	
+	/** The limit. */
+	int limit;
+	
+	/** The entry. */
+	Map&lt;String,Map&lt;String,String&gt;&gt; entry;
+	
+	/** The attachment present. */
+	boolean attachmentPresent;
+
+	/** The img file path. */
+	String imgFilePath;
+	
+	/** The img file name. */
+	String imgFileName;
+	
+	/** The access mode. */
+	String accessMode;
+	
+	/** The project oid. */
+	String projectOID;
+	
+	/** The scope down. */
+	boolean scopeDown;
+
+	/**
+	 * Checks if is attachment present.
+	 *
+	 * @return true, if is attachment present
+	 */
+	public boolean isAttachmentPresent() {
+<span class="nc" id="L68">		return attachmentPresent;</span>
+	}
+
+	/**
+	 * Sets the attachment present.
+	 *
+	 * @param attachmentPresent the new attachment present
+	 */
+	public void setAttachmentPresent(boolean attachmentPresent) {
+<span class="nc" id="L77">		this.attachmentPresent = attachmentPresent;</span>
+<span class="nc" id="L78">	}</span>
+	
+	/**
+	 * Gets the access mode.
+	 *
+	 * @return the access mode
+	 */
+	public String getAccessMode() {
+<span class="nc" id="L86">		return accessMode;</span>
+	}
+
+	/**
+	 * Sets the access mode.
+	 *
+	 * @param accessMode the new access mode
+	 */
+	public void setAccessMode(String accessMode) {
+<span class="nc" id="L95">		this.accessMode = accessMode;</span>
+<span class="nc" id="L96">	}</span>
+
+	/**
+	 * Gets the img file path.
+	 *
+	 * @return the img file path
+	 */
+	public String getImgFilePath() {
+<span class="nc" id="L104">		return imgFilePath;</span>
+	}
+
+	/**
+	 * Sets the img file path.
+	 *
+	 * @param imgFilePath the new img file path
+	 */
+	public void setImgFilePath(String imgFilePath) {
+<span class="nc" id="L113">		this.imgFilePath = imgFilePath;</span>
+<span class="nc" id="L114">	}</span>
+
+	/**
+	 * Gets the img file name.
+	 *
+	 * @return the img file name
+	 */
+	public String getImgFileName() {
+<span class="nc" id="L122">		return imgFileName;</span>
+	}
+
+	/**
+	 * Sets the img file name.
+	 *
+	 * @param imgFileName the new img file name
+	 */
+	public void setImgFileName(String imgFileName) {
+<span class="nc" id="L131">		this.imgFileName = imgFileName;</span>
+<span class="nc" id="L132">	}</span>
+
+	/**
+	 * Instantiates a new request info.
+	 */
+<span class="nc" id="L137">	public RequestInfo(){</span>
+<span class="nc" id="L138">		pageSize = -1;</span>
+<span class="nc" id="L139">		limit = -1;</span>
+<span class="nc" id="L140">	}</span>
+	
+	/**
+	 * Instantiates a new request info.
+	 *
+	 * @param reqType the req type
+	 * @param key the key
+	 * @param reqEntries the req entries
+	 */
+<span class="nc" id="L149">	public RequestInfo(String reqType, String key, Map&lt;String, String&gt; reqEntries){</span>
+<span class="nc" id="L150">		setRequestType(reqType);</span>
+<span class="nc bnc" id="L151" title="All 2 branches missed.">		for(Map.Entry&lt;String, String&gt; entry: reqEntries.entrySet()){</span>
+<span class="nc" id="L152">			addEntry(key, entry.getKey(), entry.getValue());</span>
+<span class="nc" id="L153">		}</span>
+<span class="nc" id="L154">	}</span>
+	
+	/**
+	 * Gets the request type.
+	 *
+	 * @return the request type
+	 */
+	public String getRequestType() {
+<span class="nc" id="L162">		return requestType;</span>
+	}
+	
+	/**
+	 * Sets the request type.
+	 *
+	 * @param requestType the new request type
+	 */
+	public void setRequestType(String requestType) {
+<span class="nc" id="L171">		this.requestType = requestType;</span>
+<span class="nc" id="L172">	}</span>
+	
+	/**
+	 * Gets the fetch.
+	 *
+	 * @return the fetch
+	 */
+	public String[] getFetch() {
+<span class="nc" id="L180">		return fetch;</span>
+	}
+	
+	/**
+	 * Sets the fetch.
+	 *
+	 * @param fetch the new fetch
+	 */
+	public void setFetch(String[] fetch) {
+<span class="nc" id="L189">		this.fetch = fetch;</span>
+<span class="nc" id="L190">	}	</span>
+	
+	/**
+	 * Gets the query filter.
+	 *
+	 * @return the query filter
+	 */
+	public ArrayList&lt;String&gt; getQueryFilter() {
+<span class="nc" id="L198">		return queryFilter;</span>
+	}
+
+	/**
+	 * Sets the query filter.
+	 *
+	 * @param queryFilter the new query filter
+	 */
+	public void setQueryFilter(ArrayList&lt;String&gt; queryFilter) {
+<span class="nc" id="L207">		this.queryFilter = queryFilter;</span>
+<span class="nc" id="L208">	}</span>
+	
+	/**
+	 * Gets the ref field.
+	 *
+	 * @return the ref field
+	 */
+	public String getRefField() {
+<span class="nc" id="L216">		return refField;</span>
+	}
+
+	/**
+	 * Sets the ref field.
+	 *
+	 * @param refField the new ref field
+	 */
+	public void setRefField(String refField) {
+<span class="nc" id="L225">		this.refField = refField;</span>
+<span class="nc" id="L226">	}</span>
+	
+	/**
+	 * Adds the order.
+	 *
+	 * @param field the field
+	 * @param order the order
+	 */
+	public void addOrder(String field,String order) {
+<span class="nc bnc" id="L235" title="All 2 branches missed.">		if(queryOrder == null)</span>
+<span class="nc" id="L236">			queryOrder = new Hashtable&lt;String, String&gt;();</span>
+<span class="nc" id="L237">		queryOrder.put(field,order);</span>
+<span class="nc" id="L238">	}</span>
+
+	/**
+	 * Gets the query order.
+	 *
+	 * @return the query order
+	 */
+	public Map&lt;String, String&gt; getQueryOrder() {
+<span class="nc" id="L246">		return queryOrder;</span>
+	}
+
+	/**
+	 * Gets the page size.
+	 *
+	 * @return the page size
+	 */
+	public int getPageSize() {
+<span class="nc" id="L255">		return pageSize;</span>
+	}
+
+	/**
+	 * Sets the page size.
+	 *
+	 * @param pageSize the new page size
+	 */
+	public void setPageSize(int pageSize) {
+<span class="nc" id="L264">		this.pageSize = pageSize;</span>
+<span class="nc" id="L265">	}</span>
+
+	/**
+	 * Gets the limit.
+	 *
+	 * @return the limit
+	 */
+	public int getLimit() {
+<span class="nc" id="L273">		return limit;</span>
+	}
+
+	/**
+	 * Sets the limit.
+	 *
+	 * @param limit the new limit
+	 */
+	public void setLimit(int limit) {
+<span class="nc" id="L282">		this.limit = limit;</span>
+<span class="nc" id="L283">	}</span>
+	
+	/**
+	 * Adds the entry.
+	 *
+	 * @param key the key
+	 * @param name the name
+	 * @param value the value
+	 */
+	public void addEntry(String key, String name,String value){
+		
+<span class="nc bnc" id="L294" title="All 2 branches missed.">		if(entry == null)</span>
+<span class="nc" id="L295">			entry = new HashMap&lt;String, Map&lt;String,String&gt;&gt;();</span>
+		
+<span class="nc" id="L297">		Map&lt;String, String&gt; map = null;</span>
+<span class="nc bnc" id="L298" title="All 2 branches missed.">		if(entry.containsKey(key))</span>
+<span class="nc" id="L299">			map = entry.get(key);</span>
+		
+<span class="nc bnc" id="L301" title="All 2 branches missed.">		if(map == null)</span>
+<span class="nc" id="L302">			map =  new HashMap&lt;String, String&gt;();</span>
+		
+<span class="nc" id="L304">		map.put(name, value);</span>
+		
+<span class="nc" id="L306">		entry.put(key, map</span>
+				);
+<span class="nc" id="L308">	}</span>
+	
+	/**
+	 * Gets the entry.
+	 *
+	 * @return the entry
+	 */
+	public Map&lt;String, Map&lt;String,String&gt;&gt; getEntry() {
+<span class="nc" id="L316">		return entry;</span>
+	}
+	
+	/**
+	 * Sets the entry.
+	 *
+	 * @param newEntry the new entry
+	 */
+	public void setEntry(Map&lt;String, Map&lt;String,String&gt;&gt; newEntry) {
+<span class="nc" id="L325">		this.entry = newEntry;</span>
+<span class="nc" id="L326">	}</span>
+
+	/**
+	 * Gets the project oid.
+	 *
+	 * @return the project oid
+	 */
+	public String getProjectOID() {
+<span class="nc" id="L334">		return projectOID;</span>
+	}
+
+	/**
+	 * Sets the project oid.
+	 *
+	 * @param projectOID the new project oid
+	 */
+	public void setProjectOID(String projectOID) {
+<span class="nc" id="L343">		this.projectOID = projectOID;</span>
+<span class="nc" id="L344">	}</span>
+
+	/**
+	 * Checks if is scope down.
+	 *
+	 * @return true, if is scope down
+	 */
+	public boolean isScopeDown() {
+<span class="nc" id="L352">		return scopeDown;</span>
+	}
+
+	/**
+	 * Sets the scope down.
+	 *
+	 * @param scopeDown the new scope down
+	 */
+	public void setScopeDown(boolean scopeDown) {
+<span class="nc" id="L361">		this.scopeDown = scopeDown;</span>
+<span class="nc" id="L362">	}</span>
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.5.201112152213</span></div></body></html>

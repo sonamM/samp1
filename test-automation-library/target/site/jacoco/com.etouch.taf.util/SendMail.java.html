@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>SendMail.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Test Automation Library</a> &gt; <a href="index.html" class="el_package">com.etouch.taf.util</a> &gt; <span class="el_source">SendMail.java</span></div><h1>SendMail.java</h1><pre class="source lang-java linenums">/*
+ * 
+ */
+package com.etouch.taf.util;
+
+ 
+
+//set CLASSPATH=%CLASSPATH%;activation.jar;mail.jar
+
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
+import javax.mail.*;
+import javax.mail.internet.*;
+
+import com.etouch.taf.infra.mail.IEMailConstantUtil;
+
+import java.util.*;
+
+ 
+
+
+// TODO: Auto-generated Javadoc
+/**
+ * The Class SendMail.
+ */
+<span class="nc" id="L27">public class SendMail</span>
+
+{
+    
+    /**
+     * The main method.
+     *
+     * @param args the arguments
+     * @throws Exception the exception
+     */
+    public static void main(String[] args) throws Exception
+
+    {
+<span class="nc" id="L40">    	Zip.zipDir(System.getProperty(&quot;user.dir&quot;)+&quot;\\XSLT_Reports&quot;,System.getProperty(&quot;user.dir&quot;)+&quot;\\email_xlst_reports.zip&quot; );</span>
+<span class="nc" id="L41">    	Zip.zipDir(IEMailConstantUtil.MAIL_REPORT_DIR,IEMailConstantUtil.MAIL_REPORT_NAME );</span>
+    	
+<span class="nc" id="L43">                String[] to={&quot;etouchautomation@gmail.com&quot;};</span>
+
+<span class="nc" id="L45">                String[] cc={};</span>
+<span class="nc" id="L46">                String[] bcc={};</span>
+
+                //This is for google
+
+<span class="nc" id="L50">          SendMail.sendMail(&quot;etouchautomation@gmail.com&quot;,</span>
+                		            &quot;etouch123&quot;,
+                		            &quot;smtp.gmail.com&quot;,
+                		            &quot;465&quot;,
+                		            &quot;true&quot;,
+                		            &quot;true&quot;,
+                		            true,
+                		            &quot;javax.net.ssl.SSLSocketFactory&quot;,
+                		            &quot;false&quot;,
+                		            to,
+                		            cc,
+                		            bcc,
+                		            &quot;Automation test Reports&quot;,
+                		            &quot;Please find the reports attached.\n\n Regards\nWebMaster&quot;,
+                		        	System.getProperty(&quot;user.dir&quot;)+&quot;\\email_xlst_reports.zip&quot;,
+                		        	&quot;email_xlst_reports.zip&quot;); 
+                 
+                        
+
+<span class="nc" id="L69">    }</span>
+
+ 
+
+        /**
+         * Send mail.
+         *
+         * @param userName the user name
+         * @param passWord the pass word
+         * @param host the host
+         * @param port the port
+         * @param starttls the starttls
+         * @param auth the auth
+         * @param debug the debug
+         * @param socketFactoryClass the socket factory class
+         * @param fallback the fallback
+         * @param to the to
+         * @param cc the cc
+         * @param bcc the bcc
+         * @param subject the subject
+         * @param text the text
+         * @param attachmentPath the attachment path
+         * @param attachmentName the attachment name
+         * @return true, if successful
+         */
+        public  static boolean sendMail(String userName,
+        		String passWord,
+        		String host,
+        		String port,
+        		String starttls,
+        		String auth,
+        		boolean debug,
+        		String socketFactoryClass,
+        		String fallback,
+        		String[] to,
+        		String[] cc,
+        		String[] bcc,
+        		String subject,
+        		String text,
+        		String attachmentPath,
+        		String attachmentName){
+
+
+<span class="nc" id="L112">                Properties props = new Properties();</span>
+
+                //Properties props=System.getProperties();
+
+<span class="nc" id="L116">        props.put(&quot;mail.smtp.user&quot;, userName);</span>
+
+<span class="nc" id="L118">        props.put(&quot;mail.smtp.host&quot;, host);</span>
+
+<span class="nc bnc" id="L120" title="All 2 branches missed.">                if(!&quot;&quot;.equals(port))</span>
+
+<span class="nc" id="L122">        props.put(&quot;mail.smtp.port&quot;, port);</span>
+
+<span class="nc bnc" id="L124" title="All 2 branches missed.">                if(!&quot;&quot;.equals(starttls))</span>
+
+<span class="nc" id="L126">        props.put(&quot;mail.smtp.starttls.enable&quot;,starttls);</span>
+
+<span class="nc" id="L128">        props.put(&quot;mail.smtp.auth&quot;, auth);</span>
+       // props.put(&quot;mail.smtps.auth&quot;, &quot;true&quot;);
+
+
+<span class="nc bnc" id="L132" title="All 2 branches missed.">                if(debug){</span>
+
+<span class="nc" id="L134">                props.put(&quot;mail.smtp.debug&quot;, &quot;true&quot;);</span>
+
+                }else{
+
+<span class="nc" id="L138">                props.put(&quot;mail.smtp.debug&quot;, &quot;false&quot;);         </span>
+
+                }
+
+<span class="nc bnc" id="L142" title="All 2 branches missed.">                if(!&quot;&quot;.equals(port))</span>
+
+<span class="nc" id="L144">        props.put(&quot;mail.smtp.socketFactory.port&quot;, port);</span>
+
+<span class="nc bnc" id="L146" title="All 2 branches missed.">                if(!&quot;&quot;.equals(socketFactoryClass))</span>
+
+<span class="nc" id="L148">        props.put(&quot;mail.smtp.socketFactory.class&quot;,socketFactoryClass);</span>
+
+<span class="nc bnc" id="L150" title="All 2 branches missed.">                if(!&quot;&quot;.equals(fallback))</span>
+
+<span class="nc" id="L152">        props.put(&quot;mail.smtp.socketFactory.fallback&quot;, fallback);</span>
+
+ 
+
+        try
+
+        {
+
+<span class="nc" id="L160">                        Session session = Session.getDefaultInstance(props, null);</span>
+
+<span class="nc" id="L162">            session.setDebug(debug);</span>
+
+<span class="nc" id="L164">            MimeMessage msg = new MimeMessage(session);</span>
+
+<span class="nc" id="L166">            msg.setText(text);</span>
+
+<span class="nc" id="L168">            msg.setSubject(subject);</span>
+            //attachment start
+            // create the message part 
+           
+<span class="nc" id="L172">            Multipart multipart = new MimeMultipart();</span>
+<span class="nc" id="L173">            MimeBodyPart messageBodyPart = new MimeBodyPart();</span>
+<span class="nc" id="L174">            DataSource source = </span>
+              new FileDataSource(attachmentPath);
+<span class="nc" id="L176">            messageBodyPart.setDataHandler(</span>
+              new DataHandler(source));
+<span class="nc" id="L178">            messageBodyPart.setFileName(attachmentName);</span>
+<span class="nc" id="L179">            multipart.addBodyPart(messageBodyPart);</span>
+            
+            // attachment ends
+
+            // Put parts in message
+<span class="nc" id="L184">            msg.setContent(multipart);</span>
+<span class="nc" id="L185">            msg.setFrom(new InternetAddress(&quot;mgtalasila22@gmail.com&quot;));</span>
+
+<span class="nc bnc" id="L187" title="All 2 branches missed.">                        for(int i=0;i&lt;to.length;i++){</span>
+
+<span class="nc" id="L189">            msg.addRecipient(Message.RecipientType.TO, new InternetAddress(to[i]));</span>
+
+                        }
+
+<span class="nc bnc" id="L193" title="All 2 branches missed.">                        for(int i=0;i&lt;cc.length;i++){</span>
+
+<span class="nc" id="L195">            msg.addRecipient(Message.RecipientType.CC, new InternetAddress(cc[i]));</span>
+
+                        }
+
+<span class="nc bnc" id="L199" title="All 2 branches missed.">                        for(int i=0;i&lt;bcc.length;i++){</span>
+
+<span class="nc" id="L201">            msg.addRecipient(Message.RecipientType.BCC, new InternetAddress(bcc[i]));</span>
+
+                        }
+
+<span class="nc" id="L205">            msg.saveChanges();</span>
+
+<span class="nc" id="L207">                        Transport transport = session.getTransport(&quot;smtp&quot;);</span>
+
+<span class="nc" id="L209">                        transport.connect(host, userName, passWord);</span>
+
+<span class="nc" id="L211">                        transport.sendMessage(msg, msg.getAllRecipients());</span>
+
+<span class="nc" id="L213">                        transport.close();</span>
+
+<span class="nc" id="L215">                        return true;</span>
+
+        }
+
+<span class="nc" id="L219">        catch (Exception mex)</span>
+
+        {
+
+<span class="nc" id="L223">            mex.printStackTrace();</span>
+
+<span class="nc" id="L225">                        return false;</span>
+
+        }
+
+        }
+
+ 
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.5.201112152213</span></div></body></html>

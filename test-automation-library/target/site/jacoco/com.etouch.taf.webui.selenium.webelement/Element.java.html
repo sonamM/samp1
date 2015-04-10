@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Element.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Test Automation Library</a> &gt; <a href="index.html" class="el_package">com.etouch.taf.webui.selenium.webelement</a> &gt; <span class="el_source">Element.java</span></div><h1>Element.java</h1><pre class="source lang-java linenums">/*
+ * 
+ */
+package com.etouch.taf.webui.selenium.webelement;
+
+import java.util.List;
+
+import org.apache.commons.logging.Log;
+import org.openqa.selenium.Dimension;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Point;
+import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Action;
+import org.openqa.selenium.interactions.Actions;
+
+import com.etouch.taf.core.TestBedManager;
+import com.etouch.taf.util.BrowserInfoUtil;
+import com.etouch.taf.util.LogUtil;
+
+// TODO: Auto-generated Javadoc
+/**
+ * PageElement that all PageObjectType should extend. This class wraps around
+ * the WebElement
+ * 
+ * @author eTouch Systems Corporation
+ * @version 1.0
+ * 
+ */
+public abstract class Element {
+	
+	/** The log. */
+<span class="nc" id="L34">	private static Log	 log	       = LogUtil.getLog(Element.class);</span>
+	
+	/** The web element. */
+<span class="nc" id="L37">	protected WebElement	webElement	= null;</span>
+	
+	/** The driver. */
+<span class="nc" id="L40">	protected WebDriver driver = null;</span>
+
+	/**
+	 * Gets the web element.
+	 *
+	 * @return the web element
+	 */
+	public WebElement getWebElement() {
+<span class="nc" id="L48">		return webElement;</span>
+	}
+
+	/**
+	 * Instantiates a new element.
+	 *
+	 * @param webElement the web element
+	 */
+<span class="nc" id="L56">	public Element(WebElement webElement) {</span>
+<span class="nc" id="L57">		this.webElement = webElement;</span>
+<span class="nc bnc" id="L58" title="All 2 branches missed.">		if (this.driver == null) {</span>
+<span class="nc" id="L59">			this.driver=(WebDriver)TestBedManager.INSTANCE.getTestBed().getDriver();</span>
+		}
+<span class="nc" id="L61">	}</span>
+	
+	/**
+	 * Double click on web element.
+	 */
+	public void doubleClick() {
+<span class="nc" id="L67">		Actions builder = new Actions(driver);</span>
+<span class="nc" id="L68">		Action mouseOverHome = builder.moveToElement(webElement).click().doubleClick(webElement).build();</span>
+<span class="nc" id="L69">		mouseOverHome.perform();</span>
+		try {
+<span class="nc" id="L71">			Thread.sleep(100000);</span>
+<span class="nc" id="L72">		} catch (InterruptedException e) {</span>
+<span class="nc" id="L73">			log.error(&quot;Exception in thread sleep, message, &quot; + e.toString());</span>
+<span class="nc" id="L74">		}</span>
+<span class="nc" id="L75">		return;</span>
+	}
+
+	/**
+	 * Returns true if element is visible.
+	 * 
+	 * @return true if elements is visible.
+	 */
+	public boolean isElementVisible() {
+		try {
+<span class="nc bnc" id="L85" title="All 2 branches missed.">			if (webElement == null)</span>
+<span class="nc" id="L86">				return false;</span>
+<span class="nc bnc" id="L87" title="All 2 branches missed.">			if (!webElement.isEnabled())</span>
+<span class="nc" id="L88">				return false;</span>
+<span class="nc" id="L89">			webElement.sendKeys(&quot; &quot;);</span>
+<span class="nc" id="L90">		} catch (org.openqa.selenium.ElementNotVisibleException ex) {</span>
+<span class="nc" id="L91">			log.error(&quot;Element No Visible - Error is &quot; + ex.getMessage());</span>
+<span class="nc" id="L92">			return false;</span>
+<span class="nc" id="L93">		} catch (org.openqa.selenium.NoSuchElementException ex) {</span>
+<span class="nc" id="L94">			log.error(&quot;No Such Element - Error is &quot; + ex.getMessage());</span>
+<span class="nc" id="L95">			return false;</span>
+<span class="nc" id="L96">		} catch (org.openqa.selenium.StaleElementReferenceException ex) {</span>
+<span class="nc" id="L97">			log.error(&quot;Stale Element Reference for element - Error is &quot; + ex.getMessage());</span>
+<span class="nc" id="L98">			return false;</span>
+<span class="nc" id="L99">		}</span>
+<span class="nc" id="L100">		return true;</span>
+	}
+
+	/**
+	 * Click on web element.
+	 */
+	public void click() {
+		try {
+<span class="nc" id="L108">			webElement.click();</span>
+<span class="nc" id="L109">			Thread.sleep(1000);</span>
+<span class="nc" id="L110">		} catch (StaleElementReferenceException e) {</span>
+<span class="nc" id="L111">			log.error(&quot;Exception in StaleElementReference message, &quot; + e.toString());</span>
+<span class="nc" id="L112">		}catch (InterruptedException e) {</span>
+<span class="nc" id="L113">		log.error(&quot;Exception in thread sleep, message, &quot; + e.toString());</span>
+<span class="nc" id="L114">	    }</span>
+<span class="nc" id="L115">	}</span>
+
+	/**
+	 * Return coordinates for given web element.
+	 * 
+	 * @return coordinates
+	 */
+	public Point getCoordinates() {
+<span class="nc" id="L123">		return webElement.getLocation();</span>
+	}
+
+	/**
+	 * Returns size of the element.
+	 * 
+	 * @return size of web element.
+	 */
+	public Dimension getSize() {
+<span class="nc" id="L132">		return webElement.getSize();</span>
+	}
+
+	/**
+	 * Returns element count.
+	 *
+	 * @param pageElements the page elements
+	 * @return count page elements.
+	 */
+	public int getElementCount(List&lt;Element&gt; pageElements) {
+<span class="nc" id="L142">		return pageElements.size();</span>
+	}
+
+	/**
+	 * Returns element text.
+	 *
+	 * @return element text
+	 */
+	public String getText() {
+<span class="nc" id="L151">		return webElement.getText();</span>
+	}
+
+	/**
+	 * Return attribute value.
+	 *
+	 * @param attrName the attr name
+	 * @return attribute value
+	 */
+	public String getAttribute(String attrName) {
+<span class="nc" id="L161">		return webElement.getAttribute(attrName);</span>
+	}
+
+	/**
+	 * Returns true if element is displayed.
+	 * 
+	 * @return true if element displayed
+	 */
+	public boolean isDisplayed() {
+<span class="nc" id="L170">		return webElement.isDisplayed();</span>
+	}
+
+	/**
+	 * Returns the css property of a text.
+	 *
+	 * @param property_name the property_name
+	 * @return property value
+	 */
+	public String getCssValue(String property_name) {
+<span class="nc" id="L180">		return webElement.getCssValue(property_name);</span>
+	}
+
+	/**
+	 * hovers on the element.
+	 */
+	public void hover() {
+<span class="nc bnc" id="L187" title="All 2 branches missed.">		if (BrowserInfoUtil.INSTANCE.isSafari()) {</span>
+<span class="nc" id="L188">			String javaScript = &quot;var evObj = document.createEvent('MouseEvents');&quot; + &quot;evObj.initMouseEvent(\&quot;mouseover\&quot;,true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);&quot;</span>
+			        + &quot;arguments[0].dispatchEvent(evObj);&quot;;
+<span class="nc" id="L190">			JavascriptExecutor js = (JavascriptExecutor) driver;</span>
+<span class="nc" id="L191">			js.executeScript(javaScript, webElement);</span>
+			try {
+<span class="nc" id="L193">				Thread.sleep(10000);</span>
+<span class="nc" id="L194">			} catch (InterruptedException e) {</span>
+<span class="nc" id="L195">				e.printStackTrace();</span>
+<span class="nc" id="L196">			}</span>
+<span class="nc" id="L197">			return;</span>
+		}
+		/*
+		 * else if(BrowserInfoUtil.INSTANCE.isIE9()){ Actions builder=new
+		 * Actions(driver); builder.moveToElement(webElement); builder.build();
+		 * //builder.click(webElement); builder.perform(); }
+		 */
+		else {
+<span class="nc" id="L205">			Actions builder = new Actions(driver);</span>
+<span class="nc" id="L206">			builder.moveToElement(webElement).build().perform();</span>
+			try {
+<span class="nc" id="L208">				Thread.sleep(10000);</span>
+<span class="nc" id="L209">			} catch (InterruptedException e) {</span>
+<span class="nc" id="L210">				e.printStackTrace();</span>
+<span class="nc" id="L211">			}</span>
+<span class="nc" id="L212">			return;</span>
+		}
+	}
+
+	/**
+	 * Click event.
+	 */
+	public void clickEvent() {
+<span class="nc" id="L220">		String javaScript = &quot;var evObj = document.createEvent('MouseEvents');&quot; + &quot;evObj.initMouseEvent(\&quot;click\&quot;,true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);&quot;</span>
+		        + &quot;arguments[0].dispatchEvent(evObj);&quot;;
+<span class="nc" id="L222">		JavascriptExecutor js = (JavascriptExecutor) driver;</span>
+<span class="nc" id="L223">		js.executeScript(javaScript, webElement);</span>
+		try {
+<span class="nc" id="L225">			Thread.sleep(10000);</span>
+<span class="nc" id="L226">		} catch (InterruptedException e) {</span>
+<span class="nc" id="L227">			e.printStackTrace();</span>
+<span class="nc" id="L228">		}</span>
+<span class="nc" id="L229">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.5.201112152213</span></div></body></html>

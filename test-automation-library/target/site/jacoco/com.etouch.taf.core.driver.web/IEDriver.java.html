@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>IEDriver.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Test Automation Library</a> &gt; <a href="index.html" class="el_package">com.etouch.taf.core.driver.web</a> &gt; <span class="el_source">IEDriver.java</span></div><h1>IEDriver.java</h1><pre class="source lang-java linenums">/*
+ * 
+ */
+package com.etouch.taf.core.driver.web;
+
+import java.io.File;
+import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
+
+import com.etouch.taf.core.TestBed;
+import com.etouch.taf.core.config.TestBedManagerConfiguration;
+import com.etouch.taf.core.driver.DriverBuilder;
+import com.etouch.taf.core.driver.DriverConstantUtil;
+import com.etouch.taf.core.exception.DriverException;
+import com.etouch.taf.core.resources.TestBedType;
+import com.etouch.taf.core.resources.TestEnvironmentType;
+import com.etouch.taf.util.ConfigUtil;
+import com.etouch.taf.webui.selenium.SeleniumDriver;
+
+// TODO: Auto-generated Javadoc
+/**
+ * The Class IEDriver.
+ */
+public class IEDriver extends DriverBuilder {
+
+	/**
+	 * Instantiates a new IE driver.
+	 *
+	 * @param testBed the test bed
+	 * @throws DriverException the driver exception
+	 */
+	public IEDriver(TestBed testBed) throws DriverException {
+<span class="fc" id="L35">		super(testBed);</span>
+		// TODO Auto-generated constructor stub
+<span class="fc" id="L37">	}</span>
+
+	/**
+	 * Creates Driver for IE8,IE9,IE10.
+	 *
+	 * @throws DriverException the driver exception
+	 */
+	@Override
+	public void buildDriver() throws DriverException {
+
+<span class="pc bpc" id="L47" title="1 of 2 branches missed.">		if (ConfigUtil.isLocalEnv()) {</span>
+			// If the tool is given as Selenium in DevConfig, then create a selenium IEDriver
+<span class="pc bpc" id="L49" title="1 of 2 branches missed.">			if (ConfigUtil.isSelenium()) {</span>
+<span class="fc" id="L50">				File ieDriverFile = getIEDriverFile();</span>
+<span class="fc" id="L51">				driver = SeleniumDriver.buildIEDriver(ieDriverFile);</span>
+<span class="fc" id="L52">			}</span>
+
+<span class="nc bnc" id="L54" title="All 2 branches missed.">		} else if (ConfigUtil.isRemoteEnv()) {</span>
+			
+		
+<span class="nc bnc" id="L57" title="All 2 branches missed.">			if (ConfigUtil.isSelenium()) {</span>
+				
+<span class="nc" id="L59">			capabilities = DesiredCapabilities.internetExplorer();</span>
+
+<span class="nc" id="L61">			capabilities</span>
+					.setCapability(
+							InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS,
+							true);
+<span class="nc" id="L65">			capabilities.setVersion(testBed.getBrowser().getVersion());</span>
+
+<span class="nc" id="L67">			 driver= SeleniumDriver.buildRemoteDriver(capabilities);</span>
+			}
+
+<span class="nc bnc" id="L70" title="All 2 branches missed.">		} else if (ConfigUtil.isBrowserStackEnv()) {</span>
+<span class="nc" id="L71">			capabilities = DesiredCapabilities.internetExplorer();</span>
+<span class="nc" id="L72">			buildBrowserstackCapabilities();</span>
+		}
+
+<span class="fc" id="L75">	}</span>
+
+	/**
+	 * This method returns Driver file for InternetExplorer Driver If is in
+	 * mentioned in config.yml then set that as system property otherwise, use
+	 * the defaults InternetExplorer driver from library based on the given
+	 * platform
+	 *
+	 * @return the IE driver file
+	 * @throws DriverException the driver exception
+	 */
+	public File getIEDriverFile() throws DriverException {
+
+<span class="fc" id="L88">		File file = null;</span>
+
+<span class="pc bpc" id="L90" title="1 of 2 branches missed.">		if (testBed.getBrowser().getDriverLocation() != null) {</span>
+
+<span class="fc" id="L92">			file = new File(testBed.getBrowser().getDriverLocation());</span>
+
+		} else {
+<span class="nc bnc" id="L95" title="All 2 branches missed.">			if (ConfigUtil.isWindows(testBed)) {</span>
+				// TODO have to remove the hard coded values
+				//file = new File(&quot;..\\test-automation-library\\resources\\IEDriverServer.exe&quot;);
+<span class="nc" id="L98">				file = new File(DriverConstantUtil.IE_DRIVER_FILE);</span>
+			} else {
+<span class="nc" id="L100">				throw new DriverException(</span>
+						&quot; Not found a InternetExplorer- not in Windows OS&quot;);
+			}
+		}
+
+<span class="fc" id="L105">		return file;</span>
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.etouch.taf.core.driver.DriverBuilder#getDriver()
+	 */
+	@Override
+	public Object getDriver() throws DriverException {
+		// TODO Auto-generated method stub
+<span class="fc" id="L114">		return driver;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.5.201112152213</span></div></body></html>

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>SikuliIntegration.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Test Automation Library</a> &gt; <a href="index.html" class="el_package">com.etouch.taf.desktop.sikuli</a> &gt; <span class="el_source">SikuliIntegration.java</span></div><h1>SikuliIntegration.java</h1><pre class="source lang-java linenums">/*
+ * 
+ */
+package com.etouch.taf.desktop.sikuli;
+
+import java.net.URL;
+
+import org.apache.commons.logging.Log;
+import org.sikuli.api.DesktopScreenRegion;
+import org.sikuli.api.ImageTarget;
+import org.sikuli.api.MultiStateTarget;
+import org.sikuli.api.ScreenRegion;
+
+import com.etouch.taf.util.LogUtil;
+
+
+// TODO: Auto-generated Javadoc
+/**
+ * Implementation for the  interface to integrate test cases with Sikuli API.
+ *  
+ * @author eTouch Systems Corporation
+ * @version 1.0
+ * 
+ */
+<span class="nc" id="L25">public class SikuliIntegration implements ISikuliIntegration {</span>
+
+	/** The log. */
+<span class="nc" id="L28">	private static Log log = LogUtil.getLog(SikuliIntegration.class);</span>
+
+	
+	/* (non-Javadoc)
+	 * @see com.etouch.taf.desktop.sikuli.ISikuliIntegration#findScreenRegionByImage(org.sikuli.api.ScreenRegion, java.net.URL[], java.lang.String[])
+	 */
+	public ScreenRegion findScreenRegionByImage(ScreenRegion screenRegionToSearch,
+			URL[] images, String... state) throws Exception
+	{
+
+<span class="nc" id="L38">		ScreenRegion region = null;</span>
+		try{
+
+<span class="nc bnc" id="L41" title="All 2 branches missed.">			if(images.length&gt;0)</span>
+			{
+<span class="nc bnc" id="L43" title="All 2 branches missed.">				if(images.length==1)</span>
+				{
+<span class="nc" id="L45">					region = screenRegionToSearch.find(new ImageTarget(images[0]));	</span>
+				}
+				else
+				{
+<span class="nc" id="L49">					MultiStateTarget target = new MultiStateTarget();</span>
+<span class="nc bnc" id="L50" title="All 2 branches missed.">					for (int i = 0; i &lt; images.length; i++)</span>
+					{
+<span class="nc" id="L52">						target.addState(new ImageTarget(images[i]), state[i]);</span>
+					}
+<span class="nc" id="L54">					region = screenRegionToSearch.find(target);	</span>
+				}
+			}
+<span class="nc" id="L57">		}catch(Exception e)</span>
+		{
+<span class="nc" id="L59">			log.error(&quot; Exception occured while retriving region &quot; + e.getMessage());</span>
+<span class="nc" id="L60">			throw e;</span>
+<span class="nc" id="L61">		}</span>
+
+<span class="nc" id="L63">		return region;</span>
+	}
+
+	
+	/* (non-Javadoc)
+	 * @see com.etouch.taf.desktop.sikuli.ISikuliIntegration#waitAndLoadScreenRegionByImage(org.sikuli.api.ScreenRegion, int, java.net.URL[], java.lang.String[])
+	 */
+	public ScreenRegion waitAndLoadScreenRegionByImage(
+			ScreenRegion screenRegionToSearch,  int wait,URL[] images,String... state)throws Exception {
+
+
+<span class="nc" id="L74">		ScreenRegion region = null;</span>
+
+		try{
+
+<span class="nc bnc" id="L78" title="All 2 branches missed.">			if(images.length&gt;0)</span>
+			{
+<span class="nc bnc" id="L80" title="All 2 branches missed.">				if(images.length==1)</span>
+				{
+<span class="nc" id="L82">					region = screenRegionToSearch.wait(new ImageTarget(images[0]),wait);	</span>
+				}
+				else
+				{
+<span class="nc" id="L86">					MultiStateTarget target = new MultiStateTarget();</span>
+<span class="nc bnc" id="L87" title="All 2 branches missed.">					for (int i = 0; i &lt; images.length; i++)</span>
+					{
+<span class="nc" id="L89">						target.addState(new ImageTarget(images[i]), state[i]);</span>
+					}
+<span class="nc" id="L91">					region = screenRegionToSearch.wait(target,wait);	</span>
+				}
+			}
+
+<span class="nc" id="L95">		}catch(Exception e)</span>
+		{
+<span class="nc" id="L97">			log.error(&quot; Exception occured while retriving region &quot; + e.getMessage());</span>
+<span class="nc" id="L98">			throw e;</span>
+<span class="nc" id="L99">		}</span>
+
+
+<span class="nc" id="L102">		return region;</span>
+
+	}
+
+	
+	/* (non-Javadoc)
+	 * @see com.etouch.taf.desktop.sikuli.ISikuliIntegration#defaultScreen()
+	 */
+	public ScreenRegion defaultScreen() throws Exception {
+<span class="nc" id="L111">		return new DesktopScreenRegion();</span>
+	}
+
+	
+	/* (non-Javadoc)
+	 * @see com.etouch.taf.desktop.sikuli.ISikuliIntegration#defaultScreenByCoordinates(int, int, int, int)
+	 */
+	public ScreenRegion defaultScreenByCoordinates(int x, int y, int width,
+			int height) throws Exception {
+<span class="nc" id="L120">		return new DesktopScreenRegion(x,y,width,height);</span>
+	}
+
+	 
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.5.201112152213</span></div></body></html>

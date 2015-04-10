@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ImageUtil.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Test Automation Library</a> &gt; <a href="index.html" class="el_package">com.etouch.taf.util</a> &gt; <span class="el_source">ImageUtil.java</span></div><h1>ImageUtil.java</h1><pre class="source lang-java linenums">/*
+ * 
+ */
+package com.etouch.taf.util;
+
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
+import javax.imageio.ImageIO;
+
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.logging.Log;
+
+// TODO: Auto-generated Javadoc
+/**
+ * This class contains utility methods for comparing Images.
+ * 
+ * @author eTouch Systems Corporation
+ * @version 1.0
+ *
+ */
+<span class="nc" id="L26">public class ImageUtil {</span>
+	
+	/** The log. */
+<span class="nc" id="L29">	private static Log log = LogUtil.getLog(ImageUtil.class);</span>
+
+	/**
+	 * Compare images using m d5.
+	 *
+	 * @param currentScreenShotFile the current screen shot file
+	 * @param goldImageScreenShotFile the gold image screen shot file
+	 * @return true, if successful
+	 */
+	public static boolean compareImagesUsingMD5(String currentScreenShotFile,
+			String goldImageScreenShotFile ) {
+<span class="nc" id="L40">		boolean isMD5ValueSame = false;</span>
+		try {
+<span class="nc" id="L42">			File currentScreenShot = new File(currentScreenShotFile);</span>
+<span class="nc" id="L43">			File goldImageScreenShot = new File(goldImageScreenShotFile);</span>
+			// Calculate MD5 value for the image found environment being checked
+			// (e.g. QA)
+<span class="nc" id="L46">			String md5ValueForQA = getMG5ValueForImage(currentScreenShot);</span>
+			// Calculate MD5 value for the golden image
+<span class="nc" id="L48">			String md5ValueForProd = getMG5ValueForImage(goldImageScreenShot);</span>
+
+<span class="nc" id="L50">			isMD5ValueSame = md5ValueForQA.equals(md5ValueForProd);</span>
+<span class="nc" id="L51">		} catch (IOException iex) {</span>
+<span class="nc" id="L52">			iex.printStackTrace();</span>
+<span class="nc" id="L53">		} catch (NoSuchAlgorithmException noAlgo) {</span>
+<span class="nc" id="L54">			noAlgo.printStackTrace();</span>
+<span class="nc" id="L55">		} catch (Exception ex) {</span>
+<span class="nc" id="L56">			ex.printStackTrace();</span>
+<span class="nc" id="L57">		}</span>
+
+<span class="nc" id="L59">		return isMD5ValueSame;</span>
+
+	}
+
+	/**
+	 * Calculates the MD5 Value for a given image.
+	 *
+	 * @param imgFile            File object for a screenshot/image
+	 * @return the m g5 value for image
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws NoSuchAlgorithmException the no such algorithm exception
+	 * @throws Exception the exception
+	 */
+	private static String getMG5ValueForImage(File imgFile) throws IOException,
+			NoSuchAlgorithmException, Exception {
+<span class="nc" id="L74">		BufferedImage buffImg = ImageIO.read(imgFile);</span>
+<span class="nc" id="L75">		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();</span>
+<span class="nc" id="L76">		ImageIO.write(buffImg, &quot;png&quot;, outputStream);</span>
+//		byte[] data = outputStream.toByteArray();
+<span class="nc" id="L78">		byte[] data = null;</span>
+<span class="nc bnc" id="L79" title="All 2 branches missed.">		if(OSUtil.is64BitOS() == true) {</span>
+<span class="nc" id="L80">			data = Base64.decodeBase64(outputStream.toByteArray());	</span>
+<span class="nc bnc" id="L81" title="All 2 branches missed.">		} else if(OSUtil.is32BitOS() == true) {</span>
+<span class="nc" id="L82">			data = outputStream.toByteArray();</span>
+		}
+		
+<span class="nc" id="L85">		MessageDigest md = MessageDigest.getInstance(&quot;MD5&quot;);</span>
+<span class="nc" id="L86">		md.update(data);</span>
+<span class="nc" id="L87">		byte[] hash = md.digest();</span>
+<span class="nc" id="L88">		return getHexValueForBytes(hash);</span>
+	}
+	
+	/**
+	 * Converts the MD5 byte value to a Hex String.
+	 *
+	 * @param inBytes the in bytes
+	 * @return the hex value for bytes
+	 */
+	private static String getHexValueForBytes(byte[] inBytes) {
+<span class="nc" id="L98">		StringBuffer hexString = new StringBuffer();</span>
+<span class="nc bnc" id="L99" title="All 2 branches missed.">		for (int i = 0; i &lt; inBytes.length; i++) { // for loop ID:1</span>
+<span class="nc" id="L100">			hexString.append(Integer.toString((inBytes[i] &amp; 0xff) + 0x100, 16)</span>
+					.substring(1));
+		} // Belongs to for loop ID:1
+<span class="nc" id="L103">		return hexString.toString();</span>
+	} // Belongs to returnHex class
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.5.201112152213</span></div></body></html>

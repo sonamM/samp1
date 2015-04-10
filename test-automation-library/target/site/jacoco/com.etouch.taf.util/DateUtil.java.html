@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>DateUtil.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Test Automation Library</a> &gt; <a href="index.html" class="el_package">com.etouch.taf.util</a> &gt; <span class="el_source">DateUtil.java</span></div><h1>DateUtil.java</h1><pre class="source lang-java linenums">/*
+ * 
+ */
+package com.etouch.taf.util;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.StringTokenizer;
+
+import org.apache.commons.logging.Log;
+
+import com.etouch.taf.core.exception.DateException;
+import com.etouch.taf.core.exception.ListException;
+
+// TODO: Auto-generated Javadoc
+/**
+ * This class contains date utility functions.
+ * 
+ * @author eTouch Systems Corporation
+ * @version 1.0
+ *
+ */
+<span class="nc" id="L30">public class DateUtil {</span>
+	
+	/** The log. */
+<span class="nc" id="L33">	private static Log log = LogUtil.getLog(DateUtil.class);</span>
+	
+	/** The Constant monthMap. */
+	private static final Map&lt;String,String&gt; monthMap;
+	
+	/** The Constant hourFormat. */
+	private static final Map&lt;String,String&gt; hourFormat;	
+	
+	/** The Constant dateFormatList. */
+	private static final List&lt;String&gt; dateFormatList;
+	
+	static{
+<span class="nc" id="L45">		monthMap = new HashMap&lt;String, String&gt;();</span>
+<span class="nc" id="L46">		monthMap.put(&quot;JAN&quot;, &quot;01&quot;);</span>
+<span class="nc" id="L47">		monthMap.put(&quot;FEB&quot;, &quot;02&quot;);</span>
+<span class="nc" id="L48">		monthMap.put(&quot;MAR&quot;, &quot;03&quot;);</span>
+<span class="nc" id="L49">		monthMap.put(&quot;APR&quot;, &quot;04&quot;);</span>
+<span class="nc" id="L50">		monthMap.put(&quot;MAY&quot;, &quot;05&quot;);</span>
+<span class="nc" id="L51">		monthMap.put(&quot;JUN&quot;, &quot;06&quot;);</span>
+<span class="nc" id="L52">		monthMap.put(&quot;JUL&quot;, &quot;07&quot;);</span>
+<span class="nc" id="L53">		monthMap.put(&quot;AUG&quot;, &quot;08&quot;);</span>
+<span class="nc" id="L54">		monthMap.put(&quot;SEP&quot;, &quot;09&quot;);</span>
+<span class="nc" id="L55">		monthMap.put(&quot;OCT&quot;, &quot;10&quot;);		</span>
+<span class="nc" id="L56">		monthMap.put(&quot;NOV&quot;, &quot;11&quot;);		</span>
+<span class="nc" id="L57">		monthMap.put(&quot;DEC&quot;, &quot;12&quot;);		</span>
+<span class="nc" id="L58">		hourFormat = new HashMap&lt;String, String&gt;();	</span>
+<span class="nc" id="L59">		hourFormat.put(&quot;01&quot;, &quot;13&quot;);</span>
+<span class="nc" id="L60">		hourFormat.put(&quot;02&quot;, &quot;14&quot;);</span>
+<span class="nc" id="L61">		hourFormat.put(&quot;03&quot;, &quot;15&quot;);</span>
+<span class="nc" id="L62">		hourFormat.put(&quot;04&quot;, &quot;16&quot;);</span>
+<span class="nc" id="L63">		hourFormat.put(&quot;05&quot;, &quot;17&quot;);</span>
+<span class="nc" id="L64">		hourFormat.put(&quot;06&quot;, &quot;18&quot;);</span>
+<span class="nc" id="L65">		hourFormat.put(&quot;07&quot;, &quot;19&quot;);</span>
+<span class="nc" id="L66">		hourFormat.put(&quot;08&quot;, &quot;20&quot;);</span>
+<span class="nc" id="L67">		hourFormat.put(&quot;09&quot;, &quot;21&quot;);</span>
+<span class="nc" id="L68">		hourFormat.put(&quot;10&quot;, &quot;22&quot;);		</span>
+<span class="nc" id="L69">		hourFormat.put(&quot;11&quot;, &quot;23&quot;);		</span>
+<span class="nc" id="L70">		dateFormatList = new ArrayList&lt;String&gt;();</span>
+<span class="nc" id="L71">		dateFormatList.add(&quot;yyyyMMdd&quot;);</span>
+<span class="nc" id="L72">		dateFormatList.add(&quot;yyyy-MM-dd&quot;);</span>
+<span class="nc" id="L73">		dateFormatList.add(&quot;yyyyMMddhhmmss&quot;);		</span>
+<span class="nc" id="L74">		dateFormatList.add(&quot;yyyy-MM-dd hh:mm:ss&quot;);</span>
+<span class="nc" id="L75">		dateFormatList.add(&quot;yyyy/MM/dd hh:mm:ss&quot;);		</span>
+<span class="nc" id="L76">    }</span>
+
+	/**
+	 * Gets the month in digit.
+	 *
+	 * @param sMon the s mon
+	 * @return the month in digit
+	 * @throws DateException the date exception
+	 */
+	public String getMonthInDigit(String sMon) throws DateException{
+<span class="nc bnc" id="L86" title="All 2 branches missed.">		if(!CommonUtil.isNull(sMon)){</span>
+<span class="nc bnc" id="L87" title="All 2 branches missed.">			if(sMon.length() &gt;= 3){</span>
+<span class="nc bnc" id="L88" title="All 2 branches missed.">				sMon = (sMon.length() &gt; 3)?sMon.substring(0,2):sMon;</span>
+			}else{
+<span class="nc" id="L90">				log.error(&quot;Month characters are less that 3 - &quot;+sMon);			</span>
+<span class="nc" id="L91">				throw new DateException(&quot;Month characters are less that 3&quot;);</span>
+			}	
+		}else{
+<span class="nc" id="L94">			log.error(&quot;Month is null&quot; + sMon);			</span>
+<span class="nc" id="L95">			throw new DateException(&quot;Month is null&quot;);</span>
+		}	
+<span class="nc" id="L97">		return monthMap.get(sMon);</span>
+	}
+	
+	/**
+	 * Gets the 24 hour format.
+	 *
+	 * @param hr the hr
+	 * @return the 24 hour format
+	 * @throws DateException the date exception
+	 */
+	public String get24HourFormat(String hr) throws DateException{
+<span class="nc bnc" id="L108" title="All 4 branches missed.">		if(CommonUtil.isNull(hr) || CommonUtil.isNull(hourFormat.get(hr))){</span>
+<span class="nc" id="L109">			log.error(&quot;Hour string or format is null - &quot;+hr);</span>
+<span class="nc" id="L110">			throw new DateException(&quot;Hour string or format is null&quot;);</span>
+		}
+<span class="nc" id="L112">		return hourFormat.get(hr);</span>
+	}
+	
+	/**
+	 * Gets the string to date.
+	 *
+	 * @param sdt the sdt
+	 * @param format the format
+	 * @return the string to date
+	 * @throws DateException the date exception
+	 */
+	public Date getStringToDate(String sdt, String format) throws DateException{
+<span class="nc bnc" id="L124" title="All 4 branches missed.">		if(CommonUtil.isNull(sdt) || CommonUtil.isNull(format)){</span>
+<span class="nc" id="L125">			log.error(&quot;Date string or format value is null - (&quot;+sdt+&quot;,&quot;+format+&quot;)&quot;);</span>
+<span class="nc" id="L126">			throw new DateException(&quot;Date String or format is null&quot;);</span>
+		}
+<span class="nc bnc" id="L128" title="All 2 branches missed.">		if (!dateFormatList.contains(format)){</span>
+<span class="nc" id="L129">			log.error(&quot;Date format is invalid - &quot;+format);</span>
+<span class="nc" id="L130">			throw new DateException(&quot;Date format is invalid&quot;);</span>
+		}
+<span class="nc" id="L132">		SimpleDateFormat sdf = new SimpleDateFormat(format);</span>
+<span class="nc" id="L133">		Date date = null;</span>
+		try {
+<span class="nc" id="L135">			date = sdf.parse(sdt);</span>
+<span class="nc" id="L136">		} catch (ParseException pe) {</span>
+<span class="nc" id="L137">			throw new DateException(&quot;Parsing Error&quot;);</span>
+<span class="nc" id="L138">		}</span>
+<span class="nc" id="L139">		return date;</span>
+	}	
+
+	
+	/**
+	 * Gets the date to string.
+	 *
+	 * @param dt the dt
+	 * @param format the format
+	 * @return the date to string
+	 * @throws DateException the date exception
+	 */
+	public String getDateToString(Date dt, String format) throws DateException{
+<span class="nc bnc" id="L152" title="All 4 branches missed.">		if(CommonUtil.isNull(dt) || CommonUtil.isNull(format)){</span>
+<span class="nc" id="L153">			log.error(&quot;Date or format value is null - (&quot;+dt+&quot;,&quot;+format+&quot;)&quot;);</span>
+<span class="nc" id="L154">			throw new DateException(&quot;Date or format value is null&quot;);</span>
+		}
+<span class="nc bnc" id="L156" title="All 2 branches missed.">		if (!dateFormatList.contains(format)){</span>
+<span class="nc" id="L157">			log.error(&quot;Date format is invalid - &quot;+format);</span>
+<span class="nc" id="L158">			throw new DateException(&quot;Date format is invalid&quot;);</span>
+		}
+<span class="nc" id="L160">		SimpleDateFormat sdf = new SimpleDateFormat(format);</span>
+<span class="nc" id="L161">		return sdf.format(dt); </span>
+	}
+	
+	/**
+	 * Gets the date to string.
+	 *
+	 * @param dt the dt
+	 * @return the date to string
+	 * @throws DateException the date exception
+	 */
+	public String getDateToString(Date dt) throws DateException{
+<span class="nc bnc" id="L172" title="All 2 branches missed.">		if(CommonUtil.isNull(dt)){</span>
+<span class="nc" id="L173">			log.error(&quot;Date value is &quot;+ dt);</span>
+<span class="nc" id="L174">			throw new DateException(&quot;Date value is null&quot;);</span>
+		}
+<span class="nc" id="L176">		Calendar cal = getDateToCalendar(dt);</span>
+<span class="nc" id="L177">		int year = cal.get(Calendar.YEAR);</span>
+<span class="nc" id="L178">		int month = cal.get(Calendar.MONTH)+1;</span>
+<span class="nc bnc" id="L179" title="All 2 branches missed.">		String sMonth = ((month &lt; 10)? &quot;0&quot; + month: &quot;&quot;+month);</span>
+<span class="nc" id="L180">		int date =  cal.get(Calendar.DATE);</span>
+<span class="nc bnc" id="L181" title="All 2 branches missed.">		String sDate = ((date &lt; 10)? &quot;0&quot; + date: &quot;&quot;+date);</span>
+<span class="nc" id="L182">		int hour =  cal.get(Calendar.HOUR);</span>
+<span class="nc bnc" id="L183" title="All 2 branches missed.">		String sHour = ((hour &lt; 10)? &quot;0&quot; + hour: &quot;&quot;+hour);</span>
+<span class="nc" id="L184">		int minute =  cal.get(Calendar.MINUTE);</span>
+<span class="nc bnc" id="L185" title="All 2 branches missed.">		String sMinute = ((minute &lt; 10)? &quot;0&quot; + minute: &quot;&quot;+minute);</span>
+<span class="nc" id="L186">		int second =  cal.get(Calendar.SECOND);</span>
+<span class="nc bnc" id="L187" title="All 2 branches missed.">		String sSecond = ((second &lt; 10)? &quot;0&quot; + second: &quot;&quot;+second);</span>
+		
+<span class="nc" id="L189">		String str =  year + sMonth + sDate + sHour + sMinute + sSecond; </span>
+<span class="nc" id="L190">		return str;</span>
+	}
+	
+	/**
+	 * Gets the date string.
+	 *
+	 * @param sTxt the s txt
+	 * @return the date string
+	 * @throws DateException the date exception
+	 */
+	public String getDateString(String sTxt) throws DateException{
+<span class="nc" id="L201">		String mon = null;</span>
+<span class="nc" id="L202">		String day = null;</span>
+<span class="nc" id="L203">		String hour = null;</span>
+<span class="nc" id="L204">		String minute = null;</span>
+
+<span class="nc" id="L206">		StringTokenizer stok = new StringTokenizer(sTxt,&quot; ,:&quot;);</span>
+			
+<span class="nc" id="L208">		mon = getMonthInDigit(stok.nextToken());</span>
+<span class="nc" id="L209">		day = stok.nextToken();</span>
+<span class="nc bnc" id="L210" title="All 2 branches missed.">		day = (day.length()==1)?&quot;0&quot;+day:day;</span>
+<span class="nc" id="L211">		hour = stok.nextToken();</span>
+<span class="nc bnc" id="L212" title="All 2 branches missed.">		hour = (hour.length()==1)?&quot;0&quot;+hour:hour;</span>
+<span class="nc" id="L213">		minute = stok.nextToken();</span>
+<span class="nc" id="L214">		String ampm = &quot;&quot;+minute.charAt(minute.length()-1);</span>
+<span class="nc" id="L215">		minute = minute.substring(0,minute.length()-1);</span>
+<span class="nc bnc" id="L216" title="All 2 branches missed.">		minute = (minute.length()==1)?&quot;0&quot;+minute:minute;</span>
+<span class="nc bnc" id="L217" title="All 2 branches missed.">		if(&quot;p&quot;.equals(ampm)){</span>
+<span class="nc" id="L218">			hour = get24HourFormat(hour);</span>
+		}
+
+<span class="nc" id="L221">		return (mon+day+hour+minute);</span>
+	}
+	
+	/**
+	 * Gets the date to calendar.
+	 *
+	 * @param date the date
+	 * @return the date to calendar
+	 * @throws DateException the date exception
+	 */
+	public Calendar getDateToCalendar(Date date)  throws DateException{
+<span class="nc bnc" id="L232" title="All 2 branches missed.">		if(CommonUtil.isNull(date)){</span>
+<span class="nc" id="L233">			log.error(&quot;Date is null - &quot;+ date);</span>
+<span class="nc" id="L234">			throw new DateException(&quot;Date is null&quot;);</span>
+		}
+		
+<span class="nc" id="L237">		Calendar cal = Calendar.getInstance();</span>
+<span class="nc" id="L238">		cal.setTime(date);</span>
+<span class="nc" id="L239">		return cal;</span>
+	}
+	
+	/**
+	 * Gets the list date to string.
+	 *
+	 * @param dtList the dt list
+	 * @return the list date to string
+	 * @throws DateException the date exception
+	 */
+	public List&lt;String&gt; getListDateToString(List&lt;Date&gt; dtList) throws DateException{
+<span class="nc bnc" id="L250" title="All 2 branches missed.">		if(CommonUtil.isNull(dtList)){</span>
+<span class="nc" id="L251">			log.error(&quot;Date List is null - &quot;+ dtList);</span>
+<span class="nc" id="L252">			throw new DateException(&quot;Date List is null&quot;);</span>
+		}
+<span class="nc" id="L254">		List&lt;String&gt; lstStr = new ArrayList&lt;String&gt;();</span>
+<span class="nc bnc" id="L255" title="All 2 branches missed.">		for(Date dt : dtList){</span>
+<span class="nc" id="L256">			lstStr.add(getDateToString(dt));</span>
+<span class="nc" id="L257">		}</span>
+<span class="nc" id="L258">		return lstStr;</span>
+	}
+	
+	/**
+	 * Checks if is date in order.
+	 *
+	 * @param lstDateStr the lst date str
+	 * @param isAsc the is asc
+	 * @return true, if is date in order
+	 * @throws DateException the date exception
+	 * @throws ListException the list exception
+	 */
+	public boolean isDateInOrder(List&lt;String&gt; lstDateStr, boolean isAsc) throws DateException,ListException{
+		
+<span class="nc bnc" id="L272" title="All 2 branches missed.">		if(CommonUtil.isNull(lstDateStr)){</span>
+<span class="nc" id="L273">			log.error(&quot;Date string is null - &quot;+ lstDateStr);</span>
+<span class="nc" id="L274">			throw new DateException(&quot;Date string is null&quot;);</span>
+		}
+		
+<span class="nc bnc" id="L277" title="All 2 branches missed.">		if(lstDateStr.size() == 0){</span>
+<span class="nc" id="L278">			log.error(&quot;List is empty - &quot;+ lstDateStr.size());</span>
+<span class="nc" id="L279">			throw new ListException(&quot;List is empty&quot;);</span>
+		}
+		
+<span class="nc bnc" id="L282" title="All 2 branches missed.">		if(isAsc==true){</span>
+<span class="nc bnc" id="L283" title="All 2 branches missed.">			for(int i=0; i &lt; lstDateStr.size()-1; i++){</span>
+				
+<span class="nc bnc" id="L285" title="All 2 branches missed.">				if(lstDateStr.get(i).compareTo(lstDateStr.get(i+1)) &gt; 0){</span>
+<span class="nc" id="L286">					return false;	</span>
+				}
+			}
+<span class="nc bnc" id="L289" title="All 2 branches missed.">		}else if(isAsc==false){</span>
+<span class="nc bnc" id="L290" title="All 2 branches missed.">			for(int i=0; i &lt; lstDateStr.size()-1; i++){</span>
+<span class="nc bnc" id="L291" title="All 2 branches missed.">				if(lstDateStr.get(i).compareTo(lstDateStr.get(i+1)) &lt; 0){</span>
+<span class="nc" id="L292">					return false;	</span>
+				}
+			}
+		}
+<span class="nc" id="L296">		return true;</span>
+	}
+	
+	/**
+	 * Gets the current date time.
+	 *
+	 * @param format the format
+	 * @return the current date time
+	 */
+	public static String getCurrentDateTime(String format){
+<span class="nc" id="L306">		DateFormat dateFormat = new SimpleDateFormat(format);</span>
+		//get current date time with Date()
+<span class="nc" id="L308">	    Date date = new Date();</span>
+<span class="nc" id="L309">	    return dateFormat.format(date);	    </span>
+	}
+	
+	/**
+	 * The main method.
+	 *
+	 * @param args the arguments
+	 */
+	public static void main(String[] args) {
+<span class="nc" id="L318">	   System.out.println(DateUtil.getCurrentDateTime(&quot;yyyy-MM-dd HH:mm:ss z&quot;));</span>
+<span class="nc" id="L319">	}</span>
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.5.201112152213</span></div></body></html>

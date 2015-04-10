@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>AndroidDriver.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Test Automation Library</a> &gt; <a href="index.html" class="el_package">com.etouch.taf.core.driver.mobile</a> &gt; <span class="el_source">AndroidDriver.java</span></div><h1>AndroidDriver.java</h1><pre class="source lang-java linenums">/*
+ * 
+ */
+package com.etouch.taf.core.driver.mobile;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import org.apache.commons.logging.Log;
+import org.openqa.selenium.remote.CapabilityType;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
+
+import com.etouch.taf.core.TestBed;
+import com.etouch.taf.core.config.TestBedManagerConfiguration;
+import com.etouch.taf.core.driver.DriverBuilder;
+import com.etouch.taf.core.exception.DriverException;
+import com.etouch.taf.core.resources.TestEnvironmentType;
+import com.etouch.taf.mobile.appium.AppiumDriver;
+import com.etouch.taf.mobile.experitest.cloud.ExperitestCloudDriver;
+import com.etouch.taf.util.ConfigUtil;
+import com.etouch.taf.util.LogUtil;
+import com.etouch.taf.core.resources.TestToolType;
+
+// TODO: Auto-generated Javadoc
+/**
+ * The Class AndroidDriver.
+ */
+public class AndroidDriver extends DriverBuilder{
+	
+	/** The log. */
+<span class="nc" id="L32">	static Log log=LogUtil.getLog(AndroidDriver.class);</span>
+
+	/**
+	 * Instantiates a new android driver.
+	 *
+	 * @param testBed the test bed
+	 * @throws DriverException the driver exception
+	 */
+	public AndroidDriver(TestBed testBed)
+			throws DriverException {
+<span class="nc" id="L42">		super(testBed);</span>
+		// TODO Auto-generated constructor stub
+<span class="nc" id="L44">	}</span>
+	
+	/**
+	 * Creates driver for Android.
+	 *
+	 * @throws DriverException the driver exception
+	 */
+	@Override
+	public void buildDriver() throws DriverException
+	{
+		try{
+<span class="nc bnc" id="L55" title="All 2 branches missed.">			if (ConfigUtil.isLocalEnv()) {</span>
+				
+<span class="nc bnc" id="L57" title="All 2 branches missed.">				if(ConfigUtil.isAppium()){</span>
+					
+<span class="nc" id="L59">					driver = AppiumDriver.buildAndroidDriver(testBed);</span>
+				}
+<span class="nc bnc" id="L61" title="All 2 branches missed.">				else if(ConfigUtil.isExperiTest())</span>
+				{
+<span class="nc" id="L63">					driver = ExperitestCloudDriver.buildDriver(testBed);</span>
+				}				
+				
+<span class="nc bnc" id="L66" title="All 2 branches missed.">			} else if (ConfigUtil.isRemoteEnv()) {</span>
+<span class="nc" id="L67">					DesiredCapabilities browser = DesiredCapabilities.android();</span>
+<span class="nc" id="L68">					driver = new RemoteWebDriver(new URL(hubLocation), browser);</span>
+					
+<span class="nc bnc" id="L70" title="All 2 branches missed.">			} else if(ConfigUtil.isBrowserStackEnv()){</span>
+
+<span class="nc" id="L72">				capabilities = DesiredCapabilities.android();</span>
+<span class="nc" id="L73">				capabilities.setCapability(&quot;device&quot;,testBed.getDevice().getName());</span>
+<span class="nc" id="L74">				buildBrowserstackCapabilities();</span>
+
+			}
+
+
+<span class="nc" id="L79">	} catch (MalformedURLException e) {</span>
+<span class="nc" id="L80">			log.error(&quot;failed to create driver for android : &quot; + e.getMessage());</span>
+<span class="nc" id="L81">			throw new DriverException(&quot;Could not create driver :: &quot; + e.getMessage());</span>
+<span class="nc" id="L82">	}</span>
+
+<span class="nc" id="L84">	}</span>
+	
+	
+	/* (non-Javadoc)
+	 * @see com.etouch.taf.core.driver.DriverBuilder#getDriver()
+	 */
+	@Override
+	public Object getDriver() throws DriverException {
+		// TODO Auto-generated method stub
+<span class="nc" id="L93">		return driver;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.5.201112152213</span></div></body></html>

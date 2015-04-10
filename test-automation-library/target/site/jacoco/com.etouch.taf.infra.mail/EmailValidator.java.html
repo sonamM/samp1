@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>EmailValidator.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Test Automation Library</a> &gt; <a href="index.html" class="el_package">com.etouch.taf.infra.mail</a> &gt; <span class="el_source">EmailValidator.java</span></div><h1>EmailValidator.java</h1><pre class="source lang-java linenums">/*
+ * 
+ */
+package com.etouch.taf.infra.mail;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.security.Security;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
+
+import javax.mail.Flags;
+import javax.mail.Folder;
+import javax.mail.Message;
+import javax.mail.Session;
+import javax.mail.Store;
+import javax.mail.Transport;
+import javax.mail.internet.MimeMessage;
+import javax.mail.search.FlagTerm;
+
+import org.apache.commons.logging.Log;
+
+import com.etouch.taf.core.exception.ValidationException;
+import com.etouch.taf.util.LogUtil;
+
+// TODO: Auto-generated Javadoc
+/**
+ * EmailValidator exposes API to integrate with Mails.
+ * 
+ * 
+ * 
+ * 
+ * @author eTouch Systems Corporation
+ * @version 1.0
+ *
+ */
+
+<span class="nc" id="L41">public class EmailValidator implements IEmailValidator</span>
+{
+
+	/** The log. */
+<span class="nc" id="L45">	private static Log log = LogUtil.getLog(EmailValidator.class);</span>
+
+	/**
+	 * Read the mail box for a given user and return a list of Messages 
+	 * based on the matched filter criteria.
+	 *
+	 * @param props the props
+	 * @return the message[]
+	 * @throws Exception the exception
+	 */
+
+	public Message[] readMail(Properties props) throws Exception
+	{
+
+
+<span class="nc" id="L60">		String mailServerName = props.getProperty(IEMailConstants.MAIL_SERVER_PROP_NAME);</span>
+<span class="nc" id="L61">		String userName = props.getProperty(IEMailConstants.USER_NAME_PROP_NAME);</span>
+<span class="nc" id="L62">		String password = props.getProperty(IEMailConstants.USER_PASSWORD_PROP_NAME);</span>
+<span class="nc" id="L63">		String protocol = props.getProperty(IEMailConstants.PROTOCOL_PROP_NAME);</span>
+
+<span class="nc" id="L65">		log.info(IEMailConstants.MAIL_SERVER_PROP_NAME +&quot; --&gt; &quot;+mailServerName);</span>
+<span class="nc" id="L66">		log.info(IEMailConstants.USER_NAME_PROP_NAME +&quot; --&gt; &quot;+userName);</span>
+<span class="nc" id="L67">		log.info(IEMailConstants.USER_PASSWORD_PROP_NAME +&quot; --&gt; &quot;+password);</span>
+<span class="nc" id="L68">		log.info(IEMailConstants.PROTOCOL_PROP_NAME +&quot; --&gt; &quot;+protocol);</span>
+
+<span class="nc" id="L70">		Session session = Session.getDefaultInstance(new Properties(),null);</span>
+<span class="nc" id="L71">		Store store = session.getStore(protocol); </span>
+
+<span class="nc" id="L73">		store.connect(mailServerName, userName,password);</span>
+
+		/*Folder folder = store.getFolder(IEMailConstants.READ_MAIL_BOX_NAME);
+		folder.open(Folder.READ_WRITE);*/
+		
+<span class="nc" id="L78">		Folder inbox = store.getFolder(&quot;INBOX&quot;);</span>
+<span class="nc" id="L79">		inbox.open(Folder.READ_WRITE);</span>
+		
+<span class="nc" id="L81">		IMailSearchCriteria criterria = getMailSearcher(props);</span>
+<span class="nc" id="L82">		Message[] messages = null;</span>
+		
+<span class="nc" id="L84">		messages = inbox.search(new FlagTerm(new Flags(Flags.Flag.SEEN), false));</span>
+<span class="nc" id="L85">		List&lt;Message&gt; messageList = new ArrayList&lt;Message&gt;();</span>
+		
+<span class="nc bnc" id="L87" title="All 2 branches missed.">		for(Message mail : messages)</span>
+		{
+<span class="nc bnc" id="L89" title="All 2 branches missed.">			if(criterria.isMatch(mail, props))</span>
+			{
+<span class="nc" id="L91">				messageList.add(mail);</span>
+			}
+
+		}
+		
+		// Convert to MimeMessage after search 
+		/*messages = (MimeMessage[]) carpetaInbox.search(new FlagTerm(new Flags(Flags.Flag.SEEN), false));
+		for (int i = 0 ; i&lt; messages.length ; i++){
+		    // Create a new message using MimeMessage copy constructor
+		    MimeMessage cmsg = new MimeMessage(messages[i]);
+		    // Use this message to read its contents 
+		    Object obj = cmsg.getContent(); 
+		// ....
+		}*/
+
+<span class="nc" id="L106">		System.out.println(&quot;Total Message:&quot; + inbox.getMessageCount());</span>
+<span class="nc" id="L107">		System.out.println(&quot;Unread Message:&quot; + inbox.getUnreadMessageCount());</span>
+
+		/*List&lt;Message&gt; messageList = new ArrayList&lt;Message&gt;();
+		IMailSearchCriteria criterria = getMailSearcher(props);
+		Message[]  messages=null;
+		for(Message mail : folder.getMessages())
+		{
+			if(criterria.isMatch(mail, props))
+			{
+				messageList.add(mail);
+			}
+
+		}*/
+<span class="nc" id="L120">		Message[] mails = messageList.toArray(new Message[messageList.size()]);</span>
+
+<span class="nc" id="L122">		return mails;</span>
+	}
+	
+	/**
+	 * Read mail through smtp.
+	 *
+	 * @param props the props
+	 * @return the message[]
+	 * @throws Exception the exception
+	 */
+	public Message[] readMailThroughSMTP(Properties props) throws Exception
+	{
+
+
+<span class="nc" id="L136">		String mailServerName = props.getProperty(IEMailConstants.MAIL_SERVER_PROP_NAME);</span>
+<span class="nc" id="L137">		String userName = props.getProperty(IEMailConstants.USER_NAME_PROP_NAME);</span>
+<span class="nc" id="L138">		String password = props.getProperty(IEMailConstants.USER_PASSWORD_PROP_NAME);</span>
+<span class="nc" id="L139">		String protocol = props.getProperty(IEMailConstants.PROTOCOL_PROP_NAME);</span>
+
+<span class="nc" id="L141">		log.info(IEMailConstants.MAIL_SERVER_PROP_NAME +&quot; --&gt; &quot;+mailServerName);</span>
+<span class="nc" id="L142">		log.info(IEMailConstants.USER_NAME_PROP_NAME +&quot; --&gt; &quot;+userName);</span>
+<span class="nc" id="L143">		log.info(IEMailConstants.USER_PASSWORD_PROP_NAME +&quot; --&gt; &quot;+password);</span>
+<span class="nc" id="L144">		log.info(IEMailConstants.PROTOCOL_PROP_NAME +&quot; --&gt; &quot;+protocol);</span>
+		
+<span class="nc" id="L146">		Properties smtpProps = new Properties();</span>
+		//smtpProps.setProperty(&quot;mail.smtp.host&quot;, &quot;smtp.gmail.com&quot;);
+<span class="nc" id="L148">		smtpProps.setProperty(&quot;mail.smtp.host&quot;, mailServerName);</span>
+<span class="nc" id="L149">		smtpProps.setProperty(&quot;mmail.smtp.socketFactory.port&quot;,&quot;465&quot;);//465</span>
+<span class="nc" id="L150">		smtpProps.setProperty(&quot;mail.smtp.socketFactory.class&quot;,&quot;javax.net.ssl.SSLSocketFactory&quot;);</span>
+<span class="nc" id="L151">		smtpProps.setProperty(&quot;mail.smtp.auth&quot;,&quot;true&quot;);</span>
+<span class="nc" id="L152">		smtpProps.setProperty(&quot;mail.smtp.port&quot;,&quot;465&quot;);//465</span>
+
+<span class="nc" id="L154">		Session session = Session.getDefaultInstance(smtpProps,null);</span>
+		
+<span class="nc" id="L156">		Transport transport = session.getTransport(protocol);</span>
+		
+<span class="nc" id="L158">		transport.connect(mailServerName, 25, userName, password);</span>
+<span class="nc" id="L159">		Store store = session.getStore(&quot;imaps&quot;); </span>
+		
+		//store.connect(&quot;mailhost.ihs.com&quot;,&quot;ULD49133&quot;,&quot;Monday123&quot;);
+<span class="nc" id="L162">		store.connect(mailServerName,userName,password);</span>
+
+<span class="nc" id="L164">		Folder folder = store.getFolder(IEMailConstants.READ_MAIL_BOX_NAME);</span>
+<span class="nc" id="L165">		folder.open(Folder.READ_WRITE);</span>
+
+		//System.out.println(&quot;Total Message:&quot; + folder.getMessageCount());
+		//System.out.println(&quot;Unread Message:&quot; + folder.getUnreadMessageCount());
+
+<span class="nc" id="L170">		List&lt;Message&gt; messageList = new ArrayList&lt;Message&gt;();</span>
+<span class="nc" id="L171">		IMailSearchCriteria criterria = getMailSearcher(props);</span>
+<span class="nc" id="L172">		Message[]  messages=null;</span>
+<span class="nc bnc" id="L173" title="All 2 branches missed.">		for(Message mail : folder.getMessages())</span>
+		{
+<span class="nc bnc" id="L175" title="All 2 branches missed.">			if(criterria.isMatch(mail, props))</span>
+			{
+<span class="nc" id="L177">				messageList.add(mail);</span>
+			}
+
+		}
+<span class="nc" id="L181">		messages = messageList.toArray(new Message[messageList.size()]);</span>
+
+<span class="nc" id="L183">		return messages;</span>
+	}	
+	
+
+	/**
+	 * Validate mail messages.
+	 *
+	 * @param messages the messages
+	 * @param props the props
+	 * @return true, if successful
+	 * @throws Exception the exception
+	 */
+	public boolean validateMailMessages(Message[]  messages,Properties props) throws Exception
+	{
+<span class="nc" id="L197">		boolean isMailFound = false;</span>
+<span class="nc" id="L198">		boolean result = true;</span>
+<span class="nc bnc" id="L199" title="All 2 branches missed.">		if(messages.length &gt; 0)</span>
+<span class="nc" id="L200">			isMailFound = true;</span>
+
+<span class="nc bnc" id="L202" title="All 2 branches missed.">		if (!isMailFound) {</span>
+<span class="nc" id="L203">			log.error(&quot;NO EMAILS TO READ&quot;);</span>
+<span class="nc" id="L204">			throw new Exception(&quot;Could not find any mail&quot;);</span>
+
+		} 
+		else 
+		{
+<span class="nc bnc" id="L209" title="All 2 branches missed.">			for (Message mail : messages)</span>
+			{
+<span class="nc" id="L211">				StringBuffer buffer = new StringBuffer();</span>
+
+<span class="nc" id="L213">				buffer = readMailContents(mail);</span>
+
+<span class="nc bnc" id="L215" title="All 2 branches missed.">				if(!inspectMail(buffer,props))</span>
+				{
+<span class="nc" id="L217">					log.error(&quot;EMAIL NOT CONTAINTING THE REQUIRED TEXT&quot;);</span>
+<span class="nc" id="L218">					result = false;</span>
+<span class="nc" id="L219">					break;</span>
+				}
+
+			}
+		}
+<span class="nc" id="L224">		return result;</span>
+	}
+
+	/**
+	 * Read mail contents.
+	 *
+	 * @param mail the mail
+	 * @return the string buffer
+	 * @throws Exception the exception
+	 */
+	private StringBuffer readMailContents(Message mail) throws Exception
+	{
+<span class="nc" id="L236">		StringBuffer buffer = new StringBuffer();</span>
+		String line;
+<span class="nc" id="L238">		BufferedReader reader = new BufferedReader(new InputStreamReader(mail.getInputStream()));</span>
+
+<span class="nc bnc" id="L240" title="All 2 branches missed.">		while ((line = reader.readLine()) != null)</span>
+		{
+<span class="nc" id="L242">			buffer.append(line+&quot; &quot;);</span>
+		}
+
+
+<span class="nc" id="L246">		return buffer;</span>
+	}
+
+	/**
+	 * Inspect mail.
+	 *
+	 * @param mailContent the mail content
+	 * @param props the props
+	 * @return true, if successful
+	 */
+	public boolean inspectMail(StringBuffer mailContent,Properties props)
+	{
+
+<span class="nc" id="L259">		boolean result = false;</span>
+
+<span class="nc" id="L261">		String mailLookupString = props.getProperty(IEMailConstants.MAIL_LOOKUP_STRING);</span>
+
+<span class="nc bnc" id="L263" title="All 2 branches missed.">		if(mailContent.toString().contains(mailLookupString))</span>
+<span class="nc" id="L264">			result = true;</span>
+
+<span class="nc" id="L266">		return result;</span>
+	}
+
+	/**
+	 * Gets the mail searcher.
+	 *
+	 * @param props the props
+	 * @return the mail searcher
+	 */
+	public IMailSearchCriteria getMailSearcher(Properties props)
+	{
+<span class="nc" id="L277">		return MailSearchCriteriaFactory.getMailSearchCrieteria(props);</span>
+
+	}
+
+	/* (non-Javadoc)
+	 * @see com.etouch.taf.infra.mail.IEmailValidator#validateEmail(java.util.Properties)
+	 */
+	public boolean validateEmail(Properties props) throws ValidationException {
+		// TODO Auto-generated method stub
+<span class="nc" id="L286">		boolean result=false;</span>
+		try
+		{
+
+<span class="nc" id="L290">			Message[]  messages = readMail(props);</span>
+
+<span class="nc" id="L292">			result = validateMailMessages(messages, props);</span>
+
+<span class="nc" id="L294">		}catch(Exception e)</span>
+		{
+<span class="nc" id="L296">			e.printStackTrace();</span>
+<span class="nc" id="L297">			throw new ValidationException(&quot;Mail Validation failed&quot;);</span>
+<span class="nc" id="L298">		}</span>
+
+<span class="nc" id="L300">		return result;</span>
+	}
+
+	/* (non-Javadoc)
+	 * @see com.etouch.taf.infra.mail.IEmailValidator#retriveEmailBodyContentFromMessages(java.util.Properties)
+	 */
+	public List&lt;String&gt; retriveEmailBodyContentFromMessages(Properties props)
+			throws ValidationException {
+<span class="nc" id="L308">		List&lt;String&gt; matchedLinks = new ArrayList&lt;String&gt;();</span>
+		try
+		{
+<span class="nc" id="L311">			Message[]  messages = readMail(props);</span>
+<span class="nc" id="L312">			matchedLinks= retriveEmailBodyContentFromMessages(messages, props);</span>
+
+<span class="nc" id="L314">		}catch(Exception e)</span>
+		{
+<span class="nc" id="L316">			e.printStackTrace();</span>
+<span class="nc" id="L317">			throw new ValidationException(&quot;Mail Validation failed&quot;);</span>
+<span class="nc" id="L318">		}</span>
+<span class="nc" id="L319">		return matchedLinks;</span>
+	}
+
+
+	/**
+	 * Retrive email body content from messages.
+	 *
+	 * @param messages the messages
+	 * @param prop the prop
+	 * @return the list
+	 * @throws Exception the exception
+	 */
+	private List&lt;String&gt; retriveEmailBodyContentFromMessages(Message[]  messages , Properties prop) throws Exception{
+
+<span class="nc" id="L333">		List&lt;String&gt; emailBodyContent = new ArrayList&lt;String&gt;();</span>
+<span class="nc" id="L334">		boolean isMailFound = false;</span>
+
+<span class="nc bnc" id="L336" title="All 2 branches missed.">		if(messages.length &gt; 0)</span>
+<span class="nc" id="L337">			isMailFound = true;</span>
+
+<span class="nc bnc" id="L339" title="All 2 branches missed.">		if (!isMailFound) {</span>
+<span class="nc" id="L340">			throw new Exception(&quot;Could not find any mail&quot;);</span>
+
+		} 
+		else 
+		{
+<span class="nc bnc" id="L345" title="All 2 branches missed.">			for (Message mail : messages)</span>
+			{
+<span class="nc" id="L347">				StringBuffer buffer = new StringBuffer();</span>
+<span class="nc" id="L348">				buffer = readMailContents(mail);</span>
+<span class="nc" id="L349">				emailBodyContent.add(buffer.toString());</span>
+
+			}
+		}
+<span class="nc" id="L353">		return emailBodyContent;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.5.201112152213</span></div></body></html>

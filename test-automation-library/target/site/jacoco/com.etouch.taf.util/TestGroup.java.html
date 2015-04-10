@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>TestGroup.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Test Automation Library</a> &gt; <a href="index.html" class="el_package">com.etouch.taf.util</a> &gt; <span class="el_source">TestGroup.java</span></div><h1>TestGroup.java</h1><pre class="source lang-java linenums">/*
+ * 
+ */
+package com.etouch.taf.util;
+
+
+import org.testng.annotations.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.htmlunit.HtmlUnitDriver;
+import org.testng.annotations.Test;
+import org.testng.annotations.Test;
+import org.testng.annotations.Parameters;
+import org.testng.annotations.Test;
+
+// TODO: Auto-generated Javadoc
+/**
+ * The Class TestGroup.
+ */
+<span class="nc" id="L22">public class TestGroup {</span>
+
+	/**
+	 * Valid authentication test.
+	 */
+	@Test (groups =  &quot;Sniff&quot;)
+    public void validAuthenticationTest(){
+        //System.out.println(&quot;1 Sniff + Regression&quot; + System.getProperty(&quot;environment&quot;));
+<span class="nc" id="L30">        System.out.println(&quot;1 Sniff&quot;);</span>
+<span class="nc" id="L31">    }</span>
+
+    /**
+     * Failed authentication test.
+     */
+    @Test (groups =  &quot;Regression&quot; )
+    public void failedAuthenticationTest(){
+        //System.out.println(&quot;2Regression-&quot;+environment);
+<span class="nc" id="L39">        System.out.println(&quot;2 Regression&quot;);</span>
+<span class="nc" id="L40">    }</span>
+
+    /**
+     * New user authentication test.
+     *
+     * @param environment the environment
+     */
+    @Parameters(&quot;environment&quot;)
+   // @Test (groups = { &quot;Sniff&quot;})
+    public void newUserAuthenticationTest(String environment){
+        //System.out.println(&quot;3Sniff-&quot;+environment);
+<span class="nc" id="L51">        System.out.println(&quot;1 test&quot;);</span>
+<span class="nc" id="L52">    }</span>
+    
+    
+    
+
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.5.201112152213</span></div></body></html>

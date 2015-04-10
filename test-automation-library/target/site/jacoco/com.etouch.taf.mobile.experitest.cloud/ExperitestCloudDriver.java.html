@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ExperitestCloudDriver.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Test Automation Library</a> &gt; <a href="index.html" class="el_package">com.etouch.taf.mobile.experitest.cloud</a> &gt; <span class="el_source">ExperitestCloudDriver.java</span></div><h1>ExperitestCloudDriver.java</h1><pre class="source lang-java linenums">/*
+ * 
+ */
+package com.etouch.taf.mobile.experitest.cloud;
+
+
+import org.apache.commons.logging.Log;
+
+import com.etouch.taf.core.TestBed;
+import com.etouch.taf.core.config.DeviceConfig;
+import com.etouch.taf.core.config.TestBedManagerConfiguration;
+import com.etouch.taf.core.exception.DriverException;
+import com.etouch.taf.util.LogUtil;
+import com.experitest.selenium.MobileWebDriver;
+
+// TODO: Auto-generated Javadoc
+/**
+ * The Class ExperitestCloudDriver.
+ *
+ * @author Lavanya Karanam
+ */
+<span class="nc" id="L22">public class ExperitestCloudDriver {</span>
+	
+/** The log. */
+<span class="fc" id="L25">private static Log log = LogUtil.getLog(ExperitestCloudDriver.class);</span>
+	
+	/**
+	 * Builds the driver.
+	 *
+	 * @param testBed the test bed
+	 * @return the mobile web driver
+	 * @throws DriverException Description: Below method creates the MobileWebDriver, which can be used to access Cloud devices.
+	 */
+	public static MobileWebDriver buildDriver(TestBed testBed) throws DriverException 
+	{
+		
+<span class="fc" id="L37">		MobileWebDriver mobileWebDriver=null;</span>
+<span class="fc" id="L38">		TestBedManagerConfiguration tbMgrConfig=TestBedManagerConfiguration.getInstance();</span>
+		
+		try{
+<span class="nc" id="L41">				String host = tbMgrConfig.getMobileConfig().getHub();</span>
+<span class="nc" id="L42">				int port = Integer.parseInt(tbMgrConfig.getMobileConfig().getPort());				</span>
+<span class="nc" id="L43">				String projectBaseDirectory =  System.getProperty(&quot;user.dir&quot;)+&quot;\\workspace\\project&quot;;	</span>
+				
+<span class="nc" id="L45">				System.out.println(host+ &quot; &quot; + port + &quot; &quot;+ projectBaseDirectory);	</span>
+				
+<span class="nc" id="L47">				mobileWebDriver = new MobileWebDriver(host, port, projectBaseDirectory,&quot;xml&quot;, &quot;reports&quot;, testBed.getTestBedName());</span>
+				
+<span class="nc bnc" id="L49" title="All 2 branches missed.">				if(testBed.getDevice()!=null)</span>
+<span class="nc" id="L50">					mobileWebDriver.setDevice(testBed.getDevice().getName());</span>
+<span class="fc" id="L51">			}catch (Exception ex) {</span>
+<span class="fc" id="L52">			log.error(&quot;Failed to create Mobile Web Driver : &quot; + ex.getMessage());</span>
+<span class="fc" id="L53">			throw new DriverException(&quot;Could not create Mobile Webdriver :: &quot; + ex.getMessage());</span>
+<span class="nc" id="L54">		}</span>
+<span class="nc" id="L55">		return  mobileWebDriver;</span>
+		
+	}
+	
+	/**
+	 * The main method.
+	 *
+	 * @param args the arguments
+	 */
+	public static void main(String args[])
+	{
+<span class="nc" id="L66">		TestBed testBed = new TestBed();</span>
+<span class="nc" id="L67">		DeviceConfig deviceConfig = new DeviceConfig();</span>
+<span class="nc" id="L68">		deviceConfig.setName(&quot;ios: iphone&quot;);</span>
+<span class="nc" id="L69">		testBed.setDevice(deviceConfig);</span>
+		try{
+<span class="nc" id="L71">		buildDriver(testBed);</span>
+<span class="nc" id="L72">		}catch(DriverException ex)</span>
+		{
+<span class="nc" id="L74">			log.error(ex.getMessage());</span>
+			//ex.printStackTrace();
+<span class="nc" id="L76">		}</span>
+		
+		
+<span class="nc" id="L79">	}</span>
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.5.201112152213</span></div></body></html>

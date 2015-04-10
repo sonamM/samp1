@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>DocReader.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Test Automation Library</a> &gt; <a href="index.html" class="el_package">com.etouch.taf.core.datamanager.doc</a> &gt; <span class="el_source">DocReader.java</span></div><h1>DocReader.java</h1><pre class="source lang-java linenums">package com.etouch.taf.core.datamanager.doc;
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.logging.Log;
+import org.apache.poi.hpsf.DocumentSummaryInformation;
+import org.apache.poi.hwpf.HWPFDocument;
+import org.apache.poi.hwpf.extractor.WordExtractor;
+import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import org.apache.poi.hwpf.usermodel.HeaderStories;
+import org.apache.poi.hwpf.usermodel.Picture;
+
+import com.etouch.taf.util.CommonUtil;
+import com.etouch.taf.util.LogUtil;
+
+public class DocReader {
+	
+	/** The Log object **/
+<span class="fc" id="L21">	private static Log log = LogUtil.getLog(DocReader.class);</span>
+	
+	//private String filePath = null;
+<span class="fc" id="L24">	private HWPFDocument doc = null;</span>
+	
+	public DocReader(String filePath)
+<span class="fc" id="L27">	{</span>
+		try{
+				//this.filePath = filePath;
+<span class="fc" id="L30">				POIFSFileSystem fs = new POIFSFileSystem(new FileInputStream(filePath));</span>
+<span class="fc" id="L31">		        this.doc = new HWPFDocument(fs);</span>
+<span class="nc" id="L32">		}catch(Exception ex)</span>
+		{
+<span class="nc" id="L34">			log.error(ex.getMessage());</span>
+<span class="fc" id="L35">		}</span>
+		
+<span class="fc" id="L37">	}	</span>
+	
+	
+	/*
+	 * This method returns the paragraphs from .doc document as a String
+	 */
+    public String readParagraphs() throws Exception{
+    	
+<span class="fc" id="L45">    	StringBuffer sb = new StringBuffer();</span>
+<span class="fc" id="L46">        WordExtractor we = new WordExtractor(doc);</span>
+
+        /**Get the total number of paragraphs**/
+<span class="fc" id="L49">        String[] paragraphs = we.getParagraphText();</span>
+<span class="fc" id="L50">        CommonUtil.sop(&quot;Total Paragraphs: &quot;+paragraphs.length);</span>
+
+<span class="fc bfc" id="L52" title="All 2 branches covered.">        for (int i = 0; i &lt; paragraphs.length; i++) {</span>
+
+            //CommonUtil.sop(&quot;Length of paragraph &quot;+(i +1)+&quot;: &quot;+ paragraphs[i].length());
+<span class="fc" id="L55">            sb.append(paragraphs[i].toString() + &quot;\n&quot;);</span>
+
+        }
+        
+<span class="fc" id="L59">        return sb.toString();</span>
+
+    }
+
+    /*
+     * This method returns the Header from the .doc file.
+     */
+    public String readHeader(int pageNumber){
+    	
+<span class="fc" id="L68">    	StringBuffer sb = new StringBuffer();</span>
+<span class="fc" id="L69">        HeaderStories headerStore = new HeaderStories( doc);</span>
+<span class="fc" id="L70">        String header = headerStore.getHeader(pageNumber);</span>
+<span class="fc" id="L71">        sb.append(header);</span>
+<span class="fc" id="L72">        return sb.toString();</span>
+
+    }
+
+    /*
+     * This method returns the footer from .doc file
+     */
+    public String readFooter(int pageNumber){
+<span class="fc" id="L80">    	StringBuffer sb = new StringBuffer();</span>
+<span class="fc" id="L81">        HeaderStories headerStore = new HeaderStories( doc);</span>
+<span class="fc" id="L82">        String footer = headerStore.getFooter(pageNumber);</span>
+<span class="fc" id="L83">        sb.append(footer);</span>
+        
+<span class="fc" id="L85">        return sb.toString();</span>
+
+    }
+    
+    /*
+     * This method returns the document summary as a String 
+     */
+    public String readDocumentSummary() {
+    	
+<span class="fc" id="L94">    	StringBuffer sb = new StringBuffer();</span>
+    	
+<span class="fc" id="L96">        DocumentSummaryInformation summaryInfo=doc.getDocumentSummaryInformation();</span>
+<span class="fc" id="L97">        String category = summaryInfo.getCategory();</span>
+<span class="fc" id="L98">        String company = summaryInfo.getCompany();</span>
+<span class="fc" id="L99">        int lineCount=summaryInfo.getLineCount();</span>
+<span class="fc" id="L100">        int sectionCount=summaryInfo.getSectionCount();</span>
+<span class="fc" id="L101">        int slideCount=summaryInfo.getSlideCount();</span>
+
+
+    //enter code here
+<span class="fc" id="L105">        sb.append(&quot;Category: &quot; + category + &quot;\n&quot;);</span>
+<span class="fc" id="L106">        sb.append(&quot;Company: &quot; + company + &quot;\n&quot;);</span>
+<span class="fc" id="L107">        sb.append(&quot;Line Count: &quot; + lineCount + &quot;\n&quot;);</span>
+<span class="fc" id="L108">        sb.append(&quot;Section Count: &quot; + sectionCount + &quot;\n&quot;);</span>
+<span class="fc" id="L109">        sb.append(&quot;Slide Count: &quot; + slideCount);</span>
+        
+<span class="fc" id="L111">        return sb.toString();</span>
+
+    }
+    
+    /*
+     * This method returns List of images read from the .doc file
+     */
+    public List&lt;byte[]&gt; readImages(){
+<span class="fc" id="L119">    	List&lt;byte[]&gt; result  = new ArrayList&lt;byte[]&gt;(); </span>
+    	
+		    try{
+		    	
+<span class="fc bfc" id="L123" title="All 2 branches covered.">		    	for (Picture picture : doc.getPicturesTable().getAllPictures()) </span>
+		    	{
+<span class="fc" id="L125">		             result.add(picture.getContent());</span>
+<span class="fc" id="L126">		             System.out.println(picture.getContent());</span>
+<span class="fc" id="L127">		    	}</span>
+	    	}
+<span class="nc" id="L129">	    	catch(Exception ex)</span>
+	    	{
+<span class="nc" id="L131">	    		ex.printStackTrace();</span>
+<span class="fc" id="L132">	    	}</span>
+    	    	
+<span class="fc" id="L134">    	return result;</span>
+
+    }
+    
+}
+
+
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.5.201112152213</span></div></body></html>

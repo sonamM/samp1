@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ReportException.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Test Automation Library</a> &gt; <a href="index.html" class="el_package">com.etouch.taf.core.exception</a> &gt; <span class="el_source">ReportException.java</span></div><h1>ReportException.java</h1><pre class="source lang-java linenums">/*
+ * 
+ */
+package com.etouch.taf.core.exception;
+
+import java.io.PrintWriter;
+
+// TODO: Auto-generated Javadoc
+/**
+ * Custom exception thrown if error in generating report.
+ * 
+ * @author eTouch Systems Corporation
+ * @version 1.0
+ * 
+ */
+public class ReportException extends Exception {
+	
+	/** The Constant serialVersionUID. */
+	private static final long serialVersionUID = -4930971510611884750L;
+	
+	/** The message. */
+	private String message;
+		
+	/**
+	 * Instantiates a new report exception.
+	 *
+	 * @param message the message
+	 */
+	public ReportException(String message) {
+<span class="nc" id="L30">		super();</span>
+<span class="nc" id="L31">		this.message = message;</span>
+<span class="nc" id="L32">	}</span>
+
+	/* (non-Javadoc)
+	 * @see java.lang.Throwable#getMessage()
+	 */
+	@Override
+	public String getMessage() {
+<span class="nc" id="L39">		return message;</span>
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Throwable#printStackTrace(java.io.PrintWriter)
+	 */
+	@Override
+	public void printStackTrace(PrintWriter s) {
+<span class="nc" id="L47">		super.printStackTrace(s);</span>
+<span class="nc" id="L48">	}</span>
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.5.201112152213</span></div></body></html>

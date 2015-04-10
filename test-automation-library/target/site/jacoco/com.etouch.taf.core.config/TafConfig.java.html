@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>TafConfig.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Test Automation Library</a> &gt; <a href="index.html" class="el_package">com.etouch.taf.core.config</a> &gt; <span class="el_source">TafConfig.java</span></div><h1>TafConfig.java</h1><pre class="source lang-java linenums">/*
+ * 
+ */
+package com.etouch.taf.core.config;
+
+import java.util.List;
+
+import com.etouch.taf.core.TestBed;
+
+// TODO: Auto-generated Javadoc
+/**
+ * The Class TestAutomationFramework Config.
+ */
+<span class="fc" id="L14">public abstract class TafConfig {</span>
+	
+
+	/** The hub. */
+	private String hub;
+	
+	/** The port. */
+	private String port;
+	
+	/** The tool. */
+	private String tool;
+	
+	/** The current test beds. */
+	private String[] currentTestBeds;
+	
+	/** The test env. */
+	private String testEnv;
+	
+	/**  The testClass. */
+	private String[] testClass;
+	
+	/** The test beds. */
+	private List&lt;TestBedConfig&gt; testBeds;
+	
+	/**
+	 * Gets the hub.
+	 *
+	 * @return the hub
+	 */
+	public String getHub() {
+<span class="fc" id="L44">		return hub;</span>
+	}
+	
+	/**
+	 * Sets the hub.
+	 *
+	 * @param hub the new hub
+	 */
+	public void setHub(String hub) {
+<span class="fc" id="L53">		this.hub = hub;</span>
+<span class="fc" id="L54">	}</span>
+	
+	/**
+	 * Gets the port.
+	 *
+	 * @return the port
+	 */
+	public String getPort() {
+<span class="fc" id="L62">		return port;</span>
+	}
+	
+	/**
+	 * Sets the port.
+	 *
+	 * @param port the new port
+	 */
+	public void setPort(String port) {
+<span class="fc" id="L71">		this.port = port;</span>
+<span class="fc" id="L72">	}</span>
+	
+	/**
+	 * Gets the tool.
+	 *
+	 * @return the tool
+	 */
+	public String getTool() {
+<span class="fc" id="L80">		return tool;</span>
+	}
+	
+	/**
+	 * Sets the tool.
+	 *
+	 * @param tool the new tool
+	 */
+	public void setTool(String tool) {
+<span class="fc" id="L89">		this.tool = tool;</span>
+<span class="fc" id="L90">	}</span>
+	
+	/**
+	 * Gets the current test beds.
+	 *
+	 * @return the current test beds
+	 */
+	public String[] getCurrentTestBeds() {
+<span class="nc" id="L98">		return currentTestBeds;</span>
+	}
+	
+	/**
+	 * Sets the current test beds.
+	 *
+	 * @param currentTestBeds the new current test beds
+	 */
+	public void setCurrentTestBeds(String[] currentTestBeds) {
+<span class="fc" id="L107">		this.currentTestBeds = currentTestBeds;</span>
+<span class="fc" id="L108">	}</span>
+	
+	/**
+	 * Gets the test beds.
+	 *
+	 * @return the test beds
+	 */
+	public List&lt;TestBedConfig&gt; getTestBeds() {
+<span class="nc" id="L116">		return testBeds;</span>
+	}
+	
+	/**
+	 * Sets the test beds.
+	 *
+	 * @param testBeds the new test beds
+	 */
+	public void setTestBeds(List&lt;TestBedConfig&gt; testBeds) {
+<span class="fc" id="L125">		this.testBeds = testBeds;</span>
+<span class="fc" id="L126">	}</span>
+	
+	/**
+	 * Gets the test env.
+	 *
+	 * @return the test env
+	 */
+	public String getTestEnv() {
+<span class="fc" id="L134">		return testEnv;</span>
+	}
+	
+	/**
+	 * Sets the test env.
+	 *
+	 * @param testEnv the new test env
+	 */
+	public void setTestEnv(String testEnv) {
+<span class="fc" id="L143">		this.testEnv = testEnv;</span>
+<span class="fc" id="L144">	}</span>
+
+	/**
+	 * Gets the test class.
+	 *
+	 * @return the test class
+	 */
+	public String[] getTestClass() {
+<span class="nc" id="L152">		return testClass;</span>
+	}
+
+	/**
+	 * Sets the test class.
+	 *
+	 * @param testClass the new test class
+	 */
+	public void setTestClass(String[] testClass) {
+<span class="fc" id="L161">		this.testClass = testClass;</span>
+<span class="fc" id="L162">	}</span>
+	
+	
+	
+	
+	
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.5.201112152213</span></div></body></html>

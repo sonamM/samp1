@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>TestBedType.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Test Automation Library</a> &gt; <a href="index.html" class="el_package">com.etouch.taf.core.resources</a> &gt; <span class="el_source">TestBedType.java</span></div><h1>TestBedType.java</h1><pre class="source lang-java linenums">/*
+ * 
+ */
+package com.etouch.taf.core.resources;
+
+import org.apache.commons.logging.Log;
+
+import com.etouch.taf.util.LogUtil;
+
+// TODO: Auto-generated Javadoc
+/**
+ * List the valid Browsers supported by the test framework.
+ *
+ * @author eTouch Systems Corporation
+ * @version 1.0
+ *
+ */
+<span class="nc" id="L18">public enum TestBedType {</span>
+	
+	/** The Firefox. */
+<span class="nc" id="L21">	Firefox(&quot;fireFox&quot;), </span>
+	
+	/** The Internet explorer. */
+<span class="nc" id="L24">	InternetExplorer(&quot;InternetExplorer&quot;), </span>
+	
+	/** The Chrome. */
+<span class="nc" id="L27">	Chrome(&quot;Chrome&quot;), </span>
+	
+	/** The Safari. */
+<span class="nc" id="L30">	Safari(&quot;Safari&quot;),</span>
+	
+	// iOS Simulators
+	/** The i phone native sim. */
+<span class="nc" id="L34">	iPhoneNativeSim(&quot;iPhoneNativeSim&quot;),</span>
+	
+	/** The i pad native sim. */
+<span class="nc" id="L37">	iPadNativeSim(&quot;iPadNativeSim&quot;),</span>
+	
+	/** The i phone web sim. */
+<span class="nc" id="L40">	iPhoneWebSim(&quot;iPhoneWebSim&quot;),</span>
+	
+	/** The i pad web sim. */
+<span class="nc" id="L43">	iPadWebSim(&quot;iPadWebSim&quot;),</span>
+	
+	//iOS real device
+	/** The i phone native. */
+<span class="nc" id="L47">	iPhoneNative(&quot;iPhoneNative&quot;),</span>
+	
+	/** The i pad native. */
+<span class="nc" id="L50">	iPadNative(&quot;iPadNative&quot;),</span>
+	
+	/** The i phone web. */
+<span class="nc" id="L53">	iPhoneWeb(&quot;iPhoneWeb&quot;),</span>
+	
+	/** The i pad web. */
+<span class="nc" id="L56">	iPadWeb(&quot;iPadWeb&quot;),</span>
+	
+	/** The i os. */
+<span class="nc" id="L59">	iOS(&quot;iOS&quot;),</span>
+    
+    /** The Android native. */
+<span class="nc" id="L62">    AndroidNative(&quot;AndroidNative&quot;),</span>
+	
+	/** The Android web em. */
+<span class="nc" id="L65">	AndroidWebEm(&quot;AndroidWebEm&quot;),</span>
+	
+	/** The Android. */
+<span class="nc" id="L68">	Android(&quot;Android&quot;),</span>
+	
+	/**  The Android Native Browser. */
+<span class="nc" id="L71">	AndroidBrowser(&quot;Android&quot;)</span>
+	;
+    
+	/** The log. */
+<span class="nc" id="L75">	static Log log = LogUtil.getLog(TestBedType.class);</span>
+	
+	/** The test bed name. */
+	private String testBedName;
+
+	/**
+	 * Instantiates a new test bed type.
+	 *
+	 * @param testBedName the test bed name
+	 */
+<span class="nc" id="L85">	private TestBedType(String testBedName) {</span>
+<span class="nc" id="L86">		this.testBedName = testBedName;</span>
+<span class="nc" id="L87">	}</span>
+
+	/**
+	 * Gets the test bed name.
+	 *
+	 * @return the test bed name
+	 */
+	public String getTestBedName() {
+<span class="nc" id="L95">		return testBedName;</span>
+	}
+	
+	
+	/**
+	 * Checks if is supported.
+	 *
+	 * @param testBedType the platform name
+	 * @return true, if is supported
+	 */
+	public static boolean isSupported(String testBedType){
+<span class="nc" id="L106">		TestBedType[] testBedTypeList = TestBedType.values();</span>
+<span class="nc bnc" id="L107" title="All 2 branches missed.">		for(TestBedType tbType : testBedTypeList){</span>
+<span class="nc bnc" id="L108" title="All 2 branches missed.">			if(tbType.getTestBedName().equalsIgnoreCase(testBedType)){</span>
+<span class="nc" id="L109">				return true;</span>
+			}
+		}
+<span class="nc" id="L112">		return false;</span>
+	}
+	
+	
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.5.201112152213</span></div></body></html>

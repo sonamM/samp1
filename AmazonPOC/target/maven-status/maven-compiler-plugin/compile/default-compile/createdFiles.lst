@@ -1,0 +1,12 @@
+com\etouch\amazon\pages\test\TestMobile.class
+com\etouch\amazon\pages\AmazonMainPage.class
+com\etouch\amazon\common\iOSDeviceTest.class
+com\etouch\amazon\pages\test\TestAmazonMainPage.class
+com\etouch\amazon\common\ReportConfig.class
+com\etouch\report\TestNGReporter$1.class
+com\etouch\amazon\common\CommonPage.class
+com\etouch\amazon\listener\SuiteListener.class
+com\etouch\amazon\common\BaseTest.class
+com\etouch\amazon\pages\test\TestWeb.class
+com\etouch\amazon\pages\test\TestCommon.class
+com\etouch\report\TestNGReporter.class

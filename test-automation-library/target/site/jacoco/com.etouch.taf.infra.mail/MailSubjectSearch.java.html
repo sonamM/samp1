@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>MailSubjectSearch.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Test Automation Library</a> &gt; <a href="index.html" class="el_package">com.etouch.taf.infra.mail</a> &gt; <span class="el_source">MailSubjectSearch.java</span></div><h1>MailSubjectSearch.java</h1><pre class="source lang-java linenums">/*
+ * 
+ */
+package com.etouch.taf.infra.mail;
+
+import java.util.Properties;
+
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.search.SearchTerm;
+
+import org.apache.commons.logging.Log;
+
+import com.etouch.taf.util.LogUtil;
+
+// TODO: Auto-generated Javadoc
+/**
+ * The Class MailSubjectSearch.
+ */
+<span class="nc" id="L20">public class MailSubjectSearch extends SearchTerm implements IMailSearchCriteria{</span>
+
+	/** The log. */
+<span class="nc" id="L23">	private static Log log = LogUtil.getLog(EmailValidator.class);</span>
+	
+	/** The prop. */
+	private Properties prop;
+	
+	/* (non-Javadoc)
+	 * @see javax.mail.search.SearchTerm#match(javax.mail.Message)
+	 */
+	@Override
+	public boolean match(Message message) {
+		try {
+			
+<span class="nc" id="L35">			String subjectLike = prop.getProperty(IEMailConstantUtil.MATCH_MAIL_SUBJECT);</span>
+			
+			//System.out.println(&quot;MailSubjectSearch.match() subjectLike &quot;+subjectLike);
+			
+<span class="nc bnc" id="L39" title="All 4 branches missed.">			if (message.getSubject() != null &amp;&amp; message.getSubject().contains(subjectLike)) {</span>
+<span class="nc" id="L40">				return true;</span>
+			}
+<span class="nc" id="L42">		} catch (MessagingException ex) {</span>
+<span class="nc" id="L43">			ex.printStackTrace();</span>
+<span class="nc" id="L44">		}</span>
+<span class="nc" id="L45">		return false;</span>
+	}
+
+	
+	/* (non-Javadoc)
+	 * @see com.etouch.taf.infra.mail.IMailSearchCriteria#isMatch(javax.mail.Message, java.util.Properties)
+	 */
+	public boolean isMatch(Message message,Properties prop) {
+		// TODO Auto-generated method stub
+<span class="nc" id="L54">		this.prop=prop;</span>
+<span class="nc" id="L55">		return match(message);</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.5.201112152213</span></div></body></html>

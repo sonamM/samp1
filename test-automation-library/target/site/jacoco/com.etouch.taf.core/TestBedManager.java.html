@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>TestBedManager.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Test Automation Library</a> &gt; <a href="index.html" class="el_package">com.etouch.taf.core</a> &gt; <span class="el_source">TestBedManager.java</span></div><h1>TestBedManager.java</h1><pre class="source lang-java linenums">/*
+ * 
+ */
+package com.etouch.taf.core;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.apache.commons.logging.Log;
+import org.testng.TestNG;
+import org.testng.xml.Parser;
+import org.testng.xml.XmlSuite;
+import org.xml.sax.SAXException;
+
+import com.etouch.taf.core.config.DefectConfig;
+import com.etouch.taf.core.config.MobileConfig;
+import com.etouch.taf.core.config.TFSConfig;
+import com.etouch.taf.core.config.TestBedConfig;
+import com.etouch.taf.core.config.TestngConfig;
+import com.etouch.taf.core.config.TestBedManagerConfiguration;
+import com.etouch.taf.core.config.WebConfig;
+import com.etouch.taf.core.exception.DefectException;
+import com.etouch.taf.core.exception.DriverException;
+import com.etouch.taf.tools.defect.DefectManagerFactory;
+import com.etouch.taf.tools.defect.DefectTools;
+import com.etouch.taf.tools.defect.IDefectManager;
+import com.etouch.taf.util.ConfigUtil;
+import com.etouch.taf.util.LogUtil;
+
+// TODO: Auto-generated Javadoc
+/**
+ * Test Bed Manager loads the profile for the test environment. This class
+ * initializes {@link TestBed}
+ * 
+ * @author eTouch Systems Corporation
+ * @version 1.0
+ * 
+ */
+<span class="pc" id="L44">public enum TestBedManager {</span>
+	
+	/**  The instance to create a Singleton object of TestbedManager. */
+<span class="fc" id="L47">	INSTANCE;</span>
+
+	/** The log. */
+<span class="fc" id="L50">	static Log log = LogUtil.getLog(TestBedManager.class);</span>
+	
+	/**  This object helps to hold information about the testbed which is executing right now. */
+<span class="fc" id="L53">	private TestBed currentTestBed=null;</span>
+	
+	/**
+	 * Gets the current test bed.
+	 *
+	 * @return the current test bed
+	 */
+	public TestBed getCurrentTestBed() {
+<span class="fc" id="L61">		return currentTestBed;</span>
+	}
+
+	/**
+	 * Sets the current test bed.
+	 *
+	 * @param currentTestBed the new current test bed
+	 */
+	public void setCurrentTestBed(TestBed currentTestBed) {
+<span class="fc" id="L70">		this.currentTestBed = currentTestBed;</span>
+<span class="fc" id="L71">	}</span>
+
+	/** The defect. */
+<span class="fc" id="L74">	private IDefectManager defect = null;</span>
+
+
+	/**
+	 * Reads configuration file and create profile and sets in test bed.
+	 *
+	 * @param ipStream the new config
+	 * @param currentTestBeds the current test beds
+	 * @throws Exception the exception
+	 */
+
+	public void setConfig(InputStream ipStream, String[] currentTestBeds) throws Exception  {
+		
+<span class="fc" id="L87">			TestBedManagerConfiguration.setIpStream(ipStream);</span>
+<span class="fc" id="L88">			TestBedManagerConfiguration.getInstance();</span>
+			
+<span class="pc bpc" id="L90" title="1 of 2 branches missed.">				if ( TestBedManagerConfiguration.getInstance().getWebConfig().getTestEnv().equalsIgnoreCase(&quot;remote&quot;) ) {</span>
+<span class="nc bnc" id="L91" title="All 4 branches missed.">					if ( currentTestBeds != null &amp;&amp; currentTestBeds.length &gt; 0 ) {</span>
+<span class="nc" id="L92">						TestBedManagerConfiguration.getInstance().getWebConfig().setCurrentTestBeds(currentTestBeds);</span>
+					}
+					else{
+<span class="nc" id="L95">						throw new Exception(&quot;Please mention paramter in Maven command for TestBed Name&quot;);</span>
+					}
+				}
+			//}else{
+				//TestBedManagerConfiguration.getInstance().setTestTypes(testTypes);
+			//}
+			
+<span class="fc" id="L102">	}</span>
+	
+	
+	/**
+	 * Creates the defect manager.
+	 *
+	 * @throws DefectException the defect exception
+	 */
+	public void createDefectManager() throws DefectException{
+		
+<span class="nc bnc" id="L112" title="All 2 branches missed.">		if(ConfigUtil.isDefectToolSupported()){</span>
+			
+		
+<span class="nc" id="L115">		this.defect = DefectManagerFactory</span>
+				.manageDefect(TestBedManagerConfiguration.getInstance().getDefectConfig().getDefectTool());
+	
+		}
+<span class="nc" id="L119">	}</span>
+
+
+
+	
+	/**
+ * Execute test ng.
+ */
+public void executeTestNG() {
+		
+<span class="nc" id="L129">		TestNG testNG = TestSuiteManager.INSTANCE</span>
+				.buildTestSuites();
+		
+<span class="nc" id="L132">		log.info(&quot;Test suites begin to run&quot;);</span>
+<span class="nc" id="L133">		testNG.run();</span>
+		
+<span class="nc" id="L135">	}</span>
+	
+	
+	
+//	/**
+//	 * Handle for existing suites.
+//	 *
+//	 * @param ipStream the ip stream
+//	 * @return the list
+//	 */
+//	private static List&lt;XmlSuite&gt; handleForExistingSuites(InputStream ipStream) {
+//		List&lt;XmlSuite&gt; existingSuite = null;
+//		try {
+//
+//			existingSuite = (List&lt;XmlSuite&gt;) new Parser(ipStream).parse();
+//			
+//		} catch (ParserConfigurationException e) {
+//			// TODO Auto-generated catch block
+//			System.out.println(&quot;ParserConfigurationException occured &quot;
+//					+ e.getMessage());
+//			e.printStackTrace();
+//
+//		} catch (SAXException e) {
+//			// TODO Auto-generated catch block
+//			System.out.println(&quot;SAXException occured &quot; + e.getMessage());
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			System.out.println(&quot;IOException occured &quot; + e.getMessage());
+//			e.printStackTrace();
+//		}
+//
+//		return existingSuite;
+//	}
+
+	
+
+	
+
+	/**
+	 * Returns profile.
+	 * 
+	 * @return Profile configuration instance.
+	 */
+	public TestBedManagerConfiguration getProfile() {
+<span class="nc" id="L180">		return TestBedManagerConfiguration.getInstance();</span>
+	}
+
+	
+	/**
+	 * Returns base URL.
+	 * 
+	 * @return profile base URL
+	 */
+	public String loadBaseURL() {
+<span class="nc" id="L190">		WebConfig webConfig=TestBedManagerConfiguration.getInstance().getWebConfig();</span>
+<span class="nc" id="L191">			return webConfig.getURL();</span>
+	}
+	
+	
+
+	/**
+	 * Returns Test bed.
+	 * 
+	 * @return TestBed
+	 */
+	public  TestBed getTestBed() {
+<span class="nc" id="L202">		return currentTestBed;</span>
+	}
+
+	/**
+	 * Returns defect instance.
+	 * 
+	 * @return DefectManager
+	 */
+	public IDefectManager getDefect() {
+<span class="nc" id="L211">		return this.defect;</span>
+	}
+	
+	
+	/**
+	 * Gets the defect config.
+	 *
+	 * @return the defect config
+	 */
+	public DefectConfig getDefectConfig()
+	{
+<span class="nc" id="L222">		return TestBedManagerConfiguration.INSTANCE.getDefectConfig();</span>
+	}
+	
+	/**
+	 * Gets the testng config.
+	 *
+	 * @return the testng config
+	 */
+	public TestngConfig getTestngConfig()
+	{
+<span class="nc" id="L232">		return TestBedManagerConfiguration.INSTANCE.getTestngConfig();</span>
+	}
+	
+	/**
+	 * Gets the TFS config.
+	 *
+	 * @return the TFS config
+	 */
+	public TFSConfig getTFSConfig()
+	{
+<span class="fc" id="L242">		return TestBedManagerConfiguration.INSTANCE.getTfsConfig();</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.5.201112152213</span></div></body></html>

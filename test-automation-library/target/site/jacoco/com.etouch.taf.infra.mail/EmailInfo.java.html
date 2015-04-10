@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>EmailInfo.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Test Automation Library</a> &gt; <a href="index.html" class="el_package">com.etouch.taf.infra.mail</a> &gt; <span class="el_source">EmailInfo.java</span></div><h1>EmailInfo.java</h1><pre class="source lang-java linenums">//package com.etouch.taf.infra.mail;
+
+package com.etouch.taf.infra.mail;
+
+import org.apache.commons.logging.Log;
+
+import com.etouch.taf.util.LogUtil;
+
+// TODO: Auto-generated Javadoc
+/**
+ * 
+ * EmailInfo object carries email information including sender / recipients details.
+ * 
+ * @author eTouch Systems Corporation
+ * @version 1.0
+ *
+ */
+<span class="nc" id="L18">public class EmailInfo {</span>
+	
+	/** The log. */
+<span class="nc" id="L21">	static Log log = LogUtil.getLog(EmailInfo.class);</span>
+	
+	/** The user name. */
+<span class="nc" id="L24">	String userName = null;</span>
+	
+	/** The pass word. */
+<span class="nc" id="L27">	String passWord = null;</span>
+	
+	/** The host. */
+<span class="nc" id="L30">	String host = null;</span>
+	
+	/** The port. */
+<span class="nc" id="L33">	String port = null;</span>
+	
+	/** The starttls. */
+<span class="nc" id="L36">	String starttls = null; </span>
+	
+	/** The auth. */
+<span class="nc" id="L39">	String auth = null; </span>
+	
+	/** The debug. */
+<span class="nc" id="L42">	boolean debug = false; </span>
+	
+	/** The socket factory class. */
+<span class="nc" id="L45">	String socketFactoryClass = null;</span>
+	
+	/** The fallback. */
+<span class="nc" id="L48">	String fallback = null;</span>
+	
+	/** The from. */
+<span class="nc" id="L51">	String from = null;</span>
+	
+	/** The to. */
+<span class="nc" id="L54">	String[] to = null;</span>
+	
+	/** The cc. */
+<span class="nc" id="L57">	String[] cc = null;</span>
+	
+	/** The bcc. */
+<span class="nc" id="L60">	String[] bcc = null;</span>
+	
+	/** The subject. */
+<span class="nc" id="L63">	String subject = null; </span>
+	
+	/** The text. */
+<span class="nc" id="L66">	String text = null;</span>
+	
+	/** The attachment path. */
+<span class="nc" id="L69">	String attachmentPath = null;</span>
+	
+	/** The attachment name. */
+<span class="nc" id="L72">	String attachmentName = null;</span>
+	
+	/**
+	 * Gets the user name.
+	 *
+	 * @return the user name
+	 */
+	public String getUserName() {
+<span class="nc" id="L80">		return userName;</span>
+	}
+	
+	/**
+	 * Sets the user name.
+	 *
+	 * @param userName the new user name
+	 */
+	public void setUserName(String userName) {
+<span class="nc" id="L89">		this.userName = userName;</span>
+<span class="nc" id="L90">	}</span>
+	
+	/**
+	 * Gets the pass word.
+	 *
+	 * @return the pass word
+	 */
+	public String getPassWord() {
+<span class="nc" id="L98">		return passWord;</span>
+	}
+	
+	/**
+	 * Sets the pass word.
+	 *
+	 * @param passWord the new pass word
+	 */
+	public void setPassWord(String passWord) {
+<span class="nc" id="L107">		this.passWord = passWord;</span>
+<span class="nc" id="L108">	}</span>
+	
+	/**
+	 * Gets the host.
+	 *
+	 * @return the host
+	 */
+	public String getHost() {
+<span class="nc" id="L116">		return host;</span>
+	}
+	
+	/**
+	 * Sets the host.
+	 *
+	 * @param host the new host
+	 */
+	public void setHost(String host) {
+<span class="nc" id="L125">		this.host = host;</span>
+<span class="nc" id="L126">	}</span>
+	
+	/**
+	 * Gets the port.
+	 *
+	 * @return the port
+	 */
+	public String getPort() {
+<span class="nc" id="L134">		return port;</span>
+	}
+	
+	/**
+	 * Sets the port.
+	 *
+	 * @param port the new port
+	 */
+	public void setPort(String port) {
+<span class="nc" id="L143">		this.port = port;</span>
+<span class="nc" id="L144">	}</span>
+	
+	/**
+	 * Gets the starttls.
+	 *
+	 * @return the starttls
+	 */
+	public String getStarttls() {
+<span class="nc" id="L152">		return starttls;</span>
+	}
+	
+	/**
+	 * Sets the starttls.
+	 *
+	 * @param starttls the new starttls
+	 */
+	public void setStarttls(String starttls) {
+<span class="nc" id="L161">		this.starttls = starttls;</span>
+<span class="nc" id="L162">	}</span>
+	
+	/**
+	 * Gets the auth.
+	 *
+	 * @return the auth
+	 */
+	public String getAuth() {
+<span class="nc" id="L170">		return auth;</span>
+	}
+	
+	/**
+	 * Sets the auth.
+	 *
+	 * @param auth the new auth
+	 */
+	public void setAuth(String auth) {
+<span class="nc" id="L179">		this.auth = auth;</span>
+<span class="nc" id="L180">	}</span>
+	
+	/**
+	 * Checks if is debug.
+	 *
+	 * @return true, if is debug
+	 */
+	public boolean isDebug() {
+<span class="nc" id="L188">		return debug;</span>
+	}
+	
+	/**
+	 * Sets the debug.
+	 *
+	 * @param debug the new debug
+	 */
+	public void setDebug(boolean debug) {
+<span class="nc" id="L197">		this.debug = debug;</span>
+<span class="nc" id="L198">	}</span>
+	
+	/**
+	 * Gets the socket factory class.
+	 *
+	 * @return the socket factory class
+	 */
+	public String getSocketFactoryClass() {
+<span class="nc" id="L206">		return socketFactoryClass;</span>
+	}
+	
+	/**
+	 * Sets the socket factory class.
+	 *
+	 * @param socketFactoryClass the new socket factory class
+	 */
+	public void setSocketFactoryClass(String socketFactoryClass) {
+<span class="nc" id="L215">		this.socketFactoryClass = socketFactoryClass;</span>
+<span class="nc" id="L216">	}</span>
+	
+	/**
+	 * Gets the fallback.
+	 *
+	 * @return the fallback
+	 */
+	public String getFallback() {
+<span class="nc" id="L224">		return fallback;</span>
+	}
+	
+	/**
+	 * Sets the fallback.
+	 *
+	 * @param fallback the new fallback
+	 */
+	public void setFallback(String fallback) {
+<span class="nc" id="L233">		this.fallback = fallback;</span>
+<span class="nc" id="L234">	}</span>
+	
+	/**
+	 * Gets the from.
+	 *
+	 * @return the from
+	 */
+	public String getFrom() {
+<span class="nc" id="L242">		return from;</span>
+	}
+	
+	/**
+	 * Sets the from.
+	 *
+	 * @param from the new from
+	 */
+	public void setFrom(String from) {
+<span class="nc" id="L251">		this.from = from;</span>
+<span class="nc" id="L252">	}</span>
+	
+	/**
+	 * Gets the to.
+	 *
+	 * @return the to
+	 */
+	public String[] getTo() {
+<span class="nc" id="L260">		return to;</span>
+	}
+	
+	/**
+	 * Sets the to.
+	 *
+	 * @param to the new to
+	 */
+	public void setTo(String[] to) {
+<span class="nc" id="L269">		this.to = to;</span>
+<span class="nc" id="L270">	}</span>
+	
+	/**
+	 * Gets the cc.
+	 *
+	 * @return the cc
+	 */
+	public String[] getCc() {
+<span class="nc" id="L278">		return cc;</span>
+	}
+	
+	/**
+	 * Sets the cc.
+	 *
+	 * @param cc the new cc
+	 */
+	public void setCc(String[] cc) {
+<span class="nc" id="L287">		this.cc = cc;</span>
+<span class="nc" id="L288">	}</span>
+	
+	/**
+	 * Gets the bcc.
+	 *
+	 * @return the bcc
+	 */
+	public String[] getBcc() {
+<span class="nc" id="L296">		return bcc;</span>
+	}
+	
+	/**
+	 * Sets the bcc.
+	 *
+	 * @param bcc the new bcc
+	 */
+	public void setBcc(String[] bcc) {
+<span class="nc" id="L305">		this.bcc = bcc;</span>
+<span class="nc" id="L306">	}</span>
+	
+	/**
+	 * Gets the subject.
+	 *
+	 * @return the subject
+	 */
+	public String getSubject() {
+<span class="nc" id="L314">		return subject;</span>
+	}
+	
+	/**
+	 * Sets the subject.
+	 *
+	 * @param subject the new subject
+	 */
+	public void setSubject(String subject) {
+<span class="nc" id="L323">		this.subject = subject;</span>
+<span class="nc" id="L324">	}</span>
+	
+	/**
+	 * Gets the text.
+	 *
+	 * @return the text
+	 */
+	public String getText() {
+<span class="nc" id="L332">		return text;</span>
+	}
+	
+	/**
+	 * Sets the text.
+	 *
+	 * @param text the new text
+	 */
+	public void setText(String text) {
+<span class="nc" id="L341">		this.text = text;</span>
+<span class="nc" id="L342">	}</span>
+	
+	/**
+	 * Gets the attachment path.
+	 *
+	 * @return the attachment path
+	 */
+	public String getAttachmentPath() {
+<span class="nc" id="L350">		return attachmentPath;</span>
+	}
+	
+	/**
+	 * Sets the attachment path.
+	 *
+	 * @param attachmentPath the new attachment path
+	 */
+	public void setAttachmentPath(String attachmentPath) {
+<span class="nc" id="L359">		this.attachmentPath = attachmentPath;</span>
+<span class="nc" id="L360">	}</span>
+	
+	/**
+	 * Gets the attachment name.
+	 *
+	 * @return the attachment name
+	 */
+	public String getAttachmentName() {
+<span class="nc" id="L368">		return attachmentName;</span>
+	}
+	
+	/**
+	 * Sets the attachment name.
+	 *
+	 * @param attachmentName the new attachment name
+	 */
+	public void setAttachmentName(String attachmentName) {
+<span class="nc" id="L377">		this.attachmentName = attachmentName;</span>
+<span class="nc" id="L378">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.5.201112152213</span></div></body></html>

@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>SeleniumDriver.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Test Automation Library</a> &gt; <a href="index.html" class="el_package">com.etouch.taf.webui.selenium</a> &gt; <span class="el_source">SeleniumDriver.java</span></div><h1>SeleniumDriver.java</h1><pre class="source lang-java linenums">/*
+ * 
+ */
+package com.etouch.taf.webui.selenium;
+
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import org.apache.commons.logging.Log;
+import org.openqa.selenium.Proxy;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxProfile;
+import org.openqa.selenium.remote.CapabilityType;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.safari.SafariDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.ie.InternetExplorerDriver;
+
+import com.etouch.taf.core.TestBed;
+import com.etouch.taf.core.TestBedManager;
+import com.etouch.taf.core.config.TestBedManagerConfiguration;
+//import com.etouch.taf.core.driver.Driver;
+import com.etouch.taf.core.driver.DriverBuilder;
+import com.etouch.taf.core.driver.DriverConstantUtil;
+import com.etouch.taf.core.driver.IDriver;
+import com.etouch.taf.core.exception.DriverException;
+import com.etouch.taf.core.resources.PlatformType;
+import com.etouch.taf.util.LogUtil;
+
+
+
+// TODO: Auto-generated Javadoc
+/**
+ * The Class SeleniumDriver.
+ */
+<span class="nc" id="L39">public class SeleniumDriver {</span>
+	
+	/** The log. */
+<span class="fc" id="L42">	static Log log = LogUtil.getLog(SeleniumDriver.class);</span>
+	//protected static DesiredCapabilities capabilities=new DesiredCapabilities();
+
+
+
+	
+	/**
+	 * Builds the fire fox driver.
+	 *
+	 * @return the firefox driver
+	 * @throws DriverException the driver exception
+	 */
+	public static FirefoxDriver buildFireFoxDriver() throws DriverException{
+<span class="fc" id="L55">		return new FirefoxDriver();</span>
+	}
+	
+	/**
+	 * Builds the fire fox driver.
+	 *
+	 * @param ffProfile the ff profile
+	 * @return the firefox driver
+	 */
+	public static FirefoxDriver buildFireFoxDriver(FirefoxProfile ffProfile){
+<span class="nc" id="L65">		return new FirefoxDriver(ffProfile);</span>
+	}
+
+	/**
+	 * Builds the safari driver.
+	 *
+	 * @return the safari driver
+	 * @throws DriverException the driver exception
+	 */
+	public static RemoteWebDriver buildSafariDriver() throws DriverException{
+		
+<span class="fc" id="L76">		DesiredCapabilities dc = DesiredCapabilities.safari();</span>
+<span class="fc" id="L77">		RemoteWebDriver driver=null;</span>
+		try {
+<span class="nc" id="L79">			driver=new RemoteWebDriver(new URL(&quot;http://localhost:4444/wd/hub&quot;),dc);</span>
+<span class="nc" id="L80">		} catch (MalformedURLException e) {</span>
+			// TODO Auto-generated catch block
+<span class="nc" id="L82">			e.printStackTrace();</span>
+<span class="nc" id="L83">		}</span>
+<span class="nc" id="L84">		return driver;</span>
+	}
+
+	
+	/**
+	 * Builds the chrome driver.
+	 *
+	 * @param file the file
+	 * @return the chrome driver
+	 * @throws DriverException the driver exception
+	 */
+	public static ChromeDriver buildChromeDriver(File file) throws DriverException{
+
+<span class="pc bpc" id="L97" title="1 of 2 branches missed.">		if(file!=null){</span>
+			
+			
+<span class="fc" id="L100">			System.setProperty(&quot;webdriver.chrome.driver&quot;,file.getPath());</span>
+			
+		}
+		
+<span class="fc" id="L104">		return new ChromeDriver();</span>
+	}
+	
+	
+
+	
+	/**
+	 * Builds the ie driver.
+	 *
+	 * @param file the file
+	 * @return the internet explorer driver
+	 * @throws DriverException the driver exception
+	 */
+	public static InternetExplorerDriver buildIEDriver(File file) throws DriverException{
+<span class="pc bpc" id="L118" title="1 of 2 branches missed.">		if(file!=null)</span>
+		{
+<span class="fc" id="L120">			System.out.println(&quot;IE Driver File path&quot;);</span>
+<span class="fc" id="L121">			System.setProperty(&quot;webdriver.ie.driver&quot;, file.getAbsolutePath());</span>
+		}
+		
+<span class="fc" id="L124">		DesiredCapabilities cap = new DesiredCapabilities();</span>
+<span class="fc" id="L125">		cap.setCapability(CapabilityType.UNEXPECTED_ALERT_BEHAVIOUR, </span>
+		   org.openqa.selenium.UnexpectedAlertBehaviour.ACCEPT);
+		//cap.setCapability(&quot;ignoreProtectedModeSettings&quot;, true);
+<span class="fc" id="L128">		cap.setCapability(InternetExplorerDriver.</span>
+                INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS,true);
+		
+<span class="fc" id="L131">		return new InternetExplorerDriver(cap);</span>
+		
+	}
+	
+	
+	/**
+	 * Builds the url.
+	 *
+	 * @param capabilities the capabilities
+	 * @return the string
+	 */
+	protected static String buildURL(DesiredCapabilities capabilities) {
+<span class="nc" id="L143">		String hubLocation = null;</span>
+<span class="nc" id="L144">		TestBedManagerConfiguration tbMgrConfig=TestBedManagerConfiguration.getInstance();</span>
+<span class="nc" id="L145">		String hub = tbMgrConfig.getWebConfig().getHub();</span>
+<span class="nc" id="L146">		String port = tbMgrConfig.getWebConfig().getPort();</span>
+		
+<span class="nc" id="L148">		TestBed testBed=TestBedManager.INSTANCE.getCurrentTestBed();</span>
+
+		// defalut hub to localhost
+<span class="nc bnc" id="L151" title="All 4 branches missed.">		if (hub == null || hub.isEmpty()) {</span>
+<span class="nc" id="L152">			hub = &quot;localhost&quot;;</span>
+		}
+
+		// default port to 4444
+<span class="nc bnc" id="L156" title="All 4 branches missed.">		if (port == null || port.isEmpty()) {</span>
+<span class="nc" id="L157">			port = &quot;4444&quot;;</span>
+		}
+		
+<span class="nc" id="L160">		 hubLocation = &quot;http://&quot; + hub + &quot;:&quot; + port + &quot;/wd/hub&quot;;</span>
+
+		// add proxy setting to the webdriver
+<span class="nc" id="L163">		String proxyString = tbMgrConfig.getWebConfig().getProxy();</span>
+<span class="nc" id="L164">		String noProxyString = tbMgrConfig.getWebConfig().getNoProxy();</span>
+<span class="nc bnc" id="L165" title="All 4 branches missed.">		if (proxyString != null &amp;&amp; !proxyString.isEmpty()) {</span>
+<span class="nc" id="L166">			Proxy proxysetting = new Proxy();</span>
+<span class="nc" id="L167">			proxysetting.setHttpProxy(proxyString)</span>
+					.setFtpProxy(proxyString).setSslProxy(proxyString);
+<span class="nc bnc" id="L169" title="All 4 branches missed.">			if (noProxyString != null &amp;&amp; !proxyString.isEmpty()) {</span>
+<span class="nc" id="L170">				proxysetting.setNoProxy(noProxyString);</span>
+			}
+
+<span class="nc" id="L173">			capabilities.setCapability(CapabilityType.PROXY,</span>
+					proxysetting);
+		}
+		
+<span class="nc" id="L177">		return hubLocation;</span>
+	}
+	
+	
+	
+	
+	
+	/**
+	 * Builds the remote driver.
+	 *
+	 * @param capabilities the capabilities
+	 * @return the remote web driver
+	 * @throws DriverException the driver exception
+	 */
+	public static RemoteWebDriver buildRemoteDriver(DesiredCapabilities capabilities) throws DriverException
+	{
+<span class="nc" id="L193">		RemoteWebDriver driver=null;</span>
+		try {
+<span class="nc" id="L195">			driver = new RemoteWebDriver(new URL(buildURL(capabilities)), capabilities);</span>
+<span class="nc" id="L196">		} catch (MalformedURLException e) {</span>
+<span class="nc" id="L197">			log.error(&quot;failed to create driver : &quot; + e.getMessage());</span>
+<span class="nc" id="L198">			throw new DriverException(&quot;failed to create driver : &quot; + e.getMessage());</span>
+<span class="nc" id="L199">		}</span>
+<span class="nc" id="L200">		return driver;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.5.201112152213</span></div></body></html>

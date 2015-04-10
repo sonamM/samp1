@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>CommonUtil.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Test Automation Library</a> &gt; <a href="index.html" class="el_package">com.etouch.taf.util</a> &gt; <span class="el_source">CommonUtil.java</span></div><h1>CommonUtil.java</h1><pre class="source lang-java linenums">/*
+ * 
+ */
+package com.etouch.taf.util;
+
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.List;
+
+import org.apache.commons.logging.Log;
+
+import com.etouch.taf.core.config.TestBedManagerConfiguration;
+import com.etouch.taf.core.exception.ListException;
+import com.etouch.taf.core.exception.PageException;
+import com.etouch.taf.core.resources.TestEnvironmentType;
+
+// TODO: Auto-generated Javadoc
+/**
+ * This class contains common utility functions.
+ * 
+ * @author eTouch Systems Corporation
+ * version 1.0
+ *
+ */
+<span class="nc" id="L27">public class CommonUtil {</span>
+	
+	/** The log. */
+<span class="fc" id="L30">	static Log log=LogUtil.getLog(CommonUtil.class);</span>
+	
+	
+	
+	/**
+	 * Checks if is list in order.
+	 *
+	 * @param sourceList1 the source list1
+	 * @param sourceList2 the source list2
+	 * @return true, if is list in order
+	 * @throws ListException the list exception
+	 */
+	public static synchronized boolean isListInOrder(List&lt;String&gt; sourceList1,List&lt;String&gt; sourceList2) throws ListException{
+<span class="nc" id="L43">		boolean result = true;</span>
+<span class="nc bnc" id="L44" title="All 4 branches missed.">		if(isNull(sourceList1) || isNull(sourceList2)){</span>
+<span class="nc" id="L45">			log.error(&quot;failed to check order, source list 1 or 2 is not initialized - (&quot;+sourceList1+&quot;,&quot;+sourceList2+&quot;)&quot;);</span>
+<span class="nc" id="L46">			throw new ListException(&quot;failed to check order, source list 1 or 2 is not initialized&quot;);</span>
+		}
+<span class="nc bnc" id="L48" title="All 2 branches missed.">		if(sourceList1.size() != sourceList2.size()){</span>
+<span class="nc" id="L49">			log.info(&quot;failed to check order, source list 1 or 2 size is different - (&quot;+sourceList1.size()+&quot;,&quot;+sourceList2.size()+&quot;)&quot;);</span>
+<span class="nc" id="L50">			result = false;</span>
+		}else{
+<span class="nc bnc" id="L52" title="All 2 branches missed.">			for(int i=0; i &lt; sourceList1.size(); i++){</span>
+<span class="nc bnc" id="L53" title="All 2 branches missed.">				if(!sourceList1.get(i).equals(sourceList2.get(i)) ){</span>
+<span class="nc" id="L54">					result = false; </span>
+				}
+			}
+		}	
+<span class="nc" id="L58">		return result;</span>
+	}
+	
+	/**
+	 * Compare text.
+	 *
+	 * @param str1 the str1
+	 * @param str2 the str2
+	 * @return true, if successful
+	 */
+	public static synchronized boolean compareText(String str1,String str2){
+<span class="nc bnc" id="L69" title="All 4 branches missed.">		if(isNull(str1) || isNull(str2) ){</span>
+<span class="nc" id="L70">			log.info(&quot;string 1 or 2 is not initialized - (&quot;+str1+&quot;,&quot;+str2+&quot;)&quot;);</span>
+		}
+<span class="nc" id="L72">		return str1.equals(str2);</span>
+	}
+	
+	/**
+	 * Checks if is null.
+	 *
+	 * @param objVal the obj val
+	 * @return true, if is null
+	 */
+	public static synchronized boolean isNull(Object objVal){
+<span class="nc bnc" id="L82" title="All 2 branches missed.">		if(objVal == null)</span>
+<span class="nc" id="L83">			return true;</span>
+<span class="nc" id="L84">		return false;</span>
+	}
+	
+	/**
+	 * Checks if is link broken.
+	 *
+	 * @param linkUrl the link url
+	 * @return true, if is link broken
+	 * @throws PageException the page exception
+	 */
+	public static synchronized boolean isLinkBroken(String linkUrl) throws PageException{
+<span class="nc" id="L95">		log.info(&quot;Start - isLinkBroken&quot;);</span>
+<span class="nc" id="L96">		boolean result = false;</span>
+<span class="nc bnc" id="L97" title="All 2 branches missed.">		if(CommonUtil.isNull(linkUrl)){</span>
+<span class="nc" id="L98">			log.error(&quot;Link URL is missing - &quot;+ linkUrl);			</span>
+<span class="nc" id="L99">			throw new PageException(&quot;Link URL is missing&quot;);</span>
+		}		
+		try {
+<span class="nc" id="L102">			URL url = new URL(linkUrl);</span>
+<span class="nc" id="L103">			HttpURLConnection httpURLConnect=(HttpURLConnection)url.openConnection();</span>
+<span class="nc" id="L104">			httpURLConnect.setConnectTimeout(6000);</span>
+<span class="nc" id="L105">		    httpURLConnect.connect();</span>
+<span class="nc bnc" id="L106" title="All 2 branches missed.">		    if(httpURLConnect.getResponseCode()==HttpURLConnection.HTTP_NOT_FOUND){</span>
+<span class="nc" id="L107">		    	result = true;</span>
+		    }
+<span class="nc" id="L109">		} catch (MalformedURLException e) {</span>
+<span class="nc" id="L110">			log.error(&quot;Malformed URL - &quot;+ linkUrl + &quot; Message - &quot;+e.toString());	</span>
+<span class="nc" id="L111">			throw new PageException(&quot;Failed to check broken link - &quot;+ linkUrl + &quot; Message - &quot;+e.toString());</span>
+<span class="nc" id="L112">		} catch (IOException e) {</span>
+<span class="nc" id="L113">			log.error(&quot;IO Exception - URL - &quot;+linkUrl);	</span>
+<span class="nc" id="L114">			throw new PageException(&quot;Failed to check broken link - &quot;+ linkUrl + &quot; Message - &quot;+e.toString());</span>
+		}finally{
+<span class="nc" id="L116">			log.info(&quot;End - isLinkBroken&quot;);</span>
+<span class="nc" id="L117">		}</span>
+<span class="nc" id="L118">		return result;</span>
+	}	
+	
+	/**
+	 * Sop.
+	 *
+	 * @param printStmt the print stmt
+	 */
+	public static synchronized void sop(String printStmt){
+	
+<span class="fc" id="L128">		System.out.println(printStmt);</span>
+<span class="fc" id="L129">	}	</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.5.201112152213</span></div></body></html>

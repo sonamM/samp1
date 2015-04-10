@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>OSUtil.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Test Automation Library</a> &gt; <a href="index.html" class="el_package">com.etouch.taf.util</a> &gt; <span class="el_source">OSUtil.java</span></div><h1>OSUtil.java</h1><pre class="source lang-java linenums">/*
+ * 
+ */
+package com.etouch.taf.util;
+
+import org.apache.commons.logging.Log;
+
+
+// TODO: Auto-generated Javadoc
+/**
+ * This class OS utility methods.
+ * 
+ * @author eTouch Systems Corporation
+ * @version 1.0
+ *
+ */
+<span class="nc" id="L17">public class OSUtil {</span>
+	
+	/** The log. */
+<span class="nc" id="L20">	private static Log log = LogUtil.getLog(OSUtil.class);</span>
+
+	/** The Constant OS_32_BIT. */
+	private static final String OS_32_BIT = &quot;32&quot;;
+	
+	/** The Constant OS_64_BIT. */
+	private static final String OS_64_BIT = &quot;64&quot;;
+	
+	/** The Constant OS_ARCH. */
+	private static final String OS_ARCH = &quot;os.arch&quot;;
+
+	/**
+	 * This method determines, if the operating system is 64 bit.
+	 *
+	 * @return true, if is 64 bit os
+	 */
+	public static boolean is64BitOS() {
+<span class="nc" id="L37">		boolean is64BitOS = false;</span>
+		// Get the OS information
+<span class="nc" id="L39">		String osArchitureInfo = System.getProperty(OS_ARCH);</span>
+<span class="nc bnc" id="L40" title="All 2 branches missed.">		if(osArchitureInfo != null) {</span>
+<span class="nc" id="L41">			is64BitOS = osArchitureInfo.contains(OS_64_BIT);</span>
+		}
+<span class="nc" id="L43">		return is64BitOS;</span>
+	}
+	
+	/**
+	 * This method determines, if the operating system is 32 bit.
+	 *
+	 * @return true, if is 32 bit os
+	 */
+	public static boolean is32BitOS() {
+<span class="nc" id="L52">		boolean is32BitOS = false;</span>
+		// Get the OS information
+<span class="nc" id="L54">		String osArchitureInfo = System.getProperty(OS_ARCH);</span>
+<span class="nc bnc" id="L55" title="All 2 branches missed.">		if(osArchitureInfo != null) {</span>
+<span class="nc" id="L56">			is32BitOS = osArchitureInfo.contains(OS_32_BIT);</span>
+		}
+<span class="nc" id="L58">		return is32BitOS;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.5.201112152213</span></div></body></html>

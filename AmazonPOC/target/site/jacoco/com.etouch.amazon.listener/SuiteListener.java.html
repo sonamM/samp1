@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>SuiteListener.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">functionalTests</a> &gt; <a href="index.html" class="el_package">com.etouch.amazon.listener</a> &gt; <span class="el_source">SuiteListener.java</span></div><h1>SuiteListener.java</h1><pre class="source lang-java linenums">/*
+ * 
+ */
+package com.etouch.amazon.listener;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.SQLException;
+import java.util.Properties;
+
+import org.apache.commons.logging.Log;
+import org.openqa.selenium.remote.server.DriverFactory;
+import org.testng.ISuite;
+import org.testng.ISuiteListener;
+
+import com.etouch.taf.core.driver.DriverManager;
+import com.etouch.taf.core.TestBed;
+import com.etouch.taf.core.TestBedManager;
+import com.etouch.taf.core.config.AppConfig;
+import com.etouch.taf.core.config.BrowserConfig;
+import com.etouch.taf.core.config.DeviceConfig;
+import com.etouch.taf.core.config.PlatformConfig;
+import com.etouch.taf.core.config.TestBedConfig;
+import com.etouch.taf.core.config.TestBedManagerConfiguration;
+import com.etouch.taf.core.exception.DefectException;
+import com.etouch.taf.core.exception.DriverException;
+import com.etouch.taf.util.CommonUtil;
+import com.etouch.taf.util.ConfigUtil;
+import com.etouch.taf.util.FileUtils;
+import com.etouch.taf.util.LogUtil;
+
+// TODO: Auto-generated Javadoc
+/**
+ * The listener interface for receiving suite events.
+ * The class that is interested in processing a suite
+ * event implements this interface, and the object created
+ * with that class is registered with a component using the
+ * component's &lt;code&gt;addSuiteListener&lt;code&gt; method. When
+ * the suite event occurs, that object's appropriate
+ * method is invoked.
+ *
+ * @author eTouch Systems Corporation
+ */
+
+<span class="fc" id="L48">public class SuiteListener implements ISuiteListener {</span>
+	
+	/** The log. */
+<span class="fc" id="L51">	static Log log = LogUtil.getLog(SuiteListener.class);</span>
+	
+	/** The page ur ls. */
+<span class="fc" id="L54">	static public Properties pageURLs = null;</span>
+	
+	/** The rally property file. */
+<span class="fc" id="L57">	static public Properties rallyPropertyFile = null;</span>
+	
+	/** The is initialize. */
+<span class="fc" id="L60">	static boolean isInitialize=false;</span>
+	
+    /* (non-Javadoc)
+     * @see org.testng.ISuiteListener#onStart(org.testng.ISuite)
+     */
+    public void onStart(ISuite arg0) {
+
+<span class="fc" id="L67">    	String testBedName=arg0.getParameter(&quot;testBedName&quot;);</span>
+<span class="fc" id="L68">    	TestBed testBed=loadTestBedDetails(testBedName);</span>
+    	try {
+<span class="fc" id="L70">    		TestBedManager.INSTANCE.createDefectManager();</span>
+<span class="fc" id="L71">			TestBedManager.INSTANCE.setCurrentTestBed(testBed);</span>
+<span class="fc" id="L72">			CommonUtil.sop(&quot;testBedName &quot;  + testBedName);</span>
+<span class="fc" id="L73">			testBed.setDriver(DriverManager.buildDriver(testBedName).getDriver());</span>
+			
+<span class="nc" id="L75">		} catch (DriverException e) {</span>
+			// TODO Auto-generated catch block
+<span class="nc" id="L77">			e.printStackTrace();</span>
+		}
+<span class="nc" id="L79">    	catch(DefectException e)</span>
+    	{
+<span class="nc" id="L81">    		e.printStackTrace();</span>
+<span class="pc" id="L82">    	}</span>
+    	
+<span class="fc" id="L84">    }</span>
+    
+    
+  
+    
+    /* (non-Javadoc)
+     * @see org.testng.ISuiteListener#onFinish(org.testng.ISuite)
+     */
+    public void onFinish(ISuite arg0) {
+<span class="fc" id="L93">    	log.info(&quot;Suite Name :&quot;+ arg0.getName() + &quot; - End&quot;);</span>
+<span class="fc" id="L94">    	log.info(&quot;********Results*******&quot;);</span>
+   
+<span class="fc" id="L96">    }</span>
+
+    /**
+     *  
+     * Loads Web Testbed details from devConfig.xml
+     *
+     * @param testBedName the test bed name
+     * @return the test bed
+     */
+    private static TestBed loadTestBedDetails(String testBedName){
+		
+<span class="fc" id="L107">		TestBed currentTestBed=null;</span>
+<span class="fc" id="L108">		TestBedManagerConfiguration testBedMgrConfig=TestBedManagerConfiguration.getInstance();</span>
+<span class="pc bpc" id="L109" title="1 of 2 branches missed.">		if(ConfigUtil.isWebTestTypeEnabled()){</span>
+<span class="pc bpc" id="L110" title="1 of 2 branches missed.">			for(TestBedConfig tbConfig:testBedMgrConfig.getWebConfig().getTestBeds()){</span>
+				
+<span class="fc" id="L112">				CommonUtil.sop(&quot; Current TestBedName &quot; + testBedName + &quot;tbConfig TestBedName &quot; +tbConfig.getTestBedName() );</span>
+<span class="pc bpc" id="L113" title="1 of 2 branches missed.">				if(tbConfig.getTestBedName().equalsIgnoreCase(testBedName)){</span>
+<span class="fc" id="L114">					currentTestBed=copyTestBedDetails(tbConfig);</span>
+<span class="fc" id="L115">					break;</span>
+				}
+<span class="nc" id="L117">			}</span>
+		}
+<span class="pc bpc" id="L119" title="1 of 2 branches missed.">		if(ConfigUtil.isMobileTestTypeEnabled()){</span>
+<span class="nc bnc" id="L120" title="All 2 branches missed.">		if(currentTestBed == null){</span>
+<span class="nc bnc" id="L121" title="All 2 branches missed.">				for(TestBedConfig tbConfig:testBedMgrConfig.getMobileConfig().getTestBeds()){</span>
+<span class="nc bnc" id="L122" title="All 2 branches missed.">					if(tbConfig.getTestBedName().equalsIgnoreCase(testBedName)){</span>
+<span class="nc" id="L123">						currentTestBed=copyTestBedDetails(tbConfig);</span>
+<span class="nc" id="L124">						break;</span>
+				}
+<span class="nc" id="L126">			}</span>
+		}
+		}
+<span class="fc" id="L129">		return currentTestBed;</span>
+	}
+	
+  
+    
+    
+	/**
+	 * Copy test bed details.
+	 *
+	 * @param testBedConfig the test bed config
+	 * @return the test bed
+	 */
+	private static TestBed copyTestBedDetails(TestBedConfig testBedConfig){
+<span class="fc" id="L142">		TestBed currentTestBed = new TestBed();</span>
+<span class="pc bpc" id="L143" title="1 of 2 branches missed.">		if(testBedConfig!=null){</span>
+			
+<span class="fc" id="L145">			currentTestBed.setTestBedName(testBedConfig.getTestBedName());</span>
+			
+<span class="fc" id="L147">			currentTestBed.setPlatform(testBedConfig.getPlatform());</span>
+<span class="fc" id="L148">			currentTestBed.setBrowser(testBedConfig.getBrowser());</span>
+<span class="fc" id="L149">			currentTestBed.setApp(testBedConfig.getApp());</span>
+<span class="fc" id="L150">			currentTestBed.setDevice(testBedConfig.getDevice());</span>
+<span class="fc" id="L151">			currentTestBed.setTestBedName(testBedConfig.getTestBedName());</span>
+<span class="fc" id="L152">			currentTestBed.setTestbedClassName(testBedConfig.getTestbedClassName());</span>
+
+			
+		}
+		
+<span class="fc" id="L157">		return currentTestBed;</span>
+	}
+
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.5.201112152213</span></div></body></html>

@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>TafExcelDataProvider.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Test Automation Library</a> &gt; <a href="index.html" class="el_package">com.etouch.taf.core.datamanager.excel</a> &gt; <span class="el_source">TafExcelDataProvider.java</span></div><h1>TafExcelDataProvider.java</h1><pre class="source lang-java linenums">/*
+ * 
+ */
+package com.etouch.taf.core.datamanager.excel;
+
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.logging.Log;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
+
+import com.etouch.taf.core.datamanager.excel.annotations.IExcelDataFiles;
+import com.etouch.taf.core.datamanager.excel.annotations.ITafExcelDataProviderInputs;
+import com.etouch.taf.core.exception.TafDataProviderException;
+import com.etouch.taf.util.ExcelUtil;
+import com.etouch.taf.util.LogUtil;
+
+// TODO: Auto-generated Javadoc
+/**
+ * TafExcelDataProvider reads data from Excel based on file,sheet and data key.
+ * 
+ * @author eTouch Systems Corporation
+ * @version 1.0
+ *
+ */
+<span class="nc" id="L28">public class TafExcelDataProvider {</span>
+	
+	/** The log. */
+<span class="nc" id="L31">	private static Log log = LogUtil.getLog(TafExcelDataProvider.class);</span>
+	
+	/** The Constant EQUALS_TO_SIGN. */
+	private static final String EQUALS_TO_SIGN = &quot;=&quot;;
+
+	/**
+	 * Gets the data from file.
+	 *
+	 * @param testMethod the test method
+	 * @return the data from file
+	 * @throws TafDataProviderException the taf data provider exception
+	 */
+	@DataProvider(name=&quot;tafDataProvider&quot;)
+	public static Object[][] getDataFromFile(Method testMethod) throws TafDataProviderException {
+		// Construct TestDataKey from the Method
+<span class="nc" id="L46">		TestDataKey testDataKey = constructTestDataKey(testMethod);</span>
+		
+		// Check if the TestDataContainer already has an entry and load test data for all the methods in that class
+<span class="nc bnc" id="L49" title="All 2 branches missed.">		if(!TestDataContainer.getInstance().hasTestData(testDataKey)){</span>
+			// Synchronize it on the class as we plan to load it the very first time the data provider is called from a test class 
+<span class="nc" id="L51">			synchronized (testMethod.getDeclaringClass()) {</span>
+<span class="nc bnc" id="L52" title="All 2 branches missed.">				if(!TestDataContainer.getInstance().hasTestData(testDataKey)){</span>
+<span class="nc" id="L53">					readTestData(testMethod.getDeclaringClass());					</span>
+				} 
+<span class="nc" id="L55">			}</span>
+		} 
+<span class="nc" id="L57">		Object[][] obj = TestDataContainer.getInstance().getTestData(testDataKey);</span>
+<span class="nc" id="L58">		return TestDataContainer.getInstance().getTestData(testDataKey);</span>
+		
+//		return new Object[][]{
+//			{new TestParameters(&quot;testurl&quot;, &quot;testid&quot;, &quot;projid&quot;, &quot;storyid&quot;, &quot;defectName&quot;, &quot;defectSeverity&quot;, &quot;defectOwner&quot;, &quot;defectNotes&quot;)}	
+//		};
+	}
+
+	/**
+	 * Construct test data key.
+	 *
+	 * @param testMethod the test method
+	 * @return the test data key
+	 */
+	private static TestDataKey constructTestDataKey(Method testMethod){		
+		// Resolve annotation
+<span class="nc" id="L73">		ITafExcelDataProviderInputs dataProviderInputs = testMethod.getAnnotation(ITafExcelDataProviderInputs.class);</span>
+		
+<span class="nc bnc" id="L75" title="All 2 branches missed.">		if (dataProviderInputs == null){</span>
+<span class="nc" id="L76">			throw new IllegalArgumentException(</span>
+					&quot;Test Method has no TafExcelDataProviderInputs annotation.&quot;);
+		}
+		
+<span class="nc bnc" id="L80" title="All 6 branches missed.">		if (dataProviderInputs.excelFile() == null || dataProviderInputs.excelsheet() == null || dataProviderInputs.dataKey() == null){</span>
+<span class="nc" id="L81">			throw new IllegalArgumentException(</span>
+					&quot;Test Method has a malformed TafExcelDataProviderInputs annotation.&quot;);
+		}		
+		
+		// Construct data key after trimming any white spaces
+<span class="nc" id="L86">		TestDataKey testDataKey = new TestDataKey(dataProviderInputs.excelFile().trim(), dataProviderInputs.excelsheet().trim(), dataProviderInputs.dataKey().trim());</span>
+		
+<span class="nc" id="L88">		return testDataKey;</span>
+	}
+	
+	/**
+	 * Loads all the test data associated with the test class and keeps it in
+	 * {@link TestDataContainer}, when the very first call to the data provider
+	 * is made from any of the test methods.
+	 * 
+	 * Test data files, sheets are read from {@link ExcelDataFiles} annotation
+	 * and
+	 *
+	 * @param callingTestClass the calling test class
+	 * @throws TafDataProviderException the taf data provider exception
+	 */
+	private static void readTestData(Class&lt;?&gt; callingTestClass) throws TafDataProviderException {
+
+		// Resolve the files from 
+<span class="nc" id="L105">		resolveExcelFiles(callingTestClass);</span>
+		
+<span class="nc" id="L107">		List&lt;TestDataKey&gt; testKeyList = collectAllTestMethodsAndPrepareTestKeys(callingTestClass);</span>
+		
+		// Go through each file and create test data key list - Each sheet is
+		// expected to have &quot;key list&quot; defined.. Convert the given keys to
+		// TestDataKey Object {&lt;filename&gt;-&lt;sheetname&gt;-&lt;datakey&gt;}
+<span class="nc bnc" id="L112" title="All 2 branches missed.">		for(TestDataKey testDataKey:testKeyList){</span>
+<span class="nc" id="L113">			String filePath = TestDataContainer.getInstance().getDataFile(testDataKey.getDataFileName());</span>
+<span class="nc" id="L114">			TestParameters[][] testDataChunk = ExcelUtil.readExcelDataParams(filePath, testDataKey.getDataSheetName(), testDataKey.getDataKey());</span>
+<span class="nc" id="L115">			TestDataContainer.getInstance().addTestData(testDataKey, testDataChunk);</span>
+<span class="nc" id="L116">		}	</span>
+<span class="nc" id="L117">	}</span>
+	
+	/**
+	 * Collect all test methods and prepare test keys.
+	 *
+	 * @param declaringClass the declaring class
+	 * @return the list
+	 */
+	private static List&lt;TestDataKey&gt; collectAllTestMethodsAndPrepareTestKeys(Class&lt;?&gt; declaringClass) {
+<span class="nc" id="L126">		List&lt;TestDataKey&gt; testKeyList = new ArrayList&lt;TestDataKey&gt;();</span>
+<span class="nc bnc" id="L127" title="All 2 branches missed.">		for (Method method : declaringClass.getMethods()) {</span>
+			// Filer only the testng Test methods that use Taf Data Provider
+<span class="nc bnc" id="L129" title="All 4 branches missed.">			if (method.isAnnotationPresent(Test.class)</span>
+					&amp;&amp; method
+							.isAnnotationPresent(ITafExcelDataProviderInputs.class)) {
+<span class="nc" id="L132">				testKeyList.add(constructTestDataKey(method));</span>
+			}
+		}
+<span class="nc" id="L135">		return testKeyList;</span>
+	}
+
+	/**
+	 * Resolves the class level annotation {@link ExcelDataFiles}.
+	 *
+	 * @param callingTestClass the calling test class
+	 * @throws TafDataProviderException the taf data provider exception
+	 */
+	private static void resolveExcelFiles(Class&lt;?&gt; callingTestClass)
+			throws TafDataProviderException {
+
+		// Get the declaring class to find the excel files
+<span class="nc" id="L148">		IExcelDataFiles excelFilesArg = callingTestClass.getAnnotation(IExcelDataFiles.class);</span>
+		
+		// Perform validation
+<span class="nc bnc" id="L151" title="All 2 branches missed.">		if (excelFilesArg == null){</span>
+<span class="nc" id="L152">			throw new IllegalArgumentException(</span>
+					&quot;Test Class has no ExcelDataFiles annotation.&quot;);
+		}
+		
+<span class="nc bnc" id="L156" title="All 4 branches missed.">		if (excelFilesArg.excelDataFiles() == null || excelFilesArg.excelDataFiles().length == 0){</span>
+<span class="nc" id="L157">			throw new IllegalArgumentException(</span>
+					&quot;Test Class has a malformed ExcelDataFiles annotation.&quot;);
+		}
+		
+		// Resolve files and sheets to a Map		
+<span class="nc bnc" id="L162" title="All 2 branches missed.">		for (String excelFileInfo:excelFilesArg.excelDataFiles()) {</span>
+<span class="nc" id="L163">			String[] excel = excelFileInfo.split(EQUALS_TO_SIGN);</span>
+
+<span class="nc bnc" id="L165" title="All 4 branches missed.">			if (excel.length &gt; 2</span>
+					|| excel.length &lt; 0) {
+<span class="nc" id="L167">				throw new IllegalArgumentException(</span>
+						&quot;Test Class has a malformed ExcelDataFiles annotation.&quot;);
+
+			}
+			
+			// TODO: Prefix class name with file key to maintain uniqueness
+<span class="nc bnc" id="L173" title="All 2 branches missed.">			if(!TestDataContainer.getInstance().hasDataFile(excel[0])){</span>
+<span class="nc" id="L174">				synchronized (callingTestClass) {</span>
+<span class="nc bnc" id="L175" title="All 2 branches missed.">					if(!TestDataContainer.getInstance().hasDataFile(excel[0])){</span>
+<span class="nc" id="L176">						TestDataContainer.getInstance().addDataFile(excel[0], excel[1]);</span>
+					}
+<span class="nc" id="L178">				}</span>
+			}
+		}
+<span class="nc" id="L181">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.5.201112152213</span></div></body></html>

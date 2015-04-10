@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>TestBed.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Test Automation Library</a> &gt; <a href="index.html" class="el_package">com.etouch.taf.core</a> &gt; <span class="el_source">TestBed.java</span></div><h1>TestBed.java</h1><pre class="source lang-java linenums">/*
+ * 
+ */
+package com.etouch.taf.core;
+
+import org.apache.commons.logging.Log;
+import org.openqa.selenium.WebDriver;
+
+import com.etouch.taf.core.config.AppConfig;
+import com.etouch.taf.core.config.BrowserConfig;
+import com.etouch.taf.core.config.DeviceConfig;
+import com.etouch.taf.core.config.PlatformConfig;
+import com.etouch.taf.core.config.TestBedManagerConfiguration;
+import com.etouch.taf.util.LogUtil;
+
+// TODO: Auto-generated Javadoc
+/**
+ * This class is primarily responsible for creating {@link WebDriver} 
+ * This class holds information of testBed.
+ *
+ * @author eTouch Systems Corporation
+ * @version 1.0
+ */
+<span class="fc" id="L24">public class TestBed {</span>
+		
+		/** The log. */
+<span class="fc" id="L27">		static Log log = LogUtil.getLog(TestBed.class);</span>
+		
+		/** The Constant MaxWaitSeconds. */
+		public static final int MaxWaitSeconds=60;
+	
+		/** The driver. */
+<span class="fc" id="L33">		private Object driver = null;</span>
+		
+		/** The testbed class name. */
+		private String[] testbedClassName;
+		
+		/**  The test bed name such as IE, Chrome, iPad, Android. */
+		private String testBedName;
+		
+		/**  All the device related information will be configured here. */
+		private DeviceConfig device;
+		
+		/**  All the browser related information will be configured here. */
+		private BrowserConfig browser;
+		
+		/**  All the Platform/OS related information will be configured here. */
+		private PlatformConfig platform; 
+		
+		/**  All the App related information(Only for mobile Config) will be configured here. */
+		private AppConfig app;
+		
+		
+		
+		/**
+		 * Gets the test bed name.
+		 *
+		 * @return the test bed name
+		 */
+		public String getTestBedName() {
+<span class="fc" id="L61">			return testBedName;</span>
+		}
+		
+		/**
+		 * Sets the test bed name.
+		 *
+		 * @param testBedName the new test bed name
+		 */
+		public void setTestBedName(String testBedName) {
+<span class="nc" id="L70">			this.testBedName = testBedName;</span>
+<span class="nc" id="L71">		}</span>
+		
+		/**
+		 * Gets the driver.
+		 *
+		 * @return the driver
+		 */
+		public Object getDriver() {
+<span class="nc" id="L79">			return driver;</span>
+		}
+		
+		/**
+		 * Sets the driver.
+		 *
+		 * @param driver the new driver
+		 */
+		public void setDriver(Object driver) {
+<span class="nc" id="L88">			this.driver = driver;</span>
+<span class="nc" id="L89">		}</span>
+		
+		/**
+		 * Gets the testbed class name.
+		 *
+		 * @return the testbed class name
+		 */
+		public String[] getTestbedClassName() {
+<span class="nc" id="L97">			return testbedClassName;</span>
+		}
+		
+		/**
+		 * Sets the testbed class name.
+		 *
+		 * @param testbedClassName the new testbed class name
+		 */
+		public void setTestbedClassName(String[] testbedClassName) {
+<span class="nc" id="L106">			this.testbedClassName = testbedClassName;</span>
+<span class="nc" id="L107">		}</span>
+		
+		/**
+		 * Gets the device.
+		 *
+		 * @return the device
+		 */
+		public DeviceConfig getDevice() {
+<span class="nc" id="L115">			return device;</span>
+		}
+		
+		/**
+		 * Sets the device.
+		 *
+		 * @param device the new device
+		 */
+		public void setDevice(DeviceConfig device) {
+<span class="fc" id="L124">			this.device = device;</span>
+<span class="fc" id="L125">		}</span>
+		
+		/**
+		 * Gets the browser.
+		 *
+		 * @return the browser
+		 */
+		public BrowserConfig getBrowser() {
+<span class="fc" id="L133">			return browser;</span>
+		}
+		
+		/**
+		 * Sets the browser.
+		 *
+		 * @param browser the new browser
+		 */
+		public void setBrowser(BrowserConfig browser) {
+<span class="fc" id="L142">			this.browser = browser;</span>
+<span class="fc" id="L143">		}</span>
+		
+		/**
+		 * Gets the platform.
+		 *
+		 * @return the platform
+		 */
+		public PlatformConfig getPlatform() {
+<span class="nc" id="L151">			return platform;</span>
+		}
+		
+		/**
+		 * Sets the platform.
+		 *
+		 * @param platform the new platform
+		 */
+		public void setPlatform(PlatformConfig platform) {
+<span class="nc" id="L160">			this.platform = platform;</span>
+<span class="nc" id="L161">		}</span>
+		
+		/**
+		 * Gets the app.
+		 *
+		 * @return the app
+		 */
+		public AppConfig getApp() {
+<span class="nc" id="L169">			return app;</span>
+		}
+		
+		/**
+		 * Sets the app.
+		 *
+		 * @param app the new app
+		 */
+		public void setApp(AppConfig app) {
+<span class="nc" id="L178">			this.app = app;</span>
+<span class="nc" id="L179">		}</span>
+		
+		
+		
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.5.201112152213</span></div></body></html>

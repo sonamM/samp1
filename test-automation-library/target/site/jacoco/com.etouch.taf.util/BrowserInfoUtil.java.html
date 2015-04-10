@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>BrowserInfoUtil.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Test Automation Library</a> &gt; <a href="index.html" class="el_package">com.etouch.taf.util</a> &gt; <span class="el_source">BrowserInfoUtil.java</span></div><h1>BrowserInfoUtil.java</h1><pre class="source lang-java linenums">/*
+ * 
+ */
+package com.etouch.taf.util;
+
+import com.etouch.taf.core.TestBed;
+import com.etouch.taf.core.TestBedManager;
+import com.etouch.taf.core.resources.TestBedType;
+
+// TODO: Auto-generated Javadoc
+/**
+ * This enum class checks on browser type.
+ * 
+ * @author eTouch Systems Corporation
+ * @version 1.0
+ *
+ */
+<span class="nc" id="L18">public enum BrowserInfoUtil {</span>
+	
+	/** The instance. */
+<span class="nc" id="L21">	INSTANCE;</span>
+	
+	/** The test bed name. */
+	private String testBedName;
+	
+	/**
+	 * Gets the browser name.
+	 *
+	 * @return the browser name
+	 */
+	private String getBrowserName() {
+<span class="nc" id="L32">		return TestBedManager.INSTANCE.getCurrentTestBed().getTestBedName();</span>
+	}
+
+	/**
+	 * Sets the browser name.
+	 *
+	 * @param browserName the new browser name
+	 */
+	public void setBrowserName(String browserName) {
+<span class="nc" id="L41">		this.testBedName = browserName;</span>
+<span class="nc" id="L42">	}</span>
+
+	/**
+	 * check the current test is running on IE or non-IE browsers.
+	 *
+	 * @return return true if it's a IE browser test, else it will return false
+	 */
+	public boolean isIE() {
+<span class="nc" id="L50">		return getBrowserName().toUpperCase().contains(&quot;IE&quot;);</span>
+	}
+
+	/**
+	 * check the current test is running on IE or non-IE browsers.
+	 *
+	 * @return return true if it's a IE browser test, else it will return false
+	 */
+	public boolean isIE8() {
+<span class="nc" id="L59">		return TestBedType.InternetExplorer.getTestBedName().equalsIgnoreCase(getBrowserName());</span>
+	}
+
+	
+
+	/**
+	 * check the current test is running on IE or non-IE browsers.
+	 *
+	 * @return return true if it's a IE browser test, else it will return false
+	 */
+	public boolean isFF() {
+<span class="nc" id="L70">		return TestBedType.Firefox.getTestBedName().equalsIgnoreCase(getBrowserName());</span>
+	}
+
+	/**
+	 * check the current test is running on IE or non-IE browsers.
+	 *
+	 * @return return true if it's a IE browser test, else it will return false
+	 */
+	public boolean isChrome() {
+<span class="nc" id="L79">		return TestBedType.Chrome.getTestBedName().equalsIgnoreCase(getBrowserName());</span>
+	}
+
+	/**
+	 * check the current test is running on Safari or non-Safari browsers.
+	 *
+	 * @return return true if it's a Safari browser test, else it will return false
+	 */
+	public boolean isSafari() {
+<span class="nc" id="L88">		return TestBedType.Safari.getTestBedName().equalsIgnoreCase(getBrowserName());</span>
+	}
+	
+	/**
+	 * Checks if is android.
+	 *
+	 * @return true, if is android
+	 */
+	public boolean isAndroid() {
+<span class="nc" id="L97">		return TestBedType.AndroidWebEm.getTestBedName().equalsIgnoreCase(getBrowserName());</span>
+	}
+	
+	/**
+	 * Checks if is ios.
+	 *
+	 * @return true, if is ios
+	 */
+	public boolean isIOS() {
+<span class="nc" id="L106">		return TestBedType.iOS.getTestBedName().equalsIgnoreCase(getBrowserName());</span>
+	}
+	
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.5.201112152213</span></div></body></html>

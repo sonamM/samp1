@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>TFSConfig.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Test Automation Library</a> &gt; <a href="index.html" class="el_package">com.etouch.taf.core.config</a> &gt; <span class="el_source">TFSConfig.java</span></div><h1>TFSConfig.java</h1><pre class="source lang-java linenums">/*
+ * 
+ */
+package com.etouch.taf.core.config;
+
+// TODO: Auto-generated Javadoc
+/**
+ * The Class BrowserConfig.
+ */
+<span class="fc" id="L10">public class TFSConfig {</span>
+	
+	/**  The User Name. */
+	private String userName;
+	
+	/**  The password. */
+	private String password;
+	
+	/**  The project name. */
+	private String projectName;
+	
+	/**  The mapping server path. */
+	private String mappingServerPath;
+	
+	/**  The mapping local path. */
+	private String mappingLocalPath;
+	
+	/**  The TFS_JNI_NATIVE_BASE directory. */
+	private String jniNativeBaseDir;
+	
+	/**  The TFS workspace name. */
+	private String workspaceName;
+	
+	/**  The maximum number of reconnection attempts. */
+	private int maxReconections;
+	
+	/**  The TFS server URL. */
+	private String collectionURL;
+	
+	/**
+	 * Gets the collection url.
+	 *
+	 * @return the collectionURL
+	 */
+	public String getCollectionURL() {
+<span class="fc" id="L45">		return collectionURL;</span>
+	}
+
+	/**
+	 * Sets the collection url.
+	 *
+	 * @param collectionURL the collectionURL to set
+	 */
+	public void setCollectionURL(String collectionURL) {
+<span class="fc" id="L54">		this.collectionURL = collectionURL;</span>
+<span class="fc" id="L55">	}</span>
+
+	/**
+	 * Gets the user name.
+	 *
+	 * @return the userName
+	 */
+	public String getUserName() {
+<span class="fc" id="L63">		return userName;</span>
+	}
+
+	/**
+	 * Sets the user name.
+	 *
+	 * @param userName the userName to set
+	 */
+	public void setUserName(String userName) {
+<span class="fc" id="L72">		this.userName = userName;</span>
+<span class="fc" id="L73">	}</span>
+
+	/**
+	 * Gets the password.
+	 *
+	 * @return the password
+	 */
+	public String getPassword() {
+<span class="fc" id="L81">		return password;</span>
+	}
+
+	/**
+	 * Sets the password.
+	 *
+	 * @param password the password to set
+	 */
+	public void setPassword(String password) {
+<span class="fc" id="L90">		this.password = password;</span>
+<span class="fc" id="L91">	}</span>
+
+	/**
+	 * Gets the project name.
+	 *
+	 * @return the projectName
+	 */
+	public String getProjectName() {
+<span class="fc" id="L99">		return projectName;</span>
+	}
+
+	/**
+	 * Sets the project name.
+	 *
+	 * @param projectName the projectName to set
+	 */
+	public void setProjectName(String projectName) {
+<span class="fc" id="L108">		this.projectName = projectName;</span>
+<span class="fc" id="L109">	}</span>
+
+	/**
+	 * Gets the mapping server path.
+	 *
+	 * @return the mappingServerPath
+	 */
+	public String getMappingServerPath() {
+<span class="fc" id="L117">		return mappingServerPath;</span>
+	}
+
+	/**
+	 * Sets the mapping server path.
+	 *
+	 * @param mappingServerPath the mappingServerPath to set
+	 */
+	public void setMappingServerPath(String mappingServerPath) {
+<span class="fc" id="L126">		this.mappingServerPath = mappingServerPath;</span>
+<span class="fc" id="L127">	}</span>
+
+	/**
+	 * Gets the mapping local path.
+	 *
+	 * @return the mappingLocalPath
+	 */
+	public String getMappingLocalPath() {
+<span class="fc" id="L135">		return mappingLocalPath;</span>
+	}
+
+	/**
+	 * Sets the mapping local path.
+	 *
+	 * @param mappingLocalPath the mappingLocalPath to set
+	 */
+	public void setMappingLocalPath(String mappingLocalPath) {
+<span class="fc" id="L144">		this.mappingLocalPath = mappingLocalPath;</span>
+<span class="fc" id="L145">	}</span>
+
+	/**
+	 * Gets the jni native base dir.
+	 *
+	 * @return the jniNativeBaseDir
+	 */
+	public String getJniNativeBaseDir() {
+<span class="fc" id="L153">		return jniNativeBaseDir;</span>
+	}
+
+	/**
+	 * Sets the jni native base dir.
+	 *
+	 * @param jniNativeBaseDir the jniNativeBaseDir to set
+	 */
+	public void setJniNativeBaseDir(String jniNativeBaseDir) {
+<span class="fc" id="L162">		this.jniNativeBaseDir = jniNativeBaseDir;</span>
+<span class="fc" id="L163">	}</span>
+
+	/**
+	 * Gets the workspace name.
+	 *
+	 * @return the workspaceName
+	 */
+	public String getWorkspaceName() {
+<span class="fc" id="L171">		return workspaceName;</span>
+	}
+
+	/**
+	 * Sets the workspace name.
+	 *
+	 * @param workspaceName the workspaceName to set
+	 */
+	public void setWorkspaceName(String workspaceName) {
+<span class="fc" id="L180">		this.workspaceName = workspaceName;</span>
+<span class="fc" id="L181">	}</span>
+
+	/**
+	 * Gets the max reconections.
+	 *
+	 * @return the maxReconections
+	 */
+	public int getMaxReconections() {
+<span class="fc" id="L189">		return maxReconections;</span>
+	}
+
+	/**
+	 * Sets the max reconections.
+	 *
+	 * @param maxReconections the maxReconections to set
+	 */
+	public void setMaxReconections(int maxReconections) {
+<span class="fc" id="L198">		this.maxReconections = maxReconections;</span>
+<span class="fc" id="L199">	}</span>
+	
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.5.201112152213</span></div></body></html>

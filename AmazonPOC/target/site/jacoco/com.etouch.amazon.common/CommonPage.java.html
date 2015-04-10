@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>CommonPage.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">functionalTests</a> &gt; <a href="index.html" class="el_package">com.etouch.amazon.common</a> &gt; <span class="el_source">CommonPage.java</span></div><h1>CommonPage.java</h1><pre class="source lang-java linenums">/*
+ * 
+ */
+package com.etouch.amazon.common;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.StringTokenizer;
+
+import org.apache.commons.logging.Log;
+import org.testng.Assert;
+
+import com.etouch.taf.core.exception.DateException;
+import com.etouch.taf.core.exception.PageException;
+import com.etouch.taf.core.exception.DefectException;
+import com.etouch.taf.core.resources.DefectParameters;
+import com.etouch.taf.core.resources.ObjectType;
+import com.etouch.taf.tools.defect.IDefectManager;
+import com.etouch.taf.tools.rally.RallyConstants;
+import com.etouch.taf.tools.rally.Rally;
+import com.etouch.taf.tools.rally.RequestInfo;
+import com.etouch.taf.util.CommonUtil;
+import com.etouch.taf.util.DateUtil;
+import com.etouch.taf.util.FileUtils;
+import com.etouch.taf.util.LogUtil;
+import com.etouch.taf.util.SoftAssertor;
+import com.etouch.taf.webui.selenium.WebPage;
+import com.etouch.taf.webui.selenium.webelement.Link;
+import com.etouch.taf.tools.jira.JiraConstants;
+import com.etouch.taf.tools.jira.Jira;
+import com.etouch.taf.tools.jira.JiraRequestInfo;
+import com.microsoft.tfs.util.base64.Base64;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.monte.media.Format;
+import org.monte.media.math.Rational;
+import org.monte.screenrecorder.ScreenRecorder;
+
+import static org.monte.media.AudioFormatKeys.*;
+import static org.monte.media.FormatKeys.EncodingKey;
+import static org.monte.media.FormatKeys.FrameRateKey;
+import static org.monte.media.FormatKeys.KeyFrameIntervalKey;
+import static org.monte.media.FormatKeys.MIME_AVI;
+import static org.monte.media.FormatKeys.MediaTypeKey;
+import static org.monte.media.FormatKeys.MimeTypeKey;
+import static org.monte.media.VideoFormatKeys.*;
+
+import java.awt.AWTException;
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsEnvironment;
+import java.awt.Rectangle;
+import java.awt.Robot;
+import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
+
+import javax.imageio.ImageIO;
+
+// TODO: Auto-generated Javadoc
+/**
+ * The Class CommonPage.
+ *
+ * @author eTouch Systems Corporation
+ */
+public abstract class CommonPage {
+
+	/** The page url. */
+	protected String pageUrl;
+	
+	/** The web page. */
+	protected WebPage webPage;
+	
+	/** The err message. */
+	protected String errMessage;
+    //required for screen recorder
+	/** The screen recorder. */
+    private ScreenRecorder screenRecorder;
+	
+	/** The log. */
+<span class="fc" id="L90">	private static Log log = LogUtil.getLog(CommonPage.class);</span>
+	
+	/**
+	 * Instantiates a new common page.
+	 */
+<span class="nc" id="L95">	public CommonPage(){</span>
+		
+<span class="nc" id="L97">	}</span>
+
+	/**
+	 * Instantiates a new common page.
+	 *
+	 * @param sbPageUrl the sb page url
+	 * @param webPage the web page
+	 */
+<span class="fc" id="L105">	public CommonPage(String sbPageUrl, WebPage webPage){</span>
+<span class="fc" id="L106">		this.pageUrl=sbPageUrl;</span>
+<span class="fc" id="L107">		this.webPage=webPage;</span>
+<span class="fc" id="L108">	}</span>
+
+	/**
+	 * Gets the err message.
+	 *
+	 * @return the err message
+	 */
+	public String getErrMessage() {
+<span class="nc" id="L116">		CommonUtil.sop(&quot;Error Message + &quot;  + errMessage );</span>
+<span class="nc" id="L117">		return errMessage;</span>
+	}
+
+	/**
+	 * Sets the err message.
+	 *
+	 * @param errMessage the new err message
+	 */
+	public void setErrMessage(String errMessage) {
+<span class="nc" id="L126">		this.errMessage = errMessage;</span>
+<span class="nc" id="L127">	}</span>
+
+	/**
+	 * Sets the err message.
+	 *
+	 * @param errorType the error type
+	 * @param pageElement the page element
+	 * @param pageUrl the page url
+	 * @param expectedResult the expected result
+	 * @param actualResult the actual result
+	 * @param messageStr the message str
+	 */
+	//TODO: ...taf.core.logging
+	//commented for safari test	
+	public void setErrMessage(String errorType,
+			String pageElement,
+			String pageUrl,
+			String expectedResult,
+			String actualResult,
+			String messageStr)
+	{
+
+<span class="nc" id="L149">		CommonUtil.sop(&quot;\n\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\nPage Exception in ????????????????????????? ::&quot; + Thread.currentThread().getStackTrace()[2].getMethodName()</span>
+		        + &quot;\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n\n&quot;);
+<span class="nc" id="L151">		String message = &quot;&quot;;</span>
+		try
+		{
+<span class="nc bnc" id="L154" title="All 2 branches missed.">			if(errorType != null)</span>
+			{
+<span class="nc" id="L156">				message += &quot;\n # Error Type: &quot; + errorType;</span>
+			}
+<span class="nc bnc" id="L158" title="All 2 branches missed.">			if(pageElement != null)</span>
+			{
+<span class="nc" id="L160">				message += &quot;\n # Page Element: &quot; + pageElement;</span>
+			}
+<span class="nc bnc" id="L162" title="All 2 branches missed.">			if(pageUrl != null)</span>
+			{
+<span class="nc" id="L164">				message += &quot;\n # Page URL: &quot; + pageUrl;</span>
+			}
+<span class="nc bnc" id="L166" title="All 2 branches missed.">			if(expectedResult != null)</span>
+			{
+<span class="nc" id="L168">				message += &quot;\n # Expected Result: &quot; + expectedResult;</span>
+			}
+<span class="nc bnc" id="L170" title="All 2 branches missed.">			if(actualResult != null)</span>
+			{
+<span class="nc" id="L172">				message += &quot;\n # Actual Result: &quot; + actualResult;</span>
+			}
+<span class="nc bnc" id="L174" title="All 2 branches missed.">			if(messageStr != null)</span>
+			{
+<span class="nc" id="L176">				message += &quot;\n # Message: &quot; + messageStr;</span>
+			}
+<span class="nc" id="L178">			message += &quot;&quot;;</span>
+		}
+<span class="nc" id="L180">		catch (Exception ex)</span>
+		{
+<span class="nc" id="L182">			message = &quot;An error occured while setting Error Message: &quot; + ex.toString();</span>
+		}
+		finally
+		{
+<span class="nc" id="L186">			this.errMessage = message;</span>
+<span class="nc" id="L187">		}</span>
+<span class="nc" id="L188">		CommonUtil.sop(&quot;Got Page Exception:-&quot; + errMessage);</span>
+
+<span class="nc" id="L190">	}</span>
+
+	/**
+	 * Load page.
+	 */
+	protected void loadPage() {
+<span class="fc" id="L196">		webPage.loadPage(pageUrl);</span>
+		
+<span class="fc" id="L198">	}</span>
+
+	
+	/*
+	 * Log error and create/add a defect
+	 */
+	/**
+	 * Log and create a defect.
+	 *
+	 * @param defect the defect
+	 * @param fileName the file name
+	 * @param testcaseId the testcase id
+	 * @param workspaceId the workspace id
+	 * @param projId the proj id
+	 * @param storyId the story id
+	 * @param defectName the defect name
+	 * @param defectSeverity the defect severity
+	 * @param defectOwner the defect owner
+	 * @param defectNotes the defect notes
+	 * @param errorMsg the error msg
+	 */
+	public void logAndCreateADefect(IDefectManager defect, String fileName, String testcaseId, String workspaceId, String projId, String storyId, String defectName, String defectSeverity, String defectOwner, String defectNotes, String errorMsg, String attachmentPath){
+		try{
+<span class="nc" id="L221">			String defectNote = defectNotes + &quot; : &quot; + errorMsg;</span>
+			// to create defect and add attatchment 
+<span class="nc" id="L223">		    defect.createDefectBuilder(defectName, testcaseId, workspaceId, projId, defectSeverity, defectOwner, defectNote, storyId, attachmentPath);</span>
+			
+<span class="nc" id="L225">			System.out.println(&quot;Defect Logged &quot;);</span>
+			//added to update testcase result 
+			
+<span class="nc" id="L228">			defect.updateTestCaseResult(defectName, testcaseId, workspaceId, projId, defectSeverity, defectOwner, defectNotes, storyId);</span>
+<span class="nc" id="L229">			System.out.println(&quot;Testcase Results updated &quot;);</span>
+			
+			}
+<span class="nc" id="L232">			catch(Exception e){</span>
+<span class="nc" id="L233">			System.out.println(&quot;exception in common page log method&quot;);</span>
+			
+<span class="nc" id="L235">		}	</span>
+<span class="nc" id="L236">		}</span>
+
+	//log and defect method for Jira defect --added by sonam
+		/**
+	 * Log and create a defect.
+	 *
+	 * @param defect the defect
+	 * @param url the url
+	 * @param issueUrl the issue url
+	 * @param username the username
+	 * @param password the password
+	 * @param keys the keys
+	 */
+	public void logAndCreateADefect(IDefectManager defect,String url, String issueUrl, String username, String password,
+				String keys){
+			
+<span class="nc bnc" id="L252" title="All 2 branches missed.">			if (defect!= null){</span>
+				
+<span class="nc" id="L254">			System.out.println(&quot;Executing the defect in Jira&quot;);</span>
+			
+<span class="nc" id="L256">			defect.createAJiraDefectBuilder( url, issueUrl,  username, password,keys);</span>
+			
+				}
+<span class="nc" id="L259">		 	}</span>
+		
+
+		///////// to start and stop video recording  // -- added by sonam
+		
+		
+		/* *//**
+		 * Start recording.
+		 *//*
+		public void startRecording() 
+	       {
+				String videoFilePath = &quot;..\\AmazonPOC\\src\\test\\resources\\testdata\\videos\\&quot;;
+				File videoFolder = new File(videoFilePath);
+	           try{                  
+	            GraphicsConfiguration gc = GraphicsEnvironment
+	               .getLocalGraphicsEnvironment()
+	               .getDefaultScreenDevice()
+	               .getDefaultConfiguration();
+	 
+	           	this.screenRecorder = new ScreenRecorder(gc,
+	           	   new Format(MediaTypeKey, MediaType.FILE, MimeTypeKey, MIME_AVI),
+	               new Format(MediaTypeKey, MediaType.VIDEO, EncodingKey, ENCODING_AVI_TECHSMITH_SCREEN_CAPTURE,
+	                    CompressorNameKey, ENCODING_AVI_TECHSMITH_SCREEN_CAPTURE,
+	                    DepthKey, 24, FrameRateKey, Rational.valueOf(15),
+	                    QualityKey, 1.0f,
+	                    KeyFrameIntervalKey, 15 * 60),
+	               new Format(MediaTypeKey, MediaType.VIDEO, EncodingKey, &quot;black&quot;,
+	                    FrameRateKey, Rational.valueOf(30)),
+	               null);
+	            
+	            this.screenRecorder = new ScreenRecorder(gc,null,
+	 	           	   new Format(MediaTypeKey, MediaType.FILE, MimeTypeKey, MIME_AVI),
+	 	               new Format(MediaTypeKey, MediaType.VIDEO, EncodingKey, ENCODING_AVI_TECHSMITH_SCREEN_CAPTURE,
+	 	                    CompressorNameKey, ENCODING_AVI_TECHSMITH_SCREEN_CAPTURE,
+	 	                    DepthKey, 24, FrameRateKey, Rational.valueOf(15),
+	 	                    QualityKey, 1.0f,
+	 	                    KeyFrameIntervalKey, 15 * 60),
+	 	               new Format(MediaTypeKey, MediaType.VIDEO, EncodingKey, &quot;black&quot;,
+	 	                    FrameRateKey, Rational.valueOf(30)),
+	 	               null,videoFolder);
+	            
+	            
+	           	this.screenRecorder.start();
+	        
+	           }catch(IOException e){
+	           e.printStackTrace();
+	           }catch(AWTException e){
+	        	   e.printStackTrace();  
+	           }
+	       }
+	 
+	       *//**
+       	 * Stop recording.
+       	 *//*
+       	public void stopRecording() 
+	       {
+	    	 try{
+	    		 this.screenRecorder.stop();
+	    	 }catch(Exception e){
+	    		  e.printStackTrace(); 
+	    	 }
+	       }*/
+
+	 /////////////////Screenshot //////// -- added by sonam
+	/*       
+	       *//**
+ 	 * Gets the screenshot.
+ 	 *
+ 	 * @return the screenshot
+ 	 *//*
+ 	public void getScreenshot() {
+				try{
+			       // Thread.sleep(10000);
+			        BufferedImage image = new Robot().createScreenCapture(new Rectangle(Toolkit.getDefaultToolkit().getScreenSize()));
+			        ImageIO.write(image, &quot;jpg&quot;, new File(&quot;..\\AmazonPOC\\src\\test\\resources\\testdata\\screenshots\\sample2.png&quot;));
+			      
+	       }catch(IOException e){
+	           e.printStackTrace();
+	           }catch(AWTException e){
+	        	   e.printStackTrace();  
+	           }
+	       }*/
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.5.201112152213</span></div></body></html>

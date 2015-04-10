@@ -1,0 +1,4 @@
+15:51:07,900 INFO  [BaseTest] >.>.>.>.>.>.>.>.>.>.>.>.> Ending method 2::testSignIn>.>.>.>.>.>.>.>.>.>.>.>.>Time Taken ::3 Seconds
+15:51:08,142 INFO  [SuiteListener] Suite Name :Firefox Suite - End
+15:51:08,142 INFO  [SuiteListener] ********Results*******
+15:51:08,252 ERROR [SoftAssertor] URL did not matched expected [https://www.google.com] but found [https://www.amazon.com/ap/signin]

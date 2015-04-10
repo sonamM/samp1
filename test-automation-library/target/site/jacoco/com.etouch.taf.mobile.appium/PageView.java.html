@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>PageView.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Test Automation Library</a> &gt; <a href="index.html" class="el_package">com.etouch.taf.mobile.appium</a> &gt; <span class="el_source">PageView.java</span></div><h1>PageView.java</h1><pre class="source lang-java linenums">/*
+ * 
+ */
+package com.etouch.taf.mobile.appium;
+
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
+
+import org.apache.commons.logging.Log;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.remote.RemoteWebElement;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import com.etouch.taf.core.TestBed;
+import com.etouch.taf.core.TestBedManager;
+import com.etouch.taf.core.config.ScreenOrientation;
+import com.etouch.taf.core.driver.IDriver;
+import com.etouch.taf.core.exception.PageException;
+import com.etouch.taf.core.resources.ObjectValType;
+import com.etouch.taf.core.resources.WaitCondition;
+import com.etouch.taf.util.*;
+import com.etouch.taf.webui.selenium.PageObjectFactory;
+import com.etouch.taf.webui.selenium.WebPage;
+import com.etouch.taf.webui.selenium.webelement.Element;
+
+// TODO: Auto-generated Javadoc
+/**
+ * This class finds and renders page objects , drivers.
+ * 
+ * @author eTouch Systems Corporation
+ * @version 1.0
+ * 
+ */
+<span class="nc" id="L44">public class PageView extends WebPage{</span>
+
+/** The log. */
+<span class="nc" id="L47">private static Log log = LogUtil.getLog(PageView.class);</span>
+
+/**
+ * Tap.
+ *
+ * @param driver the driver
+ * @param element the element
+ * @param duration the duration
+ */
+public void tap(IDriver driver,WebElement element, Double duration)
+{
+<span class="nc" id="L58">JavascriptExecutor js = (JavascriptExecutor) driver;</span>
+<span class="nc" id="L59">HashMap&lt;String, Double&gt; tapObject = new HashMap&lt;String, Double&gt;();</span>
+<span class="nc" id="L60">tapObject.put(&quot;x&quot;, (double) element.getLocation().getX()); </span>
+<span class="nc" id="L61">tapObject.put(&quot;y&quot;, (double) element.getLocation().getY()); </span>
+<span class="nc" id="L62">tapObject.put(&quot;duration&quot;, duration);</span>
+<span class="nc" id="L63">js.executeScript(&quot;mobile: tap&quot;, tapObject);</span>
+<span class="nc" id="L64">}</span>
+
+/**
+ * Tap element by id.
+ *
+ * @param driver the driver
+ * @param element the element
+ */
+public void tapElementById(IDriver driver, RemoteWebElement element){
+<span class="nc" id="L73">JavascriptExecutor js = (JavascriptExecutor) driver;</span>
+<span class="nc" id="L74">HashMap&lt;String, Object&gt; tapObject = new HashMap&lt;String, Object&gt;();</span>
+<span class="nc" id="L75">tapObject.put(&quot;x&quot;, 150); // in pixels from left</span>
+<span class="nc" id="L76">tapObject.put(&quot;y&quot;, 30); // in pixels from top</span>
+<span class="nc" id="L77">tapObject.put(&quot;element&quot;, ((RemoteWebElement) element).getId()); // the id of the element we want to tap</span>
+<span class="nc" id="L78">js.executeScript(&quot;mobile: tap&quot;, tapObject);</span>
+<span class="nc" id="L79">}</span>
+
+/**
+ * Swipe.
+ *
+ * @param startX the start x
+ * @param startY the start y
+ * @param endX the end x
+ * @param endY the end y
+ * @param duration the duration
+ */
+public void swipe(Double startX,Double startY, Double endX, Double endY,Double duration)
+{
+<span class="nc" id="L92">JavascriptExecutor js = (JavascriptExecutor) driver;</span>
+<span class="nc" id="L93">HashMap&lt;String, Double&gt; swipeObject = new HashMap&lt;String, Double&gt;();</span>
+<span class="nc" id="L94">swipeObject.put(&quot;startX&quot;, startX);</span>
+<span class="nc" id="L95">swipeObject.put(&quot;startY&quot;, startY);</span>
+<span class="nc" id="L96">swipeObject.put(&quot;endX&quot;, endX);</span>
+<span class="nc" id="L97">swipeObject.put(&quot;endY&quot;, endY);</span>
+<span class="nc" id="L98">swipeObject.put(&quot;duration&quot;, duration);</span>
+<span class="nc" id="L99">js.executeScript(&quot;mobile: swipe&quot;, swipeObject);</span>
+<span class="nc" id="L100">}</span>
+
+/**
+ * Flick.
+ */
+public void flick(){
+<span class="nc" id="L106">JavascriptExecutor js = (JavascriptExecutor) driver;</span>
+<span class="nc" id="L107">HashMap&lt;String, Object&gt; flickObject = new HashMap&lt;String, Object&gt;();</span>
+<span class="nc" id="L108">flickObject.put(&quot;endX&quot;, 0);</span>
+<span class="nc" id="L109">flickObject.put(&quot;endY&quot;, 0);</span>
+<span class="nc" id="L110">flickObject.put(&quot;touchCount&quot;, 2);</span>
+<span class="nc" id="L111">js.executeScript(&quot;mobile: flick&quot;, flickObject);</span>
+<span class="nc" id="L112">}</span>
+
+/**
+ * Slider.
+ *
+ * @param element the element
+ * @param slideValue the slide value
+ */
+public void slider(WebElement element,float slideValue){
+<span class="nc bnc" id="L121" title="All 4 branches missed.">if((slideValue&gt;=0.0) &amp;&amp; (slideValue&lt;=1)){</span>
+<span class="nc" id="L122">element.sendKeys(String.valueOf(slideValue));</span>
+}
+<span class="nc" id="L124">}</span>
+
+/**
+ * Sets the orientation.
+ *
+ * @param driver the driver
+ * @param orientation the orientation
+ */
+public void setOrientation(RemoteWebDriver driver,ScreenOrientation orientation){
+
+//((Rotatable)driver).rotate(ScreenOrientation.LANDSCAPE);
+// Find a way to figure out x.y of elements got changed or not
+<span class="nc" id="L136">}</span>
+
+//    tap (on screen or on element) with options:
+//        how many fingers
+//        how long to tap
+//        how many taps
+//        where precisely to tap on the screen or element
+//    flick (on screen or on element) with options:
+//        how many fingers
+//        where to start the flick on screen or element
+//        where to end the flick on screen or element
+//    swipe/drag (on screen or on element) with options:
+//        how many fingers
+//        how long the swipe/drag takes in seconds
+//        where to start the swipe on screen or element
+//        where to end the swipe on screen or element
+//    scroll to (element)
+//    slider
+//    shake
+//    longTap (element)
+//    set the orientation with option:
+//        new orientation (landscape or portrait)
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.5.201112152213</span></div></body></html>

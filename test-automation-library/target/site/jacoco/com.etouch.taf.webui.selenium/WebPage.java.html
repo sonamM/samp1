@@ -1,0 +1,1411 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>WebPage.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Test Automation Library</a> &gt; <a href="index.html" class="el_package">com.etouch.taf.webui.selenium</a> &gt; <span class="el_source">WebPage.java</span></div><h1>WebPage.java</h1><pre class="source lang-java linenums">/*
+ * 
+ */
+package com.etouch.taf.webui.selenium;
+
+
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
+
+import org.apache.commons.logging.Log;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import com.etouch.taf.core.TestBed;
+import com.etouch.taf.core.TestBedManager;
+import com.etouch.taf.core.exception.PageException;
+import com.etouch.taf.core.resources.ObjectValType;
+import com.etouch.taf.core.resources.WaitCondition;
+import com.etouch.taf.util.BrowserInfoUtil;
+import com.etouch.taf.util.LogUtil;
+import com.etouch.taf.webui.selenium.webelement.Element;
+
+// TODO: Auto-generated Javadoc
+/**
+ * This class finds and renders page objects , drivers.
+ * 
+ * @author eTouch Systems Corporation
+ * @version 1.0
+ * 
+ */
+public class WebPage {
+	
+	/** The log. */
+<span class="nc" id="L41">	private static Log log = LogUtil.getLog(WebPage.class);</span>
+	
+	//private static TestBedManager testBedManager = null; 
+	/** The driver. */
+<span class="nc" id="L45">	protected WebDriver driver = null;</span>
+	
+	//value for the wait loop
+	/** The wait to check. */
+<span class="nc" id="L49">	private int WAIT_TO_CHECK = 500;</span>
+	
+	/**
+	 * Initializes web driver and test bed manager.
+	 */
+<span class="nc" id="L54">	public WebPage() {		</span>
+		//if (this.driver == null) {
+<span class="nc" id="L56">			this.driver=(WebDriver)TestBedManager.INSTANCE.getCurrentTestBed().getDriver();</span>
+		//}
+		//testBedManager = manager;
+<span class="nc" id="L59">	}</span>
+
+	/**
+	 * 
+	 * Returns driver.
+	 * @return instance of web driver
+	 * 
+	 */
+	public WebDriver getDriver() {
+<span class="nc" id="L68">		return driver;</span>
+	}
+
+	/**
+	 * Loads web page URL.
+	 * @param pageUrl web page URL
+	 */
+	public void loadPage(String pageUrl) {
+<span class="nc" id="L76">		this.driver.get(pageUrl);</span>
+<span class="nc bnc" id="L77" title="All 6 branches missed.">		if(BrowserInfoUtil.INSTANCE.isFF()||BrowserInfoUtil.INSTANCE.isIE() || BrowserInfoUtil.INSTANCE.isChrome() )</span>
+		{
+<span class="nc" id="L79">			this.driver.manage().window().maximize();</span>
+		}
+		
+<span class="nc" id="L82">	}</span>
+
+	/**
+	 * find the specified object using an id .
+	 *
+	 * @param &lt;T&gt; the generic type
+	 * @param object target object to look for e.g button, link
+	 * @param id target value to use to find the object e.g. &lt;div&gt;...
+	 * @return instance of page object based on the object
+	 * @exception PageException throws this exception if object not found
+	 */
+	
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public &lt;T extends Element&gt; T findObjectUsingId(String object, String id) throws PageException{
+<span class="nc" id="L96">		WebElement webElement = null;</span>
+		try{
+<span class="nc" id="L98">			webElement = driver.findElement(By.id(id));</span>
+<span class="nc" id="L99">		}catch (Exception e){</span>
+<span class="nc" id="L100">			log.error(&quot;Failed to find object using given id&quot; + &quot; = &quot;+ id + &quot;, message : &quot; + e.toString());</span>
+<span class="nc" id="L101">        	throw new PageException(&quot;Failed to find object using given id , message : &quot; + e.toString());</span>
+<span class="nc" id="L102">		}		</span>
+<span class="nc" id="L103">		return (T) PageObjectFactory.createPageObject(webElement,object);</span>
+	}
+	
+	/**
+	 * find the specified object using a name .
+	 *
+	 * @param &lt;T&gt; the generic type
+	 * @param object target object to look for e.g button, link
+	 * @param name target value to use to find the object e.g. &lt;div&gt;...
+	 * @return instance of page object based on the object
+	 * @exception PageException throws this exception if object not found
+	 */
+	
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public &lt;T extends Element&gt; T findObjectUsingName(String object, String name) throws PageException{
+<span class="nc" id="L118">		WebElement webElement = null;</span>
+		try{
+<span class="nc" id="L120">			  webElement = driver.findElement(By.id(name));</span>
+<span class="nc" id="L121">		}catch (Exception e){</span>
+<span class="nc" id="L122">			log.error(&quot;Failed to find object using given name&quot; + &quot; = &quot; + name + &quot;, message : &quot; + e.toString());</span>
+<span class="nc" id="L123">        	throw new PageException(&quot;Failed to find object using given name, message : &quot; + e.toString());</span>
+<span class="nc" id="L124">		}		</span>
+<span class="nc" id="L125">		return (T) PageObjectFactory.createPageObject(webElement,object);</span>
+	}
+	
+	/**
+	 * find the specified object using an xpath .
+	 *
+	 * @param &lt;T&gt; the generic type
+	 * @param object target object to look for e.g button, link
+	 * @param xpath target value to use to find the object e.g. &lt;div&gt;...
+	 * @return instance of page object based on the object
+	 * @exception PageException throws this exception if object not found
+	 */
+	
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public &lt;T extends Element&gt; T findObjectUsingxPath(String object, String xpath) throws PageException{
+<span class="nc" id="L140">		WebElement webElement = null;</span>
+		try{
+<span class="nc" id="L142">			webElement = driver.findElement(By.xpath(xpath));</span>
+<span class="nc" id="L143">		}catch (Exception e){</span>
+<span class="nc" id="L144">			log.error(&quot;Failed to find object using given xpath&quot;+ &quot; = &quot; + &quot; , message : &quot; + e.toString());</span>
+<span class="nc" id="L145">        	throw new PageException(&quot;Failed to find object using given xpath, message : &quot; + e.toString());</span>
+<span class="nc" id="L146">		}		</span>
+<span class="nc" id="L147">		return (T) PageObjectFactory.createPageObject(webElement,object);</span>
+	}	
+	
+	/**
+	 * find the specified object using an css selector.
+	 *
+	 * @param &lt;T&gt; the generic type
+	 * @param object target object to look for e.g button, link
+	 * @param css target value to use to find the object e.g. &lt;div&gt;...
+	 * @return instance of page object based on the object
+	 * @exception PageException throws this exception if object not found
+	 */
+	
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public &lt;T extends Element&gt; T findObjectUsingCss(String object, String css) throws PageException{
+<span class="nc" id="L162">		WebElement webElement = null;</span>
+		try{
+<span class="nc" id="L164">			webElement = driver.findElement(By.cssSelector(css));</span>
+<span class="nc" id="L165">		}catch (Exception e){</span>
+<span class="nc" id="L166">			log.error(&quot;Failed to find object using given css&quot; + &quot; = &quot; + css + &quot;, message : &quot; + e.toString());</span>
+<span class="nc" id="L167">        	throw new PageException(&quot;Failed to find object using given css, message : &quot; + e.toString());</span>
+<span class="nc" id="L168">		}		</span>
+<span class="nc" id="L169">		return (T) PageObjectFactory.createPageObject(webElement,object);</span>
+	}
+	
+	/**
+	 * find the specified object using a link .
+	 *
+	 * @param &lt;T&gt; the generic type
+	 * @param object target object to look for e.g button, link
+	 * @param link target value to use to find the object e.g. &lt;div&gt;...
+	 * @return instance of page object based on the object
+	 * @exception PageException throws this exception if object not found
+	 */
+	
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public &lt;T extends Element&gt; T findObjectUsingLink(String object, String link) throws PageException{
+<span class="nc" id="L184">		WebElement webElement = null;</span>
+		try{
+<span class="nc" id="L186">			webElement = driver.findElement(By.linkText(link)); </span>
+<span class="nc" id="L187">		}catch (Exception e){</span>
+<span class="nc" id="L188">			log.error(&quot;Failed to find object using given link&quot; + &quot; = &quot; + link + &quot;, message : &quot; + e.toString());</span>
+<span class="nc" id="L189">        	throw new PageException(&quot;Failed to find object using given link , message : &quot; + e.toString());</span>
+<span class="nc" id="L190">		}		</span>
+<span class="nc" id="L191">		return (T) PageObjectFactory.createPageObject(webElement,object);</span>
+	}
+	
+	/**
+	 * find the specified object using a partial link .
+	 *
+	 * @param &lt;T&gt; the generic type
+	 * @param object target object to look for e.g button, link
+	 * @param link target value to use to find the object e.g. &lt;div&gt;...
+	 * @return instance of page object based on the object
+	 * @exception PageException throws this exception if object not found
+	 */
+	
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public &lt;T extends Element&gt; T findObjectUsingPartialLink(String object, String link) throws PageException{
+<span class="nc" id="L206">		WebElement webElement = null;</span>
+		try{
+<span class="nc" id="L208">			webElement = driver.findElement(By.partialLinkText(link)); </span>
+<span class="nc" id="L209">		}catch (Exception e){</span>
+<span class="nc" id="L210">			log.error(&quot;Failed to find object using given partial link&quot; + &quot; = &quot; + link + &quot;, message : &quot; + e.toString());</span>
+<span class="nc" id="L211">        	throw new PageException(&quot;Failed to find object using given partial link, message : &quot; + e.toString());</span>
+<span class="nc" id="L212">		}		</span>
+<span class="nc" id="L213">		return (T) PageObjectFactory.createPageObject(webElement,object);</span>
+	}
+	
+	/**
+	 * find the specified object using an class name .
+	 *
+	 * @param &lt;T&gt; the generic type
+	 * @param object target object to look for e.g button, link
+	 * @param name target value to use to find the object e.g. &lt;div&gt;...
+	 * @return instance of page object based on the object
+	 * @exception PageException throws this exception if object not found
+	 */
+	
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public &lt;T extends Element&gt; T findObjectUsingClass(String object, String name) throws PageException{
+<span class="nc" id="L228">		WebElement webElement = null;</span>
+		try{
+<span class="nc" id="L230">			webElement = driver.findElement(By.className(name)); </span>
+<span class="nc" id="L231">		}catch (Exception e){</span>
+<span class="nc" id="L232">			log.error(&quot;Failed to find object using given class name&quot; + &quot; = &quot; + name + &quot;, message : &quot; + e.toString());</span>
+<span class="nc" id="L233">        	throw new PageException(&quot;Failed to find object using given class name, message : &quot; + e.toString());</span>
+<span class="nc" id="L234">		}		</span>
+<span class="nc" id="L235">		return (T) PageObjectFactory.createPageObject(webElement,object);</span>
+	}
+	
+	/**
+	 * Find object.
+	 *
+	 * @param &lt;T&gt; the generic type
+	 * @param object the object
+	 * @param val the val
+	 * @param valType the val type
+	 * @return the t
+	 * @throws PageException the page exception
+	 */
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public &lt;T extends Element&gt; T findObject(String object, String val, ObjectValType valType) throws PageException{
+<span class="nc" id="L250">		WebElement webElement = null;</span>
+		try{
+<span class="nc" id="L252">			Method m = By.class.getMethod(valType.getObjectValType(), String.class);</span>
+<span class="nc" id="L253">			webElement = ((WebDriver)driver).findElement((By)m.invoke(By.class, val));</span>
+<span class="nc" id="L254">		}catch (Exception e){</span>
+<span class="nc" id="L255">			log.error(&quot;Failed to find object using given &quot;+ valType + &quot; = &quot; + val +&quot;, message : &quot; + e.toString());</span>
+<span class="nc" id="L256">        	throw new PageException(&quot;Failed to find object using given &quot;+ valType + &quot;, message : &quot; + e.toString());</span>
+<span class="nc" id="L257">		}		</span>
+<span class="nc" id="L258">		return (T) PageObjectFactory.createPageObject(webElement,object);</span>
+	}
+	
+	/**
+	 * Waits for specified time to find an object using an id. 
+	 *
+	 * @param &lt;T&gt; the generic type
+	 * @param object target actual object e.g. button, link
+	 * @param id target value of the object e.g &lt;div&gt;...
+	 * @param wait target maximum wait in seconds
+	 * @return instance of page object based on the object
+	 * @exception PageException throws this exception if object not found
+	 */
+	
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public &lt;T extends Element&gt; T findObjectUsingId(String object, String id, int wait) throws PageException{
+<span class="nc" id="L274">		WebElement webElement=null;</span>
+<span class="nc bnc" id="L275" title="All 2 branches missed.">		webElement = waitOnElement(By.id(id), (wait==-1)?TestBed.MaxWaitSeconds:wait, null);</span>
+<span class="nc" id="L276">		return (T) PageObjectFactory.createPageObject(webElement,object);</span>
+	}
+	
+	/**
+	 * Waits for specified time to find an object using a name. 
+	 *
+	 * @param &lt;T&gt; the generic type
+	 * @param object target actual object e.g. button, link
+	 * @param name target value of the object e.g &lt;div&gt;...
+	 * @param wait target maximum wait in seconds
+	 * @return instance of page object based on the object
+	 * @exception PageException throws this exception if object not found
+	 */ 
+	
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public &lt;T extends Element&gt; T findObjectUsingName(String object, String name, int wait) throws PageException{
+<span class="nc" id="L292">		WebElement webElement=null;</span>
+<span class="nc bnc" id="L293" title="All 2 branches missed.">		webElement = waitOnElement(By.name(name), (wait==-1)?TestBed.MaxWaitSeconds:wait, null);</span>
+<span class="nc" id="L294">		return (T) PageObjectFactory.createPageObject(webElement,object);	</span>
+	}
+
+	/**
+	 * Waits for specified time to find an object using an xpath. 
+	 *
+	 * @param &lt;T&gt; the generic type
+	 * @param object target actual object e.g. button, link
+	 * @param xpath target value of the object e.g &lt;div&gt;...
+	 * @param wait target maximum wait in seconds
+	 * @return instance of page object based on the object
+	 * @exception PageException throws this exception if object not found
+	 */ 
+	
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public &lt;T extends Element&gt; T findObjectUsingXpath(String object, String xpath, int wait) throws PageException{
+<span class="nc" id="L310">		WebElement webElement=null;</span>
+<span class="nc bnc" id="L311" title="All 2 branches missed.">		webElement = waitOnElement(By.xpath(xpath), (wait==-1)?TestBed.MaxWaitSeconds:wait, null);</span>
+<span class="nc" id="L312">		return (T) PageObjectFactory.createPageObject(webElement,object);		</span>
+	}
+	
+	/**
+	 * Waits for specified time to find an object using an css. 
+	 *
+	 * @param &lt;T&gt; the generic type
+	 * @param object target actual object e.g. button, link
+	 * @param css target value of the object e.g &lt;div&gt;...
+	 * @param wait target maximum wait in seconds
+	 * @return instance of page object based on the object
+	 * @exception PageException throws this exception if object not found
+	 */
+	
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public &lt;T extends Element&gt; T findObjectUsingCss(String object, String css, int wait) throws PageException{
+<span class="nc" id="L328">		WebElement webElement=null;</span>
+<span class="nc bnc" id="L329" title="All 2 branches missed.">		webElement = waitOnElement(By.cssSelector(css), (wait==-1)?TestBed.MaxWaitSeconds:wait, null);</span>
+<span class="nc" id="L330">		return (T) PageObjectFactory.createPageObject(webElement,object);		</span>
+	}
+	
+	/**
+	 * Waits for specified time to find an object using an link text. 
+	 *
+	 * @param &lt;T&gt; the generic type
+	 * @param object target actual object e.g. button, link
+	 * @param link target value of the object e.g &lt;div&gt;...
+	 * @param wait target maximum wait in seconds
+	 * @return instance of page object based on the object
+	 * @exception PageException throws this exception if object not found
+	 */
+	
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public &lt;T extends Element&gt; T findObjectUsingLink(String object, String link, int wait) throws PageException{
+<span class="nc" id="L346">		WebElement webElement=null;</span>
+<span class="nc bnc" id="L347" title="All 2 branches missed.">		webElement = waitOnElement(By.linkText(link), (wait==-1)?TestBed.MaxWaitSeconds:wait, null);</span>
+<span class="nc" id="L348">		return (T) PageObjectFactory.createPageObject(webElement,object);		</span>
+	}
+	
+	/**
+	 * Waits for specified time to find an object using a partial link text. 
+	 *
+	 * @param &lt;T&gt; the generic type
+	 * @param object target actual object e.g. button, link
+	 * @param link target value of the object e.g &lt;div&gt;...
+	 * @param wait target maximum wait in seconds
+	 * @return instance of page object based on the object
+	 * @exception PageException throws this exception if object not found
+	 */
+	
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public &lt;T extends Element&gt; T findObjectUsingPartialLink(String object, String link, int wait) throws PageException{
+<span class="nc" id="L364">		WebElement webElement=null;</span>
+<span class="nc bnc" id="L365" title="All 2 branches missed.">		webElement = waitOnElement(By.partialLinkText(link), (wait==-1)?TestBed.MaxWaitSeconds:wait, null);</span>
+<span class="nc" id="L366">		return (T) PageObjectFactory.createPageObject(webElement,object);</span>
+		
+	}
+	
+	/**
+	 * Waits for specified time to find an object using a class name. 
+	 *
+	 * @param &lt;T&gt; the generic type
+	 * @param object target actual object e.g. button, link
+	 * @param name target value of the object e.g &lt;div&gt;...
+	 * @param wait target maximum wait in seconds
+	 * @return instance of page object based on the object
+	 * @exception PageException throws this exception if object not found
+	 */
+	
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public &lt;T extends Element&gt; T findObjectUsingClass(String object, String name, int wait) throws PageException{
+<span class="nc" id="L383">		WebElement webElement=null;</span>
+<span class="nc bnc" id="L384" title="All 2 branches missed.">		webElement = waitOnElement(By.className(name), (wait==-1)?TestBed.MaxWaitSeconds:wait, null);</span>
+<span class="nc" id="L385">		return (T) PageObjectFactory.createPageObject(webElement,object);</span>
+	}
+	
+	/**
+	 * Find object.
+	 *
+	 * @param &lt;T&gt; the generic type
+	 * @param object the object
+	 * @param val the val
+	 * @param valType the val type
+	 * @param wait the wait
+	 * @return the t
+	 * @throws PageException the page exception
+	 */
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public &lt;T extends Element&gt; T findObject(String object, String val, ObjectValType valType, int wait) throws PageException{
+<span class="nc" id="L401">		WebElement webElement=null;</span>
+		Method m;
+		try {
+<span class="nc" id="L404">			m = By.class.getMethod(valType.getObjectValType(), String.class);</span>
+<span class="nc bnc" id="L405" title="All 2 branches missed.">			webElement = waitOnElement(((By)m.invoke(By.class, val)), (wait==-1)?TestBed.MaxWaitSeconds:wait, null);</span>
+<span class="nc" id="L406">		} catch (Exception e) {</span>
+<span class="nc" id="L407">			log.error(&quot;Failed to find object using given &quot;+ valType + &quot; = &quot; + val +&quot;, message : &quot; + e.toString());</span>
+<span class="nc" id="L408">        	throw new PageException(&quot;Failed to find object using given &quot;+ valType + &quot;, message : &quot; + e.toString());</span>
+<span class="nc" id="L409">		}</span>
+<span class="nc" id="L410">		return (T) PageObjectFactory.createPageObject(webElement,object);</span>
+	}
+	
+	/**
+	 * Waits for specified time to find an object using a wait condition.
+	 *
+	 * @param &lt;T&gt; the generic type
+	 * @param object target actual object e.g. button, link
+	 * @param id the id
+	 * @param wait target maximum wait in seconds
+	 * @param condition target wait based on a Condition
+	 * @return instance of page object based on the object
+	 * @throws PageException throws this exception if object not found
+	 */
+
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public &lt;T extends Element&gt; T findObjectUsingId(String object, String id, int wait, WaitCondition condition) throws PageException{
+<span class="nc" id="L427">		WebElement webElement=null;</span>
+<span class="nc bnc" id="L428" title="All 2 branches missed.">		webElement = waitOnElement(By.id(id), (wait==-1)?TestBed.MaxWaitSeconds:wait, null,condition);</span>
+<span class="nc" id="L429">		return (T) PageObjectFactory.createPageObject(webElement,object);</span>
+	}
+	
+	/**
+	 * Find object using name.
+	 *
+	 * @param &lt;T&gt; the generic type
+	 * @param object the object
+	 * @param name the name
+	 * @param wait the wait
+	 * @param condition the condition
+	 * @return the t
+	 * @throws PageException the page exception
+	 */
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public &lt;T extends Element&gt; T findObjectUsingName(String object, String name, int wait, WaitCondition condition) throws PageException{
+<span class="nc" id="L445">		WebElement webElement=null;</span>
+<span class="nc bnc" id="L446" title="All 2 branches missed.">		webElement = waitOnElement(By.name(name), (wait==-1)?TestBed.MaxWaitSeconds:wait, null,condition);</span>
+<span class="nc" id="L447">		return (T) PageObjectFactory.createPageObject(webElement,object);</span>
+	}
+	
+	/**
+	 * Find object using xpath.
+	 *
+	 * @param &lt;T&gt; the generic type
+	 * @param object the object
+	 * @param xpath the xpath
+	 * @param wait the wait
+	 * @param condition the condition
+	 * @return the t
+	 * @throws PageException the page exception
+	 */
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public &lt;T extends Element&gt; T findObjectUsingXpath(String object, String xpath, int wait, WaitCondition condition) throws PageException{
+<span class="nc" id="L463">		WebElement webElement=null;</span>
+<span class="nc bnc" id="L464" title="All 2 branches missed.">		webElement = waitOnElement(By.xpath(xpath), (wait==-1)?TestBed.MaxWaitSeconds:wait, null,condition);</span>
+<span class="nc" id="L465">		return (T) PageObjectFactory.createPageObject(webElement,object);</span>
+	}
+	
+	/**
+	 * Find object using css.
+	 *
+	 * @param &lt;T&gt; the generic type
+	 * @param object the object
+	 * @param css the css
+	 * @param wait the wait
+	 * @param condition the condition
+	 * @return the t
+	 * @throws PageException the page exception
+	 */
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public &lt;T extends Element&gt; T findObjectUsingCss(String object, String css, int wait, WaitCondition condition) throws PageException{
+<span class="nc" id="L481">		WebElement webElement=null;</span>
+<span class="nc bnc" id="L482" title="All 2 branches missed.">		webElement = waitOnElement(By.cssSelector(css), (wait==-1)?TestBed.MaxWaitSeconds:wait, null,condition);</span>
+<span class="nc" id="L483">		return (T) PageObjectFactory.createPageObject(webElement,object);</span>
+	}
+	
+	/**
+	 * Find object using link.
+	 *
+	 * @param &lt;T&gt; the generic type
+	 * @param object the object
+	 * @param link the link
+	 * @param wait the wait
+	 * @param condition the condition
+	 * @return the t
+	 * @throws PageException the page exception
+	 */
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public &lt;T extends Element&gt; T findObjectUsingLink(String object, String link, int wait, WaitCondition condition) throws PageException{
+<span class="nc" id="L499">		WebElement webElement=null;</span>
+<span class="nc bnc" id="L500" title="All 2 branches missed.">		webElement = waitOnElement(By.linkText(link), (wait==-1)?TestBed.MaxWaitSeconds:wait, null,condition);</span>
+<span class="nc" id="L501">		return (T) PageObjectFactory.createPageObject(webElement,object);</span>
+	}
+	
+	/**
+	 * Find object using partial link.
+	 *
+	 * @param &lt;T&gt; the generic type
+	 * @param object the object
+	 * @param link the link
+	 * @param wait the wait
+	 * @param condition the condition
+	 * @return the t
+	 * @throws PageException the page exception
+	 */
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public &lt;T extends Element&gt; T findObjectUsingPartialLink(String object, String link, int wait, WaitCondition condition) throws PageException{
+<span class="nc" id="L517">		WebElement webElement=null;</span>
+<span class="nc bnc" id="L518" title="All 2 branches missed.">		webElement = waitOnElement(By.partialLinkText(link), (wait==-1)?TestBed.MaxWaitSeconds:wait, null,condition);</span>
+<span class="nc" id="L519">		return (T) PageObjectFactory.createPageObject(webElement,object);</span>
+	}
+	
+	/**
+	 * Find object using class.
+	 *
+	 * @param &lt;T&gt; the generic type
+	 * @param object the object
+	 * @param name the name
+	 * @param wait the wait
+	 * @param condition the condition
+	 * @return the t
+	 * @throws PageException the page exception
+	 */
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public &lt;T extends Element&gt; T findObjectUsingClass(String object, String name, int wait, WaitCondition condition) throws PageException{
+<span class="nc" id="L535">		WebElement webElement=null;</span>
+<span class="nc bnc" id="L536" title="All 2 branches missed.">		webElement = waitOnElement(By.className(name), (wait==-1)?TestBed.MaxWaitSeconds:wait, null,condition);		</span>
+<span class="nc" id="L537">		return (T) PageObjectFactory.createPageObject(webElement,object);</span>
+	}
+	
+	/**
+	 * Find object.
+	 *
+	 * @param &lt;T&gt; the generic type
+	 * @param object the object
+	 * @param val the val
+	 * @param valType the val type
+	 * @param wait the wait
+	 * @param condition the condition
+	 * @return the t
+	 * @throws PageException the page exception
+	 */
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public &lt;T extends Element&gt; T findObject(String object, String val, ObjectValType valType, int wait, WaitCondition condition) throws PageException{
+<span class="nc" id="L554">		WebElement webElement=null;</span>
+		Method m;
+		try {
+<span class="nc" id="L557">			m = By.class.getMethod(valType.getObjectValType(), String.class);</span>
+<span class="nc bnc" id="L558" title="All 2 branches missed.">			webElement = waitOnElement(((By)m.invoke(By.class, val)), (wait==-1)?TestBed.MaxWaitSeconds:wait, null,condition);</span>
+<span class="nc" id="L559">		} catch (Exception e) {</span>
+			
+<span class="nc" id="L561">				log.error(&quot;Failed to find object using given &quot;+ valType + &quot;  =  &quot; + val +&quot;, message : &quot; + e.getMessage());</span>
+			
+			;
+<span class="nc" id="L564">        	throw new PageException(&quot;Failed to find object using given &quot;+ valType + &quot;, message : &quot; + e.toString());</span>
+<span class="nc" id="L565">		}		</span>
+<span class="nc" id="L566">		return (T) PageObjectFactory.createPageObject(webElement,object);</span>
+	}
+	
+	/**
+	 * Waits for specified time to find the object using a specific frame handle. 
+	 *
+	 * @param &lt;T&gt; the generic type
+	 * @param object target actual object e.g. button, link
+	 * @param id the id
+	 * @param wait target maximum wait in seconds
+	 * @param frame target name of the frame
+	 * @return instance of page object based on the object
+	 * @throws PageException throws this exception if object not found
+	 */
+	
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public &lt;T extends Element&gt; T findObjectUsingId(String object, String id, int wait, String frame) throws PageException{
+<span class="nc" id="L583">		WebElement webElement = null;</span>
+<span class="nc bnc" id="L584" title="All 6 branches missed.">		webElement = (waitOnElement(By.id(id), (wait==-1)?TestBed.MaxWaitSeconds:wait, (frame==null||&quot;&quot;.equals(frame))?null:frame));</span>
+<span class="nc" id="L585">		return (T) PageObjectFactory.createPageObject(webElement,object);</span>
+	}
+	
+	/**
+	 * Find object using name.
+	 *
+	 * @param &lt;T&gt; the generic type
+	 * @param object the object
+	 * @param name the name
+	 * @param wait the wait
+	 * @param frame the frame
+	 * @return the t
+	 * @throws PageException the page exception
+	 */
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public &lt;T extends Element&gt; T findObjectUsingName(String object, String name, int wait, String frame) throws PageException{
+<span class="nc" id="L601">		WebElement webElement = null;</span>
+<span class="nc bnc" id="L602" title="All 6 branches missed.">		webElement = (waitOnElement(By.name(name), (wait==-1)?TestBed.MaxWaitSeconds:wait, (frame==null||&quot;&quot;.equals(frame))?null:frame));</span>
+<span class="nc" id="L603">		return (T) PageObjectFactory.createPageObject(webElement,object);</span>
+	}
+
+	/**
+	 * Find object using xpath.
+	 *
+	 * @param &lt;T&gt; the generic type
+	 * @param object the object
+	 * @param xpath the xpath
+	 * @param wait the wait
+	 * @param frame the frame
+	 * @return the t
+	 * @throws PageException the page exception
+	 */
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public &lt;T extends Element&gt; T findObjectUsingXpath(String object, String xpath, int wait, String frame) throws PageException{
+<span class="nc" id="L619">		WebElement webElement = null;</span>
+<span class="nc bnc" id="L620" title="All 6 branches missed.">		webElement = (waitOnElement(By.xpath(xpath), (wait==-1)?TestBed.MaxWaitSeconds:wait, (frame==null||&quot;&quot;.equals(frame))?null:frame));</span>
+<span class="nc" id="L621">		return (T) PageObjectFactory.createPageObject(webElement,object);</span>
+	}
+	
+	/**
+	 * Find object using css.
+	 *
+	 * @param &lt;T&gt; the generic type
+	 * @param object the object
+	 * @param css the css
+	 * @param wait the wait
+	 * @param frame the frame
+	 * @return the t
+	 * @throws PageException the page exception
+	 */
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public &lt;T extends Element&gt; T findObjectUsingCss(String object, String css, int wait, String frame) throws PageException{
+<span class="nc" id="L637">		WebElement webElement = null;</span>
+<span class="nc bnc" id="L638" title="All 6 branches missed.">		webElement = (waitOnElement(By.cssSelector(css), (wait==-1)?TestBed.MaxWaitSeconds:wait, (frame==null||&quot;&quot;.equals(frame))?null:frame));</span>
+<span class="nc" id="L639">		return (T) PageObjectFactory.createPageObject(webElement,object);</span>
+	}
+	
+	/**
+	 * Find object using link.
+	 *
+	 * @param &lt;T&gt; the generic type
+	 * @param object the object
+	 * @param link the link
+	 * @param wait the wait
+	 * @param frame the frame
+	 * @return the t
+	 * @throws PageException the page exception
+	 */
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public &lt;T extends Element&gt; T findObjectUsingLink(String object, String link, int wait, String frame) throws PageException{
+<span class="nc" id="L655">		WebElement webElement = null;</span>
+<span class="nc bnc" id="L656" title="All 6 branches missed.">		webElement = (waitOnElement(By.linkText(link), (wait==-1)?TestBed.MaxWaitSeconds:wait, (frame==null||&quot;&quot;.equals(frame))?null:frame));</span>
+<span class="nc" id="L657">		return (T) PageObjectFactory.createPageObject(webElement,object);</span>
+	}
+	
+	/**
+	 * Find object using partial link.
+	 *
+	 * @param &lt;T&gt; the generic type
+	 * @param object the object
+	 * @param link the link
+	 * @param wait the wait
+	 * @param frame the frame
+	 * @return the t
+	 * @throws PageException the page exception
+	 */
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public &lt;T extends Element&gt; T findObjectUsingPartialLink(String object, String link, int wait, String frame) throws PageException{
+<span class="nc" id="L673">		WebElement webElement = null;</span>
+<span class="nc bnc" id="L674" title="All 6 branches missed.">		webElement = (waitOnElement(By.partialLinkText(link), (wait==-1)?TestBed.MaxWaitSeconds:wait, (frame==null||&quot;&quot;.equals(frame))?null:frame));</span>
+<span class="nc" id="L675">		return (T) PageObjectFactory.createPageObject(webElement,object);</span>
+	}
+	
+	/**
+	 * Find object using class.
+	 *
+	 * @param &lt;T&gt; the generic type
+	 * @param object the object
+	 * @param name the name
+	 * @param wait the wait
+	 * @param frame the frame
+	 * @return the t
+	 * @throws PageException the page exception
+	 */
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public &lt;T extends Element&gt; T findObjectUsingClass(String object, String name, int wait, String frame) throws PageException{
+<span class="nc" id="L691">		WebElement webElement = null;</span>
+<span class="nc bnc" id="L692" title="All 6 branches missed.">		webElement = (waitOnElement(By.className(name), (wait==-1)?TestBed.MaxWaitSeconds:wait, (frame==null||&quot;&quot;.equals(frame))?null:frame));</span>
+<span class="nc" id="L693">		return (T) PageObjectFactory.createPageObject(webElement,object);</span>
+	}
+	
+	/**
+	 * Find object.
+	 *
+	 * @param &lt;T&gt; the generic type
+	 * @param object the object
+	 * @param val the val
+	 * @param valType the val type
+	 * @param wait the wait
+	 * @param frame the frame
+	 * @return the t
+	 * @throws PageException the page exception
+	 */
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public &lt;T extends Element&gt; T findObject(String object, String val, ObjectValType valType, int wait, String frame) throws PageException{
+<span class="nc" id="L710">		WebElement webElement = null;</span>
+		Method m;
+		try {
+<span class="nc" id="L713">			m = By.class.getMethod(valType.getObjectValType(), String.class);</span>
+<span class="nc bnc" id="L714" title="All 6 branches missed.">			webElement = (waitOnElement(((By)m.invoke(By.class, val)), (wait==-1)?TestBed.MaxWaitSeconds:wait, (frame==null||&quot;&quot;.equals(frame))?null:frame));</span>
+<span class="nc" id="L715">		} catch (Exception e) {</span>
+<span class="nc" id="L716">			log.error(&quot;Failed to find object using given &quot;+ valType + &quot; = &quot; + val + &quot;, message : &quot; + e.toString());</span>
+<span class="nc" id="L717">        	throw new PageException(&quot;Failed to find object using given &quot;+ valType + &quot;, message : &quot; + e.toString());</span>
+<span class="nc" id="L718">		}</span>
+<span class="nc" id="L719">		return (T) PageObjectFactory.createPageObject(webElement,object);</span>
+	}
+	
+	/**
+	 * Waits for specified time to find an object by using a condition and a specific frame.
+	 *
+	 * @param &lt;T&gt; the generic type
+	 * @param object target actual object e.g. button, link
+	 * @param id the id
+	 * @param wait target maximum wait in seconds
+	 * @param condition target wait based on the Expected Condition
+	 * @param frame target name of the frame
+	 * @return instance of page object based on the object
+	 * @throws PageException throws this exception if object not found
+	 */
+	
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public &lt;T extends Element&gt; T findObjectUsingId(String object, String id, int wait, WaitCondition condition, String frame) throws PageException{
+<span class="nc" id="L737">		WebElement webElement = null;</span>
+<span class="nc bnc" id="L738" title="All 6 branches missed.">		webElement=waitOnElement(By.id(id), (wait==-1)?TestBed.MaxWaitSeconds:wait, (frame==null||&quot;&quot;.equals(frame))?null:frame,condition);</span>
+<span class="nc" id="L739">		return (T) PageObjectFactory.createPageObject(webElement,object);</span>
+	}
+	
+	/**
+	 * Find object using name.
+	 *
+	 * @param &lt;T&gt; the generic type
+	 * @param object the object
+	 * @param name the name
+	 * @param wait the wait
+	 * @param condition the condition
+	 * @param frame the frame
+	 * @return the t
+	 * @throws PageException the page exception
+	 */
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public &lt;T extends Element&gt; T findObjectUsingName(String object, String name, int wait, WaitCondition condition, String frame) throws PageException{
+<span class="nc" id="L756">		WebElement webElement = null;</span>
+<span class="nc bnc" id="L757" title="All 6 branches missed.">		webElement=waitOnElement(By.name(name), (wait==-1)?TestBed.MaxWaitSeconds:wait, (frame==null||&quot;&quot;.equals(frame))?null:frame,condition);</span>
+<span class="nc" id="L758">		return (T) PageObjectFactory.createPageObject(webElement,object);</span>
+	}
+
+	/**
+	 * Find object using xpath.
+	 *
+	 * @param &lt;T&gt; the generic type
+	 * @param object the object
+	 * @param xpath the xpath
+	 * @param wait the wait
+	 * @param condition the condition
+	 * @param frame the frame
+	 * @return the t
+	 * @throws PageException the page exception
+	 */
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public &lt;T extends Element&gt; T findObjectUsingXpath(String object, String xpath, int wait, WaitCondition condition, String frame) throws PageException{
+<span class="nc" id="L775">		WebElement webElement = null;</span>
+<span class="nc bnc" id="L776" title="All 6 branches missed.">		webElement=waitOnElement(By.xpath(xpath), (wait==-1)?TestBed.MaxWaitSeconds:wait, (frame==null||&quot;&quot;.equals(frame))?null:frame,condition);</span>
+<span class="nc" id="L777">		return (T) PageObjectFactory.createPageObject(webElement,object);</span>
+	}
+	
+	/**
+	 * Find object using css.
+	 *
+	 * @param &lt;T&gt; the generic type
+	 * @param object the object
+	 * @param css the css
+	 * @param wait the wait
+	 * @param condition the condition
+	 * @param frame the frame
+	 * @return the t
+	 * @throws PageException the page exception
+	 */
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public &lt;T extends Element&gt; T findObjectUsingCss(String object, String css, int wait, WaitCondition condition, String frame) throws PageException{
+<span class="nc" id="L794">		WebElement webElement = null;</span>
+<span class="nc bnc" id="L795" title="All 6 branches missed.">		webElement=waitOnElement(By.cssSelector(css), (wait==-1)?TestBed.MaxWaitSeconds:wait, (frame==null||&quot;&quot;.equals(frame))?null:frame,condition);</span>
+<span class="nc" id="L796">		return (T) PageObjectFactory.createPageObject(webElement,object);</span>
+	}
+	
+	/**
+	 * Find object using link.
+	 *
+	 * @param &lt;T&gt; the generic type
+	 * @param object the object
+	 * @param link the link
+	 * @param wait the wait
+	 * @param condition the condition
+	 * @param frame the frame
+	 * @return the t
+	 * @throws PageException the page exception
+	 */
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public &lt;T extends Element&gt; T findObjectUsingLink(String object, String link, int wait, WaitCondition condition, String frame) throws PageException{
+<span class="nc" id="L813">		WebElement webElement = null;</span>
+<span class="nc bnc" id="L814" title="All 6 branches missed.">		webElement=waitOnElement(By.linkText(link), (wait==-1)?TestBed.MaxWaitSeconds:wait, (frame==null||&quot;&quot;.equals(frame))?null:frame,condition);</span>
+<span class="nc" id="L815">		return (T) PageObjectFactory.createPageObject(webElement,object);</span>
+	}
+	
+	/**
+	 * Find object using partial link.
+	 *
+	 * @param &lt;T&gt; the generic type
+	 * @param object the object
+	 * @param link the link
+	 * @param wait the wait
+	 * @param condition the condition
+	 * @param frame the frame
+	 * @return the t
+	 * @throws PageException the page exception
+	 */
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public &lt;T extends Element&gt; T findObjectUsingPartialLink(String object, String link, int wait, WaitCondition condition, String frame) throws PageException{
+<span class="nc" id="L832">		WebElement webElement = null;</span>
+<span class="nc bnc" id="L833" title="All 6 branches missed.">		webElement=waitOnElement(By.partialLinkText(link), (wait==-1)?TestBed.MaxWaitSeconds:wait, (frame==null||&quot;&quot;.equals(frame))?null:frame,condition);</span>
+<span class="nc" id="L834">		return (T) PageObjectFactory.createPageObject(webElement,object);</span>
+	}
+	
+	/**
+	 * Find object using class.
+	 *
+	 * @param &lt;T&gt; the generic type
+	 * @param object the object
+	 * @param name the name
+	 * @param wait the wait
+	 * @param condition the condition
+	 * @param frame the frame
+	 * @return the t
+	 * @throws PageException the page exception
+	 */
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public &lt;T extends Element&gt; T findObjectUsingClass(String object, String name, int wait, WaitCondition condition, String frame) throws PageException{
+<span class="nc" id="L851">		WebElement webElement = null;</span>
+<span class="nc bnc" id="L852" title="All 6 branches missed.">		webElement=waitOnElement(By.className(name), (wait==-1)?TestBed.MaxWaitSeconds:wait, (frame==null||&quot;&quot;.equals(frame))?null:frame,condition);</span>
+<span class="nc" id="L853">		return (T) PageObjectFactory.createPageObject(webElement,object);</span>
+	}
+	
+	/**
+	 * Find object.
+	 *
+	 * @param &lt;T&gt; the generic type
+	 * @param object the object
+	 * @param val the val
+	 * @param valType the val type
+	 * @param wait the wait
+	 * @param condition the condition
+	 * @param frame the frame
+	 * @return the t
+	 * @throws PageException the page exception
+	 */
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public &lt;T extends Element&gt; T findObject(String object, String val, ObjectValType valType, int wait, WaitCondition condition, String frame) throws PageException{
+<span class="nc" id="L871">		WebElement webElement = null;</span>
+		Method m;
+		try {
+<span class="nc" id="L874">			m = By.class.getMethod(valType.getObjectValType(), String.class);</span>
+<span class="nc bnc" id="L875" title="All 6 branches missed.">			webElement = (waitOnElement(((By)m.invoke(By.class, val)), (wait==-1)?TestBed.MaxWaitSeconds:wait, (frame==null||&quot;&quot;.equals(frame))?null:frame,condition));</span>
+<span class="nc" id="L876">		} catch (Exception e) {</span>
+<span class="nc" id="L877">			log.error(&quot;Failed to find object using given &quot;+ valType + &quot; = &quot; + val +&quot;, message : &quot; + e.toString());</span>
+<span class="nc" id="L878">        	throw new PageException(&quot;Failed to find object using given &quot;+ valType + &quot;, message : &quot; + e.toString());</span>
+<span class="nc" id="L879">		}</span>
+<span class="nc" id="L880">		return (T) PageObjectFactory.createPageObject(webElement,object);</span>
+	}
+	
+	/**
+	 * find multiple objects by using the valType. 
+	 *
+	 * @param &lt;T&gt; the generic type
+	 * @param object the object
+	 * @param tag the tag
+	 * @return list of page objects if WebDriver is able to find the objects
+	 * @throws PageException the page exception
+	 */
+	
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public &lt;T extends Element&gt; List&lt;T&gt; findObjectsUsingTag(String object, String tag) throws PageException{
+<span class="nc" id="L895">		List&lt;T&gt; l1 = new ArrayList&lt;T&gt;();</span>
+<span class="nc" id="L896">		List&lt;WebElement&gt; lst=null;</span>
+<span class="nc" id="L897">		lst = driver.findElements(By.tagName(tag));</span>
+<span class="nc bnc" id="L898" title="All 2 branches missed.">		for(WebElement we : lst){</span>
+<span class="nc" id="L899">			l1.add((T) PageObjectFactory.createPageObject(we,object));</span>
+<span class="nc" id="L900">		}</span>
+<span class="nc" id="L901">		return l1;</span>
+	}
+	
+	/**
+	 * Find objects using xpath.
+	 *
+	 * @param &lt;T&gt; the generic type
+	 * @param object the object
+	 * @param xpath the xpath
+	 * @return the list
+	 * @throws PageException the page exception
+	 */
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public &lt;T extends Element&gt; List&lt;T&gt; findObjectsUsingXpath(String object, String xpath) throws PageException{
+<span class="nc" id="L915">		List&lt;T&gt; l1 = new ArrayList&lt;T&gt;();</span>
+<span class="nc" id="L916">		List&lt;WebElement&gt; lst=null;</span>
+<span class="nc" id="L917">		lst = driver.findElements(By.xpath(xpath));</span>
+<span class="nc bnc" id="L918" title="All 2 branches missed.">		for(WebElement we : lst){</span>
+<span class="nc" id="L919">			l1.add((T) PageObjectFactory.createPageObject(we,object));</span>
+<span class="nc" id="L920">		}</span>
+<span class="nc" id="L921">		return l1;</span>
+	}
+	
+	/**
+	 * Find objects using link.
+	 *
+	 * @param &lt;T&gt; the generic type
+	 * @param object the object
+	 * @param link the link
+	 * @return the list
+	 * @throws PageException the page exception
+	 */
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public &lt;T extends Element&gt; List&lt;T&gt; findObjectsUsingLink(String object, String link) throws PageException{
+<span class="nc" id="L935">		List&lt;T&gt; l1 = new ArrayList&lt;T&gt;();</span>
+<span class="nc" id="L936">		List&lt;WebElement&gt; lst=null;</span>
+<span class="nc" id="L937">		lst = driver.findElements(By.linkText(link));</span>
+<span class="nc bnc" id="L938" title="All 2 branches missed.">		for(WebElement we : lst){</span>
+<span class="nc" id="L939">			l1.add((T) PageObjectFactory.createPageObject(we,object));</span>
+<span class="nc" id="L940">		}</span>
+<span class="nc" id="L941">		return l1;</span>
+	}
+	
+	/**
+	 * Find objects using partial link.
+	 *
+	 * @param &lt;T&gt; the generic type
+	 * @param object the object
+	 * @param link the link
+	 * @return the list
+	 * @throws PageException the page exception
+	 */
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public &lt;T extends Element&gt; List&lt;T&gt; findObjectsUsingPartialLink(String object, String link) throws PageException{
+<span class="nc" id="L955">		List&lt;T&gt; l1 = new ArrayList&lt;T&gt;();</span>
+<span class="nc" id="L956">		List&lt;WebElement&gt; lst=null;</span>
+<span class="nc" id="L957">		lst = driver.findElements(By.partialLinkText(link));</span>
+<span class="nc bnc" id="L958" title="All 2 branches missed.">		for(WebElement we : lst){</span>
+<span class="nc" id="L959">			l1.add((T) PageObjectFactory.createPageObject(we,object));</span>
+<span class="nc" id="L960">		}</span>
+<span class="nc" id="L961">		return l1;</span>
+	}
+	
+	/**
+	 * Find objects using class.
+	 *
+	 * @param &lt;T&gt; the generic type
+	 * @param object the object
+	 * @param name the name
+	 * @return the list
+	 * @throws PageException the page exception
+	 */
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public &lt;T extends Element&gt; List&lt;T&gt; findObjectsUsingClass(String object, String name) throws PageException{
+<span class="nc" id="L975">		List&lt;T&gt; l1 = new ArrayList&lt;T&gt;();</span>
+<span class="nc" id="L976">		List&lt;WebElement&gt; lst=null;</span>
+<span class="nc" id="L977">		lst = driver.findElements(By.className(name));</span>
+<span class="nc bnc" id="L978" title="All 2 branches missed.">		for(WebElement we : lst){</span>
+<span class="nc" id="L979">			l1.add((T) PageObjectFactory.createPageObject(we,object));</span>
+<span class="nc" id="L980">		}</span>
+<span class="nc" id="L981">		return l1;</span>
+	}
+	
+	/**
+	 * Find objects.
+	 *
+	 * @param &lt;T&gt; the generic type
+	 * @param object the object
+	 * @param val the val
+	 * @param valType the val type
+	 * @return the list
+	 * @throws PageException the page exception
+	 */
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public &lt;T extends Element&gt; List&lt;T&gt; findObjects(String object, String val, ObjectValType valType) throws PageException{
+<span class="nc" id="L996">		List&lt;T&gt; l1 = new ArrayList&lt;T&gt;();</span>
+<span class="nc" id="L997">		List&lt;WebElement&gt; lst=null;</span>
+		Method m;
+		try {
+<span class="nc" id="L1000">			m = By.class.getMethod(valType.getObjectValType(), String.class);</span>
+<span class="nc" id="L1001">			lst= driver.findElements((By)m.invoke(By.class, val));</span>
+<span class="nc" id="L1002">		} catch (Exception e) {</span>
+<span class="nc" id="L1003">			log.error(&quot;Can not find objects for: &quot;+ valType + &quot; = &quot; + val +&quot;, message : &quot; + e.toString());</span>
+<span class="nc" id="L1004">        	throw new PageException(&quot;Can not find objects for:  &quot;+ valType + &quot;, message : &quot; + e.toString());</span>
+<span class="nc" id="L1005">		}</span>
+<span class="nc bnc" id="L1006" title="All 2 branches missed.">		for(WebElement we : lst){</span>
+<span class="nc" id="L1007">			l1.add((T) PageObjectFactory.createPageObject(we,object));</span>
+<span class="nc" id="L1008">		}</span>
+<span class="nc" id="L1009">		return l1;</span>
+	}
+	
+	/**
+	 * find multiple objects by using the valType .
+	 *
+	 * @param &lt;T&gt; the generic type
+	 * @param object the object
+	 * @param tag the tag
+	 * @param wait the wait
+	 * @param condition the condition
+	 * @return list of page objects if WebDriver is able to find the objects
+	 * @throws PageException the page exception
+	 */
+	
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public &lt;T extends Element&gt; List&lt;T&gt; findObjectsUsingTag(String object, String tag, int wait, WaitCondition condition) throws PageException{
+<span class="nc" id="L1026">		List&lt;T&gt; l1 = new ArrayList&lt;T&gt;();</span>
+<span class="nc" id="L1027">		List&lt;WebElement&gt; lst =  null;</span>
+<span class="nc" id="L1028">		lst= waitOnElements(By.tagName(tag),wait,condition);</span>
+<span class="nc bnc" id="L1029" title="All 2 branches missed.">		for(WebElement we : lst){</span>
+<span class="nc" id="L1030">			l1.add((T) PageObjectFactory.createPageObject(we,object));</span>
+<span class="nc" id="L1031">		}</span>
+<span class="nc" id="L1032">		return l1;</span>
+	}
+
+	/**
+	 * Find objects using xpath.
+	 *
+	 * @param &lt;T&gt; the generic type
+	 * @param object the object
+	 * @param xpath the xpath
+	 * @param wait the wait
+	 * @param condition the condition
+	 * @return the list
+	 * @throws PageException the page exception
+	 */
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public &lt;T extends Element&gt; List&lt;T&gt; findObjectsUsingXpath(String object, String xpath, int wait, WaitCondition condition) throws PageException{
+<span class="nc" id="L1048">		List&lt;T&gt; l1 = new ArrayList&lt;T&gt;();</span>
+<span class="nc" id="L1049">		List&lt;WebElement&gt; lst =  null;</span>
+<span class="nc" id="L1050">		lst= waitOnElements(By.xpath(xpath),wait,condition);</span>
+<span class="nc bnc" id="L1051" title="All 2 branches missed.">		for(WebElement we : lst){</span>
+<span class="nc" id="L1052">			l1.add((T) PageObjectFactory.createPageObject(we,object));</span>
+<span class="nc" id="L1053">		}</span>
+<span class="nc" id="L1054">		return l1;</span>
+	}
+	
+	/**
+	 * Find objects using link.
+	 *
+	 * @param &lt;T&gt; the generic type
+	 * @param object the object
+	 * @param link the link
+	 * @param wait the wait
+	 * @param condition the condition
+	 * @return the list
+	 * @throws PageException the page exception
+	 */
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public &lt;T extends Element&gt; List&lt;T&gt; findObjectsUsingLink(String object, String link, int wait, WaitCondition condition) throws PageException{
+<span class="nc" id="L1070">		List&lt;T&gt; l1 = new ArrayList&lt;T&gt;();</span>
+<span class="nc" id="L1071">		List&lt;WebElement&gt; lst =  null;</span>
+<span class="nc" id="L1072">		lst= waitOnElements(By.linkText(link),wait,condition);</span>
+<span class="nc bnc" id="L1073" title="All 2 branches missed.">		for(WebElement we : lst){</span>
+<span class="nc" id="L1074">			l1.add((T) PageObjectFactory.createPageObject(we,object));</span>
+<span class="nc" id="L1075">		}</span>
+<span class="nc" id="L1076">		return l1;</span>
+	}
+	
+	/**
+	 * Find objects using partial link.
+	 *
+	 * @param &lt;T&gt; the generic type
+	 * @param object the object
+	 * @param link the link
+	 * @param wait the wait
+	 * @param condition the condition
+	 * @return the list
+	 * @throws PageException the page exception
+	 */
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public &lt;T extends Element&gt; List&lt;T&gt; findObjectsUsingPartialLink(String object, String link, int wait, WaitCondition condition) throws PageException{
+<span class="nc" id="L1092">		List&lt;T&gt; l1 = new ArrayList&lt;T&gt;();</span>
+<span class="nc" id="L1093">		List&lt;WebElement&gt; lst =  null;</span>
+<span class="nc" id="L1094">		lst= waitOnElements(By.partialLinkText(link),wait,condition);</span>
+<span class="nc bnc" id="L1095" title="All 2 branches missed.">		for(WebElement we : lst){</span>
+<span class="nc" id="L1096">			l1.add((T) PageObjectFactory.createPageObject(we,object));</span>
+<span class="nc" id="L1097">		}</span>
+<span class="nc" id="L1098">		return l1;</span>
+	}
+	
+	/**
+	 * Find objects using class.
+	 *
+	 * @param &lt;T&gt; the generic type
+	 * @param object the object
+	 * @param name the name
+	 * @param wait the wait
+	 * @param condition the condition
+	 * @return the list
+	 * @throws PageException the page exception
+	 */
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public &lt;T extends Element&gt; List&lt;T&gt; findObjectsUsingClass(String object, String name, int wait, WaitCondition condition) throws PageException{
+<span class="nc" id="L1114">		List&lt;T&gt; l1 = new ArrayList&lt;T&gt;();</span>
+<span class="nc" id="L1115">		List&lt;WebElement&gt; lst =  null;</span>
+<span class="nc" id="L1116">		lst= waitOnElements(By.className(name),wait,condition);</span>
+<span class="nc bnc" id="L1117" title="All 2 branches missed.">		for(WebElement we : lst){</span>
+<span class="nc" id="L1118">			l1.add((T) PageObjectFactory.createPageObject(we,object));</span>
+<span class="nc" id="L1119">		}</span>
+<span class="nc" id="L1120">		return l1;</span>
+	}
+	
+	/**
+	 * Find objects.
+	 *
+	 * @param &lt;T&gt; the generic type
+	 * @param object the object
+	 * @param val the val
+	 * @param valType the val type
+	 * @param wait the wait
+	 * @param condition the condition
+	 * @return the list
+	 * @throws PageException the page exception
+	 */
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public &lt;T extends Element&gt; List&lt;T&gt; findObjects(String object, String val, ObjectValType valType, int wait, WaitCondition condition) throws PageException{
+<span class="nc" id="L1137">		List&lt;T&gt; l1 = new ArrayList&lt;T&gt;();</span>
+<span class="nc" id="L1138">		List&lt;WebElement&gt; lst =  null;</span>
+		Method m;
+		try {
+<span class="nc" id="L1141">			m = By.class.getMethod(valType.getObjectValType(), String.class);</span>
+<span class="nc" id="L1142">			lst= waitOnElements(((By)m.invoke(By.class, val)),wait,condition);</span>
+<span class="nc" id="L1143">		} catch (Exception e) {</span>
+<span class="nc" id="L1144">			log.error(&quot;Can not find objects for: &quot;+ valType + &quot; = &quot; + val +&quot;, message : &quot; + e.toString());</span>
+<span class="nc" id="L1145">        	throw new PageException(&quot;Can not find objects for:  &quot;+ valType + &quot;, message : &quot; + e.toString());</span>
+<span class="nc" id="L1146">		}</span>
+<span class="nc bnc" id="L1147" title="All 2 branches missed.">		for(WebElement we : lst){</span>
+<span class="nc" id="L1148">			l1.add((T) PageObjectFactory.createPageObject(we,object));</span>
+<span class="nc" id="L1149">		}</span>
+<span class="nc" id="L1150">		return l1;</span>
+	}
+	
+	/**
+	 * Wait on element.
+	 *
+	 * @param element the element
+	 * @param wait the wait
+	 * @param frame the frame
+	 * @return the web element
+	 * @throws PageException the page exception
+	 */
+	private WebElement waitOnElement(By element, int wait, String frame) throws PageException{
+<span class="nc" id="L1163">		WebElement identifier = null;</span>
+<span class="nc bnc" id="L1164" title="All 2 branches missed.">		for (int i = 0; i &lt; wait; i++) {</span>
+			try {
+<span class="nc bnc" id="L1166" title="All 2 branches missed.">				if (frame == null)</span>
+<span class="nc" id="L1167">					identifier = driver.findElement(element);</span>
+				else {
+<span class="nc" id="L1169">					driver.switchTo().defaultContent();</span>
+<span class="nc" id="L1170">					identifier = driver.switchTo().frame(frame).findElement(element);</span>
+				}		
+				//if element is found return
+<span class="nc bnc" id="L1173" title="All 2 branches missed.">				if (identifier != null) </span>
+<span class="nc" id="L1174">					break;		</span>
+				//Thread.sleep(WAIT_TO_CHECK);
+<span class="nc" id="L1176">			} catch (Exception e) {	</span>
+<span class="nc" id="L1177">				identifier = null;</span>
+<span class="nc" id="L1178">				log.error(&quot;Failed to find object, message : &quot; + e.toString());</span>
+<span class="nc" id="L1179">	        	throw new PageException(&quot;Failed to find object, message : &quot; + e.toString());</span>
+<span class="nc" id="L1180">			}		</span>
+		}
+<span class="nc" id="L1182">		return identifier;</span>
+	}
+
+	/**
+	 * Waits on web element.  
+	 *
+	 * @param element the element
+	 * @param wait the wait
+	 * @return the web element
+	 * @throws PageException the page exception
+	 */
+	public WebElement waitOnElement(By element, int wait) throws PageException{
+<span class="nc" id="L1194">		return waitOnElement(element, wait, null);</span>
+	}
+	
+
+	/**
+	 * Wait on element to get loaded based on the Expected Condition.
+	 *
+	 * @param element the element
+	 * @param wait the wait
+	 * @param frame the frame
+	 * @param condition the condition
+	 * @return the web element
+	 * @throws PageException the page exception
+	 */
+	@SuppressWarnings(&quot;unchecked&quot;)
+	private WebElement waitOnElement(By element, int wait, String frame, WaitCondition condition) throws PageException{
+<span class="nc" id="L1210">		WebElement identifier = null;</span>
+		try{
+<span class="nc" id="L1212">			Method method = ExpectedConditions.class.getMethod(condition.getCondition(), By.class);</span>
+<span class="nc" id="L1213">			WebDriverWait w = new WebDriverWait(((WebDriver)driver), wait);</span>
+<span class="nc bnc" id="L1214" title="All 2 branches missed.">			if(frame != null)</span>
+<span class="nc" id="L1215">				w.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(frame));</span>
+<span class="nc" id="L1216">			identifier = w.until((ExpectedCondition&lt;WebElement&gt;)method.invoke(ExpectedConditions.class,  element)) ; 	</span>
+<span class="nc" id="L1217">		} catch (Exception e) {	</span>
+<span class="nc" id="L1218">			identifier = null;</span>
+<span class="nc" id="L1219">			log.error(&quot;Failed to find object, message : &quot; + e.toString());</span>
+<span class="nc" id="L1220">			throw new PageException(&quot;Failed to find object, message : &quot; + e.toString());</span>
+<span class="nc" id="L1221">		}</span>
+<span class="nc" id="L1222">		return identifier;</span>
+	}
+	
+	/**
+	 * Wait on element.
+	 *
+	 * @param element the element
+	 * @param wait the wait
+	 * @param condition the condition
+	 * @return the list
+	 * @throws PageException the page exception
+	 */
+	
+	@SuppressWarnings(&quot;unchecked&quot;)
+	private List&lt;WebElement&gt; waitOnElements(By element, int wait, WaitCondition condition) throws PageException{
+<span class="nc" id="L1237">		List&lt;WebElement&gt; identifiers = null;</span>
+		try{
+
+<span class="nc" id="L1240">			Method method = ExpectedConditions.class.getMethod(condition.getCondition(), By.class);</span>
+<span class="nc" id="L1241">			WebDriverWait w = new WebDriverWait((WebDriver)driver, wait);</span>
+<span class="nc" id="L1242">			identifiers = w.until( (ExpectedCondition&lt;List&lt;WebElement&gt;&gt;)method.invoke(ExpectedConditions.class,  element));  </span>
+<span class="nc" id="L1243">		} catch (Exception e) {	</span>
+<span class="nc" id="L1244">			identifiers = null;</span>
+<span class="nc" id="L1245">			log.error(&quot;Failed to find object, message : &quot; + e.toString());</span>
+<span class="nc" id="L1246">			throw new PageException(&quot;Failed to find object, message : &quot; + e.toString());</span>
+<span class="nc" id="L1247">		}</span>
+<span class="nc" id="L1248">		return identifiers;</span>
+	}
+	
+	/**
+	 * Click on &quot;Continue to this Website(not recommended)&quot; link on Certificate Error Page for IE browser.
+	 */
+	public void  certificateErrorClick() {
+<span class="nc bnc" id="L1255" title="All 2 branches missed.">		if(BrowserInfoUtil.INSTANCE.isIE()){</span>
+<span class="nc" id="L1256">			driver.navigate().to(&quot;javascript:document.getElementById('overridelink').click()&quot;);</span>
+		}
+<span class="nc" id="L1258">	}</span>
+
+	/**
+	 * sleep time.
+	 *
+	 * @param timeout the timeout
+	 */
+	public void sleep(long timeout){
+		try {
+<span class="nc" id="L1267">			Thread.sleep(timeout);</span>
+<span class="nc" id="L1268">		} catch (InterruptedException e) {</span>
+<span class="nc" id="L1269">			e.printStackTrace();</span>
+<span class="nc" id="L1270">		}</span>
+<span class="nc" id="L1271">	}</span>
+
+	/**
+	 * Resize window to given width and height.
+	 *
+	 * @param width the width
+	 * @param height the height
+	 */
+	public void resize(int width,int height){
+<span class="nc" id="L1280">		driver.manage().window().setSize(new org.openqa.selenium.Dimension(width,height));</span>
+<span class="nc" id="L1281">		return;</span>
+	}
+
+	/**
+	 * Resize window to given height width by adding wait.
+	 *
+	 * @param width the width
+	 * @param height the height
+	 * @param wait the wait
+	 */
+	public void resize(int width,int height,int wait){
+<span class="nc" id="L1292">		driver.manage().window().setSize(new org.openqa.selenium.Dimension(width,height));	</span>
+<span class="nc" id="L1293">		sleep(wait);</span>
+<span class="nc" id="L1294">		return;</span>
+	}
+	
+	/**
+	 * Returns current URL.
+	 *
+	 * @return the current url
+	 */
+	public String getCurrentUrl(){
+<span class="nc" id="L1303">		return driver.getCurrentUrl();</span>
+	}
+
+	/**
+	 * Gets the transition url.
+	 *
+	 * @param previousUrl the previous url
+	 * @param driverWait the driver wait
+	 * @param implicitWait the implicit wait
+	 * @return the transition url
+	 */
+	public String getTransitionUrl(final String previousUrl, int driverWait,int implicitWait){
+<span class="nc" id="L1315">		WebDriverWait wait = new WebDriverWait(driver, driverWait);</span>
+<span class="nc" id="L1316">	    driver.manage().timeouts().implicitlyWait(implicitWait, TimeUnit.SECONDS);</span>
+<span class="nc" id="L1317">	    ExpectedCondition&lt;Boolean&gt; e = new ExpectedCondition&lt;Boolean&gt;() {</span>
+	    	public Boolean apply(WebDriver d) {
+<span class="nc bnc" id="L1319" title="All 2 branches missed.">	    		return (d.getCurrentUrl() != previousUrl);</span>
+	    	}
+	    };
+<span class="nc" id="L1322">	    wait.until(e);</span>
+<span class="nc" id="L1323">		return driver.getCurrentUrl();</span>
+	}
+	
+	/**
+	 * Returns true if current URL has parameters appended.
+	 * @return true if current URL has parameters appended.
+	 */
+	public boolean StringParameterAppend(){
+<span class="nc" id="L1331">		String url=driver.getCurrentUrl();</span>
+<span class="nc bnc" id="L1332" title="All 2 branches missed.">		boolean flag = url.indexOf(&quot;?&quot;)!= -1;</span>
+<span class="nc bnc" id="L1333" title="All 2 branches missed.">		if(flag)</span>
+<span class="nc" id="L1334">			return false;</span>
+		else
+<span class="nc" id="L1336">			return true;</span>
+	}
+
+	/**
+	 * Navigates to the given URL.
+	 * @param url URL to navigate.
+	 */
+	public void navigateToUrl(String url){
+<span class="nc" id="L1344">		driver.navigate().to(url);</span>
+		try {
+<span class="nc" id="L1346">			Thread.sleep(1000);</span>
+<span class="nc" id="L1347">		} catch (InterruptedException e) {</span>
+<span class="nc" id="L1348">			log.error(&quot;Exception in thread sleep, message, &quot; + e.toString());</span>
+<span class="nc" id="L1349">		}</span>
+<span class="nc" id="L1350">	}</span>
+	
+	/**
+	 * Switch to new tab.
+	 */
+	public void openNewTab(){
+<span class="nc" id="L1356">		Set&lt;String&gt; windows = driver.getWindowHandles();</span>
+<span class="nc" id="L1357">		log.info(&quot;After click no. of windows:&quot;+windows.size());</span>
+<span class="nc" id="L1358">		log.info(&quot;Before Switch &quot;+driver.getWindowHandle());</span>
+<span class="nc bnc" id="L1359" title="All 2 branches missed.">		for(String window: windows){</span>
+<span class="nc" id="L1360">			driver.switchTo().window(window);</span>
+<span class="nc" id="L1361">			log.info(&quot;After Switch &quot;+driver.getWindowHandle());</span>
+<span class="nc" id="L1362">			log.info(&quot;Page URL:&quot;+driver.getCurrentUrl());</span>
+<span class="nc" id="L1363">			log.info(&quot;Switched Page title is:&quot;+driver.getTitle());</span>
+<span class="nc" id="L1364">		}</span>
+<span class="nc" id="L1365">	}</span>
+	
+	/**
+	 * Navigates back.
+	 *
+	 * @return the back to url
+	 */
+	public void getBackToUrl(){
+<span class="nc" id="L1373">		driver.navigate().back();</span>
+<span class="nc" id="L1374">		return;</span>
+	}
+
+	/**
+	 * Toggle window.
+	 */
+    public void toggleWindow() {
+<span class="nc" id="L1381">           String currentHandle = driver.getWindowHandle();</span>
+<span class="nc" id="L1382">           log.info(&quot;currentHandle:: &quot; + currentHandle);</span>
+<span class="nc" id="L1383">           Set&lt;String&gt; windows = driver.getWindowHandles();</span>
+<span class="nc" id="L1384">           log.info(&quot;no. of windows::&quot; + windows.size());</span>
+<span class="nc" id="L1385">           windows.remove(currentHandle);</span>
+<span class="nc" id="L1386">           log.info(&quot;no. of windows after remove current handle ::&quot; + windows.size());</span>
+<span class="nc bnc" id="L1387" title="All 2 branches missed.">           if (windows.size() == 1) {</span>
+<span class="nc" id="L1388">                  log.info(&quot;switching to window ::&quot; + (String) ((windows.toArray())[0]));</span>
+<span class="nc" id="L1389">                  driver.switchTo().window((String) ((windows.toArray())[0]));</span>
+           }
+<span class="nc" id="L1391">    }</span>
+
+    /**
+     * Close_toggle window.
+     */
+    public void close_toggleWindow() {
+<span class="nc" id="L1397">           String currentHandle = driver.getWindowHandle();</span>
+<span class="nc" id="L1398">           log.info(&quot;currentHandle:: &quot; + currentHandle);</span>
+<span class="nc" id="L1399">           Set&lt;String&gt; windows = driver.getWindowHandles();</span>
+<span class="nc" id="L1400">           log.info(&quot;no. of windows::&quot; + windows.size());</span>
+<span class="nc" id="L1401">           driver.switchTo().window(currentHandle).close();</span>
+<span class="nc" id="L1402">           windows.remove(currentHandle);</span>
+<span class="nc" id="L1403">           log.info(&quot;no. of windows after remove current handle ::&quot; + windows.size());</span>
+<span class="nc bnc" id="L1404" title="All 2 branches missed.">           if (windows.size() == 1) {</span>
+<span class="nc" id="L1405">                  log.info(&quot;switching to window ::&quot; + (String) ((windows.toArray())[0]));</span>
+<span class="nc" id="L1406">                  driver.switchTo().window((String) ((windows.toArray())[0]));</span>
+           }
+<span class="nc" id="L1408">    }	</span>
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.5.201112152213</span></div></body></html>

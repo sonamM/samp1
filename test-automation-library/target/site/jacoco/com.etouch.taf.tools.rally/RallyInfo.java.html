@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>RallyInfo.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Test Automation Library</a> &gt; <a href="index.html" class="el_package">com.etouch.taf.tools.rally</a> &gt; <span class="el_source">RallyInfo.java</span></div><h1>RallyInfo.java</h1><pre class="source lang-java linenums">/*
+ * 
+ */
+package com.etouch.taf.tools.rally;
+
+// TODO: Auto-generated Javadoc
+/**
+ * This class stores information used to connect rally instance.
+ * 
+ * @author eTouch Systems Corporation
+ * @version 1.0
+ *
+ */
+public class RallyInfo {
+	
+	/** The url. */
+	String url;
+	
+	/** The user name. */
+	String userName;
+	
+	/** The password. */
+	String password;
+	
+	/** The app name. */
+	String appName;
+	
+	/** The wsapi version. */
+	String wsapiVersion;
+	
+	/**
+	 * Instantiates a new rally info.
+	 *
+	 * @param url the url
+	 * @param userName the user name
+	 * @param password the password
+	 * @param appName the app name
+	 */
+	public RallyInfo(String url, String userName, String password, String appName) {
+<span class="nc" id="L40">		super();</span>
+<span class="nc" id="L41">		this.url = url;</span>
+<span class="nc" id="L42">		this.userName = userName;</span>
+<span class="nc" id="L43">		this.password = password;</span>
+<span class="nc" id="L44">		this.appName = appName;</span>
+<span class="nc" id="L45">	}</span>
+	
+	/**
+	 * Gets the url.
+	 *
+	 * @return the url
+	 */
+	public String getUrl() {
+<span class="nc" id="L53">		return url;</span>
+	}
+	
+	/**
+	 * Sets the url.
+	 *
+	 * @param url the new url
+	 */
+	public void setUrl(String url) {
+<span class="nc" id="L62">		this.url = url;</span>
+<span class="nc" id="L63">	}</span>
+	
+	/**
+	 * Gets the user name.
+	 *
+	 * @return the user name
+	 */
+	public String getUserName() {
+<span class="nc" id="L71">		return userName;</span>
+	}
+	
+	/**
+	 * Sets the user name.
+	 *
+	 * @param userName the new user name
+	 */
+	public void setUserName(String userName) {
+<span class="nc" id="L80">		this.userName = userName;</span>
+<span class="nc" id="L81">	}</span>
+	
+	/**
+	 * Gets the password.
+	 *
+	 * @return the password
+	 */
+	public String getPassword() {
+<span class="nc" id="L89">		return password;</span>
+	}
+	
+	/**
+	 * Sets the password.
+	 *
+	 * @param password the new password
+	 */
+	public void setPassword(String password) {
+<span class="nc" id="L98">		this.password = password;</span>
+<span class="nc" id="L99">	}</span>
+	
+	/**
+	 * Gets the app name.
+	 *
+	 * @return the app name
+	 */
+	public String getAppName() {
+<span class="nc" id="L107">		return appName;</span>
+	}
+	
+	/**
+	 * Sets the app name.
+	 *
+	 * @param appName the new app name
+	 */
+	public void setAppName(String appName) {
+<span class="nc" id="L116">		this.appName = appName;</span>
+<span class="nc" id="L117">	}</span>
+	
+	/**
+	 * Gets the wsapi version.
+	 *
+	 * @return the wsapi version
+	 */
+	public String getWsapiVersion() {
+<span class="nc" id="L125">		return wsapiVersion;</span>
+	}
+	
+	/**
+	 * Sets the wsapi version.
+	 *
+	 * @param wsapiVersion the new wsapi version
+	 */
+	public void setWsapiVersion(String wsapiVersion) {
+<span class="nc" id="L134">		this.wsapiVersion = wsapiVersion;</span>
+<span class="nc" id="L135">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.5.201112152213</span></div></body></html>

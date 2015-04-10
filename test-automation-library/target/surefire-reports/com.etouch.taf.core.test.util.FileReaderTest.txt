@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.etouch.taf.core.test.util.FileReaderTest
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.51 sec

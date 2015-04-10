@@ -1,0 +1,486 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>XlsReader.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Test Automation Library</a> &gt; <a href="index.html" class="el_package">com.etouch.taf.core.datamanager.excel</a> &gt; <span class="el_source">XlsReader.java</span></div><h1>XlsReader.java</h1><pre class="source lang-java linenums">/*
+ * 
+ */
+package com.etouch.taf.core.datamanager.excel;
+
+import org.apache.commons.logging.Log;
+import org.apache.poi.POIXMLDocument;
+import org.apache.poi.POIXMLDocumentPart;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFCreationHelper;
+import org.apache.poi.hssf.usermodel.HSSFDateUtil;
+import org.apache.poi.hssf.usermodel.HSSFFont;
+import org.apache.poi.hssf.usermodel.HSSFHyperlink;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import com.etouch.taf.util.LogUtil;
+
+import java.io.*;
+import java.util.Calendar;
+import java.util.Iterator;
+
+
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Xls_Reader.
+ */
+public class XlsReader extends ExcelReader {	
+	
+	/** The log. */
+<span class="fc" id="L36">	private static Log log = LogUtil.getLog(XlsReader.class);</span>
+	
+	/** The path. */
+	public  String path;
+	
+	/** The fis. */
+<span class="fc" id="L42">	public  FileInputStream fis = null;</span>
+	
+	/** The file out. */
+<span class="fc" id="L45">	public  FileOutputStream fileOut =null;</span>
+	
+	/** The workbook. */
+<span class="fc" id="L48">	private HSSFWorkbook workbook = null;</span>
+	//private Workbook workbook = null;
+	/** The sheet. */
+<span class="fc" id="L51">	private HSSFSheet sheet = null;</span>
+	//Sheet sheet = null;
+	/** The row. */
+<span class="fc" id="L54">	private HSSFRow row   =null;</span>
+	
+	/** The cell. */
+<span class="fc" id="L57">	private HSSFCell cell = null;</span>
+	
+	//private Row row = null;
+	//private Cell cell = null;
+	
+	/**
+	 * Instantiates a new xls_ reader.
+	 *
+	 * @param path the path
+	 */
+<span class="fc" id="L67">	public XlsReader(String path) {</span>
+		
+<span class="fc" id="L69">		this.path=path;</span>
+		try {
+<span class="fc" id="L71">			fis = new FileInputStream(path);</span>
+<span class="fc" id="L72">			workbook = new HSSFWorkbook(fis);	</span>
+<span class="fc" id="L73">			sheet = workbook.getSheetAt(0);</span>
+			
+<span class="nc" id="L75">		} catch (Exception e) {</span>
+			// TODO Auto-generated catch block
+<span class="nc" id="L77">			log.error(e.getMessage());</span>
+		} 
+		finally
+		{
+<span class="pc" id="L81">			closeFileObjects(fis, fileOut);	</span>
+<span class="pc" id="L82">		}</span>
+		
+<span class="fc" id="L84">	}</span>
+	
+	/*
+	 * This method reads the complete data and returns the String[][]from Excel files with .xls extension.
+	 */
+	
+	/**
+	 * Read xls data.
+	 *
+	 * @param sheetName the sheet name
+	 * @return the string[][]
+	 */
+	public String[][] readXLSData(String sheetName)
+			
+	{
+<span class="fc" id="L99">		String[][] data = null;</span>
+<span class="fc" id="L100">		data = readXLSData(workbook, sheetName);		</span>
+<span class="fc" id="L101">	    return data;     </span>
+	}
+	
+	// returns the row count in a sheet
+	/**
+	 * Gets the row count.
+	 *
+	 * @param sheetName the sheet name
+	 * @return the row count
+	 */
+	public int getRowCount(String sheetName){
+<span class="fc" id="L112">		int number = getRowCount(workbook, sheetName);		</span>
+<span class="fc" id="L113">		return number;		</span>
+	}
+	
+	// returns the data from a cell using sheet name, column name and row number
+	/* (non-Javadoc)
+	 * @see com.etouch.taf.core.datamanager.excel.ExcelReader#getCellData(java.lang.String, java.lang.String, int)
+	 */
+	public String getCellData(String sheetName, String colName, int rowNum){
+<span class="fc" id="L121">		String cellText = getCellData(workbook, sheetName, colName, rowNum);</span>
+<span class="fc" id="L122">		return cellText;</span>
+	}
+	
+	// returns the data from a cell
+	/* (non-Javadoc)
+	 * @see com.etouch.taf.core.datamanager.excel.ExcelReader#getCellData(java.lang.String, int, int)
+	 */
+	public String getCellData(String sheetName,int colNum,int rowNum){
+<span class="fc" id="L130">		String cellText = getCellData(workbook, sheetName, colNum, rowNum);</span>
+<span class="fc" id="L131">		return cellText;</span>
+	}
+	
+	// returns true if data is set successfully else false
+	/**
+	 * Sets the cell data.
+	 *
+	 * @param sheetName the sheet name
+	 * @param colName the col name
+	 * @param rowNum the row num
+	 * @param data the data
+	 * @return true, if successful
+	 */
+	public boolean setCellData(String sheetName,String colName,int rowNum, String data){
+<span class="fc" id="L145">		boolean isSet = false;</span>
+		try
+		{
+<span class="fc" id="L148">			fis = new FileInputStream(path); </span>
+<span class="fc" id="L149">			workbook = new HSSFWorkbook(fis);</span>
+<span class="fc" id="L150">			isSet = setCellData(path, workbook, sheetName, colName, rowNum, data);</span>
+			
+<span class="nc" id="L152">		}catch(Exception ex)</span>
+		{
+<span class="nc" id="L154">			log.error(ex.getMessage());</span>
+<span class="nc" id="L155">			return false;</span>
+		}
+		finally
+		{
+<span class="pc" id="L159">			closeFileObjects(fis, fileOut);	</span>
+<span class="fc" id="L160">		}</span>
+<span class="fc" id="L161">		return isSet;</span>
+	}
+	
+	
+	// returns true if data is set successfully else false
+	/* (non-Javadoc)
+	 * @see com.etouch.taf.core.datamanager.excel.ExcelReader#setCellData(java.lang.String, java.lang.String, int, java.lang.String, java.lang.String)
+	 */
+	public boolean setCellData(String sheetName,String colName,int rowNum, String data,String url){
+		//System.out.println(&quot;setCellData setCellData******************&quot;);
+<span class="fc" id="L171">		boolean isSet = false;</span>
+		try{
+<span class="fc" id="L173">			fis = new FileInputStream(path); </span>
+<span class="fc" id="L174">			workbook = new HSSFWorkbook(fis);			</span>
+<span class="fc" id="L175">			sheet = (HSSFSheet)getSheet(workbook, sheetName);</span>
+			
+<span class="pc bpc" id="L177" title="1 of 2 branches missed.">			if(sheet!=null)</span>
+			{
+<span class="fc" id="L179">				int colNum = getColNumber(sheet, colName);</span>
+				
+<span class="pc bpc" id="L181" title="2 of 4 branches missed.">				if(rowNum&lt;=0 || colNum&lt;0)</span>
+<span class="nc" id="L182">					return false;		</span>
+				
+<span class="fc" id="L184">				cell = (HSSFCell)setCellValue(sheet, rowNum, colNum, data);</span>
+<span class="fc" id="L185">			    setHyperlink(cell, url);		      </span>
+<span class="fc" id="L186">			    fileOut = new FileOutputStream(path);</span>
+<span class="fc" id="L187">				workbook.write(fileOut);			    </span>
+<span class="fc" id="L188">			    isSet = true;</span>
+			}
+
+		}
+<span class="nc" id="L192">		catch(Exception e){</span>
+<span class="nc" id="L193">			log.error(e.getMessage());</span>
+<span class="nc" id="L194">			return false;</span>
+		}
+		finally
+		{
+<span class="pc" id="L198">			closeFileObjects(fis, fileOut);	</span>
+<span class="fc" id="L199">		}</span>
+<span class="fc" id="L200">		return true;</span>
+	}
+	
+	//This method sets the hyperlink for a particular cell.
+	/**
+	 * Sets the hyperlink.
+	 *
+	 * @param cell the cell
+	 * @param url the url
+	 */
+	public void setHyperlink(HSSFCell cell, String url)
+	{
+<span class="fc" id="L212">		HSSFCreationHelper createHelper =(HSSFCreationHelper) workbook.getCreationHelper();</span>
+		
+	    //cell style for hyperlinks
+	    //by default hypelrinks are blue and underlined
+<span class="fc" id="L216">	    CellStyle hlink_style = workbook.createCellStyle();</span>
+	    //HSSFFont hlink_font = workbook.createFont();
+<span class="fc" id="L218">	    HSSFFont hlink_font = workbook.createFont();</span>
+<span class="fc" id="L219">	    hlink_font.setUnderline(HSSFFont.U_SINGLE);</span>
+<span class="fc" id="L220">	    hlink_font.setColor(IndexedColors.BLUE.getIndex());</span>
+<span class="fc" id="L221">	    hlink_style.setFont(hlink_font);</span>
+	    //hlink_style.setWrapText(true);
+	
+<span class="fc" id="L224">	    HSSFHyperlink link = createHelper.createHyperlink(HSSFHyperlink.LINK_FILE);</span>
+<span class="fc" id="L225">	    link.setAddress(url);</span>
+<span class="fc" id="L226">	    cell.setHyperlink(link);</span>
+<span class="fc" id="L227">	    cell.setCellStyle(hlink_style);	   </span>
+<span class="fc" id="L228">	}</span>
+	
+	
+	
+	// returns true if sheet is created successfully else false
+	/**
+	 * Adds the sheet.
+	 *
+	 * @param sheetname the sheetname
+	 * @return true, if successful
+	 */
+	public boolean addSheet(String  sheetname){		
+		
+<span class="fc" id="L241">		boolean isAdded = false;</span>
+		try{
+<span class="fc" id="L243">		fis = new FileInputStream(path);</span>
+<span class="fc" id="L244">		workbook = new HSSFWorkbook(fis);</span>
+<span class="fc" id="L245">		isAdded = addSheet(path, workbook, sheetname);</span>
+<span class="nc" id="L246">		}catch(Exception ex)</span>
+		{
+<span class="nc" id="L248">			log.error(ex.getMessage());</span>
+		}
+		finally
+		{
+<span class="pc" id="L252">			closeFileObjects(fis, fileOut);	</span>
+<span class="pc" id="L253">		}</span>
+<span class="fc" id="L254">		return isAdded;</span>
+	}
+	
+	// returns true if sheet is removed successfully else false if sheet does not exist
+	/**
+	 * Removes the sheet.
+	 *
+	 * @param sheetName the sheet name
+	 * @return true, if successful
+	 */
+	public boolean removeSheet(String sheetName){	
+<span class="fc" id="L265">		boolean isRemoved = false;</span>
+		try{
+<span class="fc" id="L267">			fis = new FileInputStream(path);</span>
+<span class="fc" id="L268">			workbook = new HSSFWorkbook(fis);</span>
+<span class="fc" id="L269">			isRemoved = removeSheet(path, workbook, sheetName);			</span>
+<span class="nc" id="L270">		}catch(Exception ex)</span>
+		{
+<span class="nc" id="L272">			log.error(ex.getMessage());</span>
+		}
+		finally
+		{
+<span class="pc" id="L276">			closeFileObjects(fis, fileOut);	</span>
+<span class="pc" id="L277">		}</span>
+		
+<span class="fc" id="L279">		return isRemoved;		</span>
+	}
+	
+	// returns true if column is created successfully
+	/* (non-Javadoc)
+	 * @see com.etouch.taf.core.datamanager.excel.ExcelReader#addColumn(java.lang.String, java.lang.String)
+	 */
+	public boolean addColumn(String sheetName, String colName){
+		//System.out.println(&quot;**************addColumn*********************&quot;);
+		
+		try{				
+<span class="fc" id="L290">			fis = new FileInputStream(path); </span>
+<span class="fc" id="L291">			workbook = new HSSFWorkbook(fis);</span>
+<span class="fc" id="L292">			int index = workbook.getSheetIndex(sheetName);</span>
+<span class="pc bpc" id="L293" title="1 of 2 branches missed.">			if(index==-1)</span>
+<span class="nc" id="L294">				return false;</span>
+			
+<span class="fc" id="L296">			HSSFCellStyle style = workbook.createCellStyle();</span>
+<span class="fc" id="L297">			style.setFillForegroundColor(HSSFColor.GREY_40_PERCENT.index);</span>
+<span class="fc" id="L298">			style.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);</span>
+			
+<span class="fc" id="L300">			sheet=workbook.getSheetAt(index);</span>
+			
+<span class="fc" id="L302">			row = sheet.getRow(0);</span>
+<span class="pc bpc" id="L303" title="1 of 2 branches missed.">			if (row == null)</span>
+<span class="nc" id="L304">				row = sheet.createRow(0);</span>
+			
+			//cell = row.getCell();	
+			//if (cell == null)
+			//System.out.println(row.getLastCellNum());
+<span class="pc bpc" id="L309" title="1 of 2 branches missed.">			if(row.getLastCellNum() == -1)</span>
+<span class="nc" id="L310">				cell = row.createCell(0);</span>
+			else
+<span class="fc" id="L312">				cell = row.createCell(row.getLastCellNum());</span>
+		        
+<span class="fc" id="L314">		        cell.setCellValue(colName);</span>
+<span class="fc" id="L315">		        cell.setCellStyle(style);</span>
+		        
+<span class="fc" id="L317">		        fileOut = new FileOutputStream(path);</span>
+<span class="fc" id="L318">				workbook.write(fileOut);</span>
+				
+<span class="nc" id="L320">			}catch(Exception e){</span>
+<span class="nc" id="L321">				log.error(e.getMessage());</span>
+<span class="nc" id="L322">				return false;</span>
+			}
+			finally
+			{
+<span class="pc" id="L326">				closeFileObjects(fis, fileOut);	</span>
+<span class="fc" id="L327">			}</span>
+			
+<span class="fc" id="L329">			return true;		</span>
+		
+	}
+	// removes a column and all the contents
+	/* (non-Javadoc)
+	 * @see com.etouch.taf.core.datamanager.excel.ExcelReader#removeColumn(java.lang.String, int)
+	 */
+	public boolean removeColumn(String sheetName, int colNum) {
+		try{
+<span class="pc bpc" id="L338" title="1 of 2 branches missed.">		if(!isSheetExist(sheetName))</span>
+<span class="nc" id="L339">			return false;</span>
+<span class="fc" id="L340">		fis = new FileInputStream(path); </span>
+<span class="fc" id="L341">		workbook = new HSSFWorkbook(fis);</span>
+<span class="fc" id="L342">		sheet=workbook.getSheet(sheetName);</span>
+<span class="fc" id="L343">		HSSFCellStyle style = workbook.createCellStyle();</span>
+<span class="fc" id="L344">		style.setFillForegroundColor(HSSFColor.GREY_40_PERCENT.index);</span>
+<span class="fc" id="L345">		HSSFCreationHelper createHelper = workbook.getCreationHelper();</span>
+<span class="fc" id="L346">		style.setFillPattern(HSSFCellStyle.NO_FILL);</span>
+		
+	    
+	
+<span class="fc bfc" id="L350" title="All 2 branches covered.">		for(int i =0;i&lt;getRowCount(sheetName);i++){</span>
+<span class="fc" id="L351">			row=sheet.getRow(i);	</span>
+<span class="pc bpc" id="L352" title="1 of 2 branches missed.">			if(row!=null){</span>
+<span class="fc" id="L353">				cell=row.getCell(colNum);</span>
+<span class="pc bpc" id="L354" title="1 of 2 branches missed.">				if(cell!=null){</span>
+<span class="nc" id="L355">					cell.setCellStyle(style);</span>
+<span class="nc" id="L356">					row.removeCell(cell);</span>
+				}
+			}
+		}
+<span class="fc" id="L360">		fileOut = new FileOutputStream(path);</span>
+<span class="fc" id="L361">		workbook.write(fileOut);	   </span>
+		}
+<span class="nc" id="L363">		catch(Exception e){</span>
+<span class="nc" id="L364">			log.error(e.getMessage());</span>
+<span class="nc" id="L365">			return false;</span>
+		}
+		finally
+		{
+<span class="pc" id="L369">			closeFileObjects(fis, fileOut);	</span>
+<span class="fc" id="L370">		}</span>
+		
+<span class="fc" id="L372">		return true;</span>
+		
+	}
+  // find whether sheets exists	
+	/**
+   * Checks if is sheet exist.
+   *
+   * @param sheetName the sheet name
+   * @return true, if is sheet exist
+   */
+  public boolean isSheetExist(String sheetName){
+<span class="fc" id="L383">		boolean sheetExists = false;</span>
+<span class="fc" id="L384">		sheetExists = isSheetExist(workbook, sheetName);</span>
+<span class="fc" id="L385">		return sheetExists;</span>
+	}
+	
+	// returns number of columns in a sheet	
+	/**
+	 * Gets the column count.
+	 *
+	 * @param sheetName the sheet name
+	 * @return the column count
+	 */
+	public int getColumnCount(String sheetName){
+<span class="nc" id="L396">		int colCount = getColumnCount(workbook, sheetName);</span>
+<span class="nc" id="L397">		return colCount;		</span>
+	}
+	//String sheetName, String testCaseName,String keyword ,String URL,String message
+	/* (non-Javadoc)
+	 * @see com.etouch.taf.core.datamanager.excel.ExcelReader#addHyperLink(java.lang.String, java.lang.String, java.lang.String, int, java.lang.String, java.lang.String)
+	 */
+	public boolean addHyperLink(String sheetName,String screenShotColName,String testCaseName,int index,String url,String message){
+		//System.out.println(&quot;ADDING addHyperLink******************&quot;);
+		
+<span class="nc" id="L406">		url=url.replace('\\', '/');</span>
+<span class="nc bnc" id="L407" title="All 2 branches missed.">		if(!isSheetExist(sheetName))</span>
+<span class="nc" id="L408">			 return false;</span>
+		
+<span class="nc" id="L410">	    sheet = workbook.getSheet(sheetName);</span>
+	    
+<span class="nc bnc" id="L412" title="All 2 branches missed.">	    for(int i=2;i&lt;=getRowCount(sheetName);i++){</span>
+<span class="nc bnc" id="L413" title="All 2 branches missed.">	    	if(getCellData(sheetName, 0, i).equalsIgnoreCase(testCaseName)){</span>
+	    		//System.out.println(&quot;**caught &quot;+(i+index));
+<span class="nc" id="L415">	    		setCellData(sheetName, screenShotColName, i+index, message,url);</span>
+<span class="nc" id="L416">	    		break;</span>
+	    	}
+	    }
+
+<span class="nc" id="L420">		return true; </span>
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.etouch.taf.core.datamanager.excel.ExcelReader#getCellRowNum(java.lang.String, java.lang.String, java.lang.String)
+	 */
+	public int getCellRowNum(String sheetName,String colName,String cellValue){
+		
+<span class="pc bpc" id="L428" title="1 of 2 branches missed.">		for(int i=2;i&lt;=getRowCount(sheetName);i++){</span>
+<span class="pc bpc" id="L429" title="1 of 2 branches missed.">	    	if(getCellData(sheetName,colName , i).equalsIgnoreCase(cellValue)){</span>
+<span class="fc" id="L430">	    		return i;</span>
+	    	}
+	    }
+<span class="nc" id="L433">		return -1;</span>
+		
+	}
+		
+	// to run this on stand alone
+	/**
+	 * The main method.
+	 *
+	 * @param arg the arguments
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
+	public static void main(String arg[]) throws IOException{
+		
+		/*   Xls_Reader datatable = null;			 
+		   datatable = new Xls_Reader(&quot;C:\\Lavanya\\Project\\eTouch\\eTap_framework\\emp1.xls&quot;);
+		   
+		   System.out.println(&quot;Is Sheet exists: &quot; + datatable.isSheetExist(&quot;E1&quot;));
+		   System.out.println(&quot;Row Count: &quot; + datatable.getRowCount(&quot;E1&quot;));
+		   System.out.println(&quot;Column Count: &quot; + datatable.getColumnCount(&quot;E1&quot;));
+		   System.out.println(&quot;Cell Row Number is: &quot; + datatable.getCellRowNum(&quot;E1&quot;, &quot;Name&quot;, &quot;Lavanya&quot;));
+		   System.out.println(&quot;Is Sheet Added? &quot; + datatable.addSheet(&quot;E2&quot;));
+		   System.out.println(&quot;Is Sheet added? &quot; + datatable.addSheet(&quot;E3&quot;));		   
+			
+		   System.out.println(&quot;Is column added? &quot; + datatable.addColumn(&quot;E1&quot;, &quot;Mail&quot;));
+		   System.out.println(&quot;Is column added? &quot; + datatable.addColumn(&quot;E1&quot;, &quot;Phone&quot;));
+		   System.out.println(&quot;Is data set? &quot; + datatable.setCellData(&quot;E1&quot;, &quot;Salary&quot;, 2, &quot;5000&quot;));
+		   System.out.println(&quot;Is data set? &quot; + datatable.setCellData(&quot;E1&quot;, &quot;Age&quot;, 3, &quot;30&quot;, &quot;C:/Lavanya/Project/eTouch/eTap_framework/staff.xlsx&quot;));
+		   String cellText = datatable.getCellData(&quot;E1&quot;, 2, 2);
+		   System.out.println(&quot;cellData1 is: &quot;  + cellText);
+			
+		   cellText = datatable.getCellData(&quot;E1&quot;, &quot;Name&quot;, 3);
+		   System.out.println(&quot;cellData2 is: &quot; + cellText);
+		   
+		   String[][] data = datatable.readXLSData(&quot;E1&quot;);
+		   if(data!=null)
+		   for(int i=0;i&lt;data.length;i++)
+		   {
+				for(int j=0;j&lt;data[0].length;j++)
+				{
+					System.out.print(data[i][j]+&quot;\t\t&quot;);
+				}
+				
+				System.out.println(&quot;&quot;);
+		   }
+			
+		   datatable.removeSheet(&quot;E2&quot;);
+			
+		   datatable.removeColumn(&quot;E1&quot;, 4);	*/		
+				
+<span class="nc" id="L482">		}</span>
+	
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.5.201112152213</span></div></body></html>

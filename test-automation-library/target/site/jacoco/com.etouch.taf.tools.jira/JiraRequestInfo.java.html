@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>JiraRequestInfo.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Test Automation Library</a> &gt; <a href="index.html" class="el_package">com.etouch.taf.tools.jira</a> &gt; <span class="el_source">JiraRequestInfo.java</span></div><h1>JiraRequestInfo.java</h1><pre class="source lang-java linenums">/*
+ * 
+ */
+package com.etouch.taf.tools.jira;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Map;
+
+// TODO: Auto-generated Javadoc
+/**
+ * This class stores Request information.
+ * @author eTouch Systems Corporation
+ * @version 1.0
+ *
+ */
+public class JiraRequestInfo {
+	
+	/** The request type. */
+	String requestType;
+	
+	/** The fetch. */
+	String fetch[]; 
+	
+	/** The query filter. */
+	ArrayList&lt;String&gt; queryFilter;
+	
+	/** The ref field. */
+	String refField;
+	
+	/** The query order. */
+	Hashtable&lt;String,String&gt; queryOrder;
+	
+	/** The page size. */
+	int pageSize;
+	
+	/** The limit. */
+	int limit;
+	
+	/** The entry. */
+	Map&lt;String,Map&lt;String,String&gt;&gt; entry;
+	
+	/** The attachment present. */
+<span class="nc" id="L45">	boolean attachmentPresent =true ;</span>
+	
+	/**
+	 * Instantiates a new jira request info.
+	 */
+<span class="nc" id="L50">	public JiraRequestInfo(){</span>
+<span class="nc" id="L51">		pageSize = -1;</span>
+<span class="nc" id="L52">		limit = -1;</span>
+<span class="nc" id="L53">	}</span>
+	
+	
+	/// constructor for JiraRequestInfo class///
+	/**
+	 * Instantiates a new jira request info.
+	 *
+	 * @param reqType the req type
+	 * @param key the key
+	 * @param reqEntries the req entries
+	 */
+<span class="nc" id="L64">	public JiraRequestInfo(String reqType, String key, Map&lt;String, String&gt; reqEntries){</span>
+<span class="nc" id="L65">		setRequestType(reqType);</span>
+<span class="nc bnc" id="L66" title="All 2 branches missed.">		for(Map.Entry&lt;String, String&gt; entry: reqEntries.entrySet()){</span>
+<span class="nc" id="L67">			addEntry(key, entry.getKey(), entry.getValue());</span>
+<span class="nc" id="L68">		}</span>
+<span class="nc" id="L69">	}</span>
+	
+	/**
+	 * Gets the request type.
+	 *
+	 * @return the request type
+	 */
+	public String getRequestType() {
+<span class="nc" id="L77">		return requestType;</span>
+	}
+	
+	/**
+	 * Sets the request type.
+	 *
+	 * @param requestType the new request type
+	 */
+	public void setRequestType(String requestType) {
+<span class="nc" id="L86">		this.requestType = requestType;</span>
+<span class="nc" id="L87">	}</span>
+	
+	/**
+	 * Gets the fetch.
+	 *
+	 * @return the fetch
+	 */
+	public String[] getFetch() {
+<span class="nc" id="L95">		return fetch;</span>
+	}
+	
+	/**
+	 * Sets the fetch.
+	 *
+	 * @param fetch the new fetch
+	 */
+	public void setFetch(String[] fetch) {
+<span class="nc" id="L104">		this.fetch = fetch;</span>
+<span class="nc" id="L105">	}	</span>
+	
+	/**
+	 * Gets the query filter.
+	 *
+	 * @return the query filter
+	 */
+	public ArrayList&lt;String&gt; getQueryFilter() {
+<span class="nc" id="L113">		return queryFilter;</span>
+	}
+
+	/**
+	 * Sets the query filter.
+	 *
+	 * @param queryFilter the new query filter
+	 */
+	public void setQueryFilter(ArrayList&lt;String&gt; queryFilter) {
+<span class="nc" id="L122">		this.queryFilter = queryFilter;</span>
+<span class="nc" id="L123">	}</span>
+	
+	/**
+	 * Gets the ref field.
+	 *
+	 * @return the ref field
+	 */
+	public String getRefField() {
+<span class="nc" id="L131">		return refField;</span>
+	}
+
+	/**
+	 * Sets the ref field.
+	 *
+	 * @param refField the new ref field
+	 */
+	public void setRefField(String refField) {
+<span class="nc" id="L140">		this.refField = refField;</span>
+<span class="nc" id="L141">	}</span>
+	
+	/**
+	 * Adds the order.
+	 *
+	 * @param field the field
+	 * @param order the order
+	 */
+	public void addOrder(String field,String order) {
+<span class="nc bnc" id="L150" title="All 2 branches missed.">		if(queryOrder == null)</span>
+<span class="nc" id="L151">			queryOrder = new Hashtable&lt;String, String&gt;();</span>
+<span class="nc" id="L152">		queryOrder.put(field,order);</span>
+<span class="nc" id="L153">	}</span>
+
+	/**
+	 * Gets the query order.
+	 *
+	 * @return the query order
+	 */
+	public Map&lt;String, String&gt; getQueryOrder() {
+<span class="nc" id="L161">		return queryOrder;</span>
+	}
+
+	/**
+	 * Gets the page size.
+	 *
+	 * @return the page size
+	 */
+	public int getPageSize() {
+<span class="nc" id="L170">		return pageSize;</span>
+	}
+
+	/**
+	 * Sets the page size.
+	 *
+	 * @param pageSize the new page size
+	 */
+	public void setPageSize(int pageSize) {
+<span class="nc" id="L179">		this.pageSize = pageSize;</span>
+<span class="nc" id="L180">	}</span>
+
+	/**
+	 * Gets the limit.
+	 *
+	 * @return the limit
+	 */
+	public int getLimit() {
+<span class="nc" id="L188">		return limit;</span>
+	}
+
+	/**
+	 * Sets the limit.
+	 *
+	 * @param limit the new limit
+	 */
+	public void setLimit(int limit) {
+<span class="nc" id="L197">		this.limit = limit;</span>
+<span class="nc" id="L198">	}</span>
+	
+	/**
+	 * Adds the entry.
+	 *
+	 * @param key the key
+	 * @param name the name
+	 * @param value the value
+	 */
+	public void addEntry(String key, String name,String value){
+		
+<span class="nc bnc" id="L209" title="All 2 branches missed.">		if(entry == null)</span>
+<span class="nc" id="L210">			entry = new HashMap&lt;String, Map&lt;String,String&gt;&gt;();</span>
+		
+<span class="nc" id="L212">		Map&lt;String, String&gt; map = null;</span>
+<span class="nc bnc" id="L213" title="All 2 branches missed.">		if(entry.containsKey(key))</span>
+<span class="nc" id="L214">			map = entry.get(key);</span>
+		
+<span class="nc bnc" id="L216" title="All 2 branches missed.">		if(map == null)</span>
+<span class="nc" id="L217">			map =  new HashMap&lt;String, String&gt;();</span>
+		
+<span class="nc" id="L219">		map.put(name, value);</span>
+		
+<span class="nc" id="L221">		entry.put(key, map</span>
+				);
+<span class="nc" id="L223">	}</span>
+	
+	/**
+	 * Gets the entry.
+	 *
+	 * @return the entry
+	 */
+	public Map&lt;String, Map&lt;String,String&gt;&gt; getEntry() {
+<span class="nc" id="L231">		return entry;</span>
+	}
+	
+	/**
+	 * Sets the entry.
+	 *
+	 * @param newEntry the new entry
+	 */
+	public void setEntry(Map&lt;String, Map&lt;String,String&gt;&gt; newEntry) {
+<span class="nc" id="L240">		this.entry = newEntry;</span>
+<span class="nc" id="L241">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.5.201112152213</span></div></body></html>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ImageRenderListener.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Test Automation Library</a> &gt; <a href="index.html" class="el_package">com.etouch.taf.core.datamanager.pdf</a> &gt; <span class="el_source">ImageRenderListener.java</span></div><h1>ImageRenderListener.java</h1><pre class="source lang-java linenums">package com.etouch.taf.core.datamanager.pdf;
+
+/*
+ * This class is part of the book &quot;iText in Action - 2nd Edition&quot;
+ * written by Bruno Lowagie (ISBN: 9781935182610)
+ * For more info, go to: http://itextpdf.com/examples/
+ * This example only works with the AGPL version of iText.
+ */
+
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+import com.itextpdf.text.pdf.parser.ImageRenderInfo;
+import com.itextpdf.text.pdf.parser.PdfImageObject;
+import com.itextpdf.text.pdf.parser.RenderListener;
+import com.itextpdf.text.pdf.parser.TextRenderInfo;
+
+public class ImageRenderListener implements RenderListener {
+
+    /** The new document to which we've added a border rectangle. */
+<span class="nc" id="L22">    protected String path = &quot;&quot;;</span>
+
+    /**
+     * Creates a RenderListener that will look for images.
+     */
+<span class="nc" id="L27">    public ImageRenderListener(String path) {</span>
+<span class="nc" id="L28">        this.path = path;</span>
+<span class="nc" id="L29">    }</span>
+    
+    /**
+     * @see com.itextpdf.text.pdf.parser.RenderListener#beginTextBlock()
+     */
+    public void beginTextBlock() {
+<span class="nc" id="L35">    }</span>
+
+    /**
+     * @see com.itextpdf.text.pdf.parser.RenderListener#endTextBlock()
+     */
+    public void endTextBlock() {
+<span class="nc" id="L41">    }</span>
+
+    /**
+     * @see com.itextpdf.text.pdf.parser.RenderListener#renderImage(
+     *     com.itextpdf.text.pdf.parser.ImageRenderInfo)
+     */
+    public void renderImage(ImageRenderInfo renderInfo) {
+        try {
+            String filename;
+            FileOutputStream os;
+<span class="nc" id="L51">            PdfImageObject image = renderInfo.getImage();</span>
+<span class="nc bnc" id="L52" title="All 2 branches missed.">            if (image == null) return;</span>
+<span class="nc" id="L53">            filename = String.format(path, renderInfo.getRef().getNumber(), image.getFileType());</span>
+<span class="nc" id="L54">            os = new FileOutputStream(filename);</span>
+<span class="nc" id="L55">            os.write(image.getImageAsBytes());</span>
+<span class="nc" id="L56">            os.flush();</span>
+<span class="nc" id="L57">            os.close();</span>
+<span class="nc" id="L58">        } catch (IOException e) {</span>
+<span class="nc" id="L59">            System.out.println(e.getMessage());</span>
+<span class="nc" id="L60">        }</span>
+<span class="nc" id="L61">    }</span>
+
+    /**
+     * @see com.itextpdf.text.pdf.parser.RenderListener#renderText(
+     *     com.itextpdf.text.pdf.parser.TextRenderInfo)
+     */
+    public void renderText(TextRenderInfo renderInfo) {
+<span class="nc" id="L68">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.5.201112152213</span></div></body></html>
